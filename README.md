@@ -1,6 +1,6 @@
 # **Lemonade Stand**
 
-Think your business skills are up to snuff? Try running this Lemonade Stand for 10 days and see if you can turn a profit
+Think your business skills are up to snuff? Try running this Lemonade Stand for 10 days and see if you can turn a profit.
 
 # **Background**
 
@@ -24,12 +24,15 @@ Finally, the clock strikes 9 am and you're open for business. Based on your pric
 
 At close, your remaining ice cubes melt. And, if luck is working against you, your lemons or sugar may spoil as well. Tomorrow is another day.
 
-At the end of Day 10, we'll see if you've made any money
+At the end of Day 10, we'll see if you've made any money along the way.
 
 The game will present an 'About' modal describing these rules when the player first opens the window. In addition, this project will include a production README on the Github repository.
 
 # **Wireframes**
 
+![main screen](screenshots/main_screen.png "main screen)
+
+![the store](screenshots/the_store.png "store)
 
 
 # **Technologies**
@@ -41,18 +44,18 @@ This project will be implemented with the following technologies:
 
 # **Implementation Timeline**
 
-Day 1
+### Day 1
 * Setup, including webpack and mapping out file structure
 * Build out game logic
 
-Day 2
+### Day 2
 * Finish game logic
 * Design game layout and begin to render game details
 
-Day 3
+### Day 3
 * Animate with fixed elements and Sprite characters
 * Model user interaction and link to game actions
 
-Day 4
+### Day 4
 * Make it pretty
 * Handle bugs
