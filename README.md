@@ -30,9 +30,9 @@ The game will present an 'About' modal describing these rules when the player fi
 
 # **Wireframes**
 
-![main screen](/Users/michaelcohen/desktop/lemonade_stand/screenshots/main_screen.png "main screen)
+![main screen](screenshots/main_screen.png "main screen)
 
-![the store](/Users/michaelcohen/desktop/lemonade_stand/screenshots/the_store.png "store)
+![the store](screenshots/the_store.png "store)
 
 
 # **Technologies**
