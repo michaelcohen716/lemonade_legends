@@ -30,10 +30,9 @@ The game will present an 'About' modal describing these rules when the player fi
 
 # **Wireframes**
 
-![main screen](screenshots/main_screen.png "main screen)
+![Screenshot](main_screen.png)
 
-![the store](screenshots/the_store.png "store)
-
+![Screenshot](the_store.png)
 
 # **Technologies**
 
