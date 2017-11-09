@@ -1,6 +1,6 @@
 # **Lemonade Stand**
 
-Think your business skills are up to snuff? Try running this Lemonade Stand for 10 days and see if you can turn a profit.
+Think your business skills are up to snuff? Try running this Lemonade Stand for a week and see if you can turn a profit.
 
 # **Background**
 
@@ -24,7 +24,7 @@ Finally, the clock strikes 9 am and you're open for business. Based on your pric
 
 At close, your remaining ice cubes melt. And, if luck is working against you, your lemons or sugar may spoil as well. Tomorrow is another day.
 
-At the end of Day 10, we'll see if you've made any money along the way.
+At the end of Day 7, we'll see if you've made any money along the way.
 
 The game will present an 'About' modal describing these rules when the player first opens the window. In addition, this project will include a production README on the Github repository.
 
@@ -55,4 +55,4 @@ This project will be implemented with the following technologies:
 
 ### Day 4
 * Make it pretty
-* Handle bugs
+* Manage bugs
