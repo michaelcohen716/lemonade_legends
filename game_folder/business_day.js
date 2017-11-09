@@ -9,6 +9,7 @@ class BusinessDay {
     this.cupsSold = 0;
     this.sales = 0.00;
     this.weatherToday = this.weather();
+    this.potentialCustomers = this.potentialCustomers();
   }
 
   start(){
@@ -21,6 +22,16 @@ class BusinessDay {
     //render animation
     //end day, print results
   }
+
+  simulateDay(){
+    for (var i = 0; i < this.potentialCustomers; i++) {
+      if(purchaseOrNot()){
+        this.cupsSold ++;
+        this.sales += this.price;
+      }
+    }
+  }
+
 
   weather(){
     const maxTemp = 100;
@@ -70,8 +81,15 @@ class BusinessDay {
 
     const weatherDecrement = this.weatherPurchaseCalculus();
     likelihood -= weatherDecrement;
+    //either a wash or a decrement
 
+    const ingredientsFactor = this.ingredientsPurchaseCalculus();
+    likelihood += ingredientsFactor;
+    //could be positive or negative
 
+    const priceFactor = this.pricePurchaseCalculus();
+    likelihood += priceFactor;
+    //could be positive or negative
 
     if (likelihood >= 50){
       return true;
@@ -80,12 +98,31 @@ class BusinessDay {
     }
   }
 
+  ingredientsPurchaseCalculus(){
+    const weatherObject = this.weatherToday;
+
+    const iceCubes = this.iceCubes;
+    const iceCubeEquilibrium = weatherObject.temperature / 20;
+    const iceQuotient = (iceCubes - iceCubeEquilibrium) * 10;
+
+    const lemons = this.lemonsPerPitcher;
+    const lemonEquilibrium = 4;
+    const lemonQuotient = (lemons - lemonEquilibrium) * 5;
+
+    const sugar = this.sugarPerPitcher;
+    const sugarEquilibrium = 4;
+    const sugarQuotient = (sugar - sugarEquilibrium) * 5;
+
+    return (iceQuotient + lemonQuotient + sugarQuotient);
+  }
+
+
   pricePurchaseCalculus(){
     const price = this.price;
 
-    // const equilibriumPrice =
-    // let priceDecrement = price * 10;
-
+    const equilibriumPrice = 0.25;
+    const priceQuotient = (equilibriumPrice - price) * 10;
+    return priceQuotient;
   }
 
   weatherPurchaseCalculus(){
