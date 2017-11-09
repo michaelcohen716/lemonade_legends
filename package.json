@@ -1,0 +1,29 @@
+
+{
+  "name": "lemonade-stand",
+  "version": "1.0.0",
+  "description": "## Background",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "webpack": "^3.8.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelcohen716/lemonade_stand.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michaelcohen716/lemonade_stand/issues"
+  },
+  "homepage": "https://github.com/michaelcohen716/lemonade_stand#readme"
+}
