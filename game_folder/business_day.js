@@ -149,3 +149,5 @@ class BusinessDay {
     return (outlookDecrement + temperatureDecrement);
   }
 }
+
+export default BusinessDay;

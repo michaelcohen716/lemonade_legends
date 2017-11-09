@@ -1,5 +1,5 @@
 import BusinessDay from './business_day';
-
+console.log('hellllllo frum game');
 
 class Game {
   constructor(){
@@ -37,3 +37,5 @@ class Game {
 }
 
 Game.DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+export default Game;
