@@ -22,7 +22,7 @@ class Game {
     };
   }
 
-  start(){
+  run(){
     //intro, etc
     //new day
     Game.DAYS_OF_WEEK.forEach((day) => {

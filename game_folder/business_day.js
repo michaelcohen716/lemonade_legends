@@ -6,10 +6,13 @@ class BusinessDay {
     this.price = 0.25;
     this.lemonsPerPitcher = 4;
     this.sugarPerPitcher = 4;
+    this.iceCubes = 4;
     this.cupsSold = 0;
     this.sales = 0.00;
     this.weatherToday = this.weather();
     this.potentialCustomers = this.potentialCustomers();
+    this.start();
+    //^ this needs to return an object with the day's info to game class
   }
 
   start(){
@@ -25,9 +28,11 @@ class BusinessDay {
 
   simulateDay(){
     for (var i = 0; i < this.potentialCustomers; i++) {
-      if(purchaseOrNot()){
+      if(this.purchaseOrNot()){
         this.cupsSold ++;
         this.sales += this.price;
+        this.updateInventory();
+        //^need to write this
       }
     }
   }
@@ -81,7 +86,7 @@ class BusinessDay {
 
     const weatherDecrement = this.weatherPurchaseCalculus();
     likelihood -= weatherDecrement;
-    //either a wash or a decrement
+    //either a neutral or a decrement
 
     const ingredientsFactor = this.ingredientsPurchaseCalculus();
     likelihood += ingredientsFactor;
