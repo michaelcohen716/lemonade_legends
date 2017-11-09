@@ -7,11 +7,14 @@ module.exports = {
     filename: './game_folder/bundle.js'
   },
   devtool: 'source-map',
+  // resolve: {
+  //   extensions:[".js", ".jsx", "*"]
+  // },
 
   module: {
      loaders: [
        {
-         test: [/\.js?$/],
+         test: [/\.jsx?$/, /\.js?$/],
          exclude: /node_modules/,
          loader: 'babel-loader',
          query: {

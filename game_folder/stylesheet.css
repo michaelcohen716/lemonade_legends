@@ -13,20 +13,39 @@ canvas {
   height: 900;*/
 }
 
+.dock-holder {
+  width: 100%;
+  height: 40px;
+}
+
 .inventory {
   margin-left: 14%;
   width: 100%;
   height: 100px;
+  display: flex;
 }
 
-.inventory-cups {
-  width: 100px;
+.inventory-number {
+  width: 200px;
+  margin: 5px;
+
+  /*height: 20px;*/
+}
+
+.inventory-holder {
+  width: 175px;
   height: 100px;
   list-style: none;
+  margin-left: 8px;
+  margin-right: 8px;
+  font-size: 14px;
 
 }
 
 .inventory-buy-button {
   width: 200px;
   margin: 5px;
+  /*border: 1px solid yellow;
+  background: pink;*/
+  border-radius: 10%;
 }

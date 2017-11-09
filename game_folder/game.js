@@ -1,5 +1,5 @@
 import BusinessDay from './business_day';
-console.log('hellllllo frum game');
+import Weather from './weather';
 
 class Game {
   constructor(){
@@ -8,7 +8,8 @@ class Game {
     this.sugar = 0;
     this.iceCubes = 0;
     this.cash = 20.00;
-    this.day = 0;
+    this.day = 1;
+    this.weather = this.generateWeather();
   }
 
   resources(){
@@ -20,6 +21,23 @@ class Game {
       cash: this.cash,
       day: this.day,
     };
+  }
+
+  generateWeather(){
+    let weather = new Weather();
+  }
+
+  updateInventory(resource, units, price){
+    if (resource === "cups"){
+      this.cups += units;
+    } else if (resource === "lemons"){
+      this.lemons += units;
+    } else if (resource === "sugar"){
+      this.sugar += units;
+    } else if (resource === "ice-cubes"){
+      this.iceCubes += units;
+    }
+    this.cash -= price;
   }
 
   run(){

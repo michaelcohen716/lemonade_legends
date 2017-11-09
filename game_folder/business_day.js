@@ -9,8 +9,8 @@ class BusinessDay {
     this.iceCubes = 4;
     this.cupsSold = 0;
     this.sales = 0.00;
-    this.weatherToday = this.weather();
-    this.potentialCustomers = this.potentialCustomers();
+    // this.weatherToday = this.weather();
+    // this.potentialCustomers = this.potentialCustomers();
     this.start();
     //^ this needs to return an object with the day's info to game class
   }
@@ -26,6 +26,10 @@ class BusinessDay {
     //end day, print results
   }
 
+  updateInventory(resource, units, price){
+
+  }
+
   simulateDay(){
     for (var i = 0; i < this.potentialCustomers; i++) {
       if(this.purchaseOrNot()){
@@ -38,25 +42,6 @@ class BusinessDay {
   }
 
 
-  weather(){
-    const maxTemp = 100;
-    const minTemp = 50;
-    let temperature = Math.floor(Math.random() * (maxTemp - minTemp) + minTemp);
-    let outlookQuotient = Math.floor(Math.random() * 4);
-    let outlook;
-    if (outlookQuotient == 0 || outlookQuotient == 1){
-      outlook = "Sunny";
-    } else if (outlookQuotient == 2){
-      outlook = "Overcast";
-    } else {
-      outlook = "Rainy";
-    }
-
-    return {
-      temperature: temperature,
-      outlook: outlook
-    };
-  }
 
   potentialCustomers(){
     const weatherObject = this.weatherToday;
