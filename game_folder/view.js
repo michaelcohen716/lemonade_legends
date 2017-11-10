@@ -10,6 +10,7 @@ class View {
 
     this.render();
     this.bindEvents();
+    // this.startDay = this.startDay.bind(this)
   }
 
   render(){
@@ -23,8 +24,11 @@ class View {
       const $button = $(e.currentTarget);
       this.makePurchase($button);
       this.render();
-    })
-  );
+    }));
+
+    $("input").click(()=> {
+      this.game.run();
+    });
 
   }
 
@@ -38,34 +42,70 @@ class View {
   }
 
   setupView(){
-    this.setupDock();
+    let dock = this.setupDock();
+    this.$el.append(dock);
+
     this.setupViewCups();
     this.setupViewLemons();
     this.setupViewSugar();
     this.setupViewIceCubes();
-
+    this.setupForm();
+    let form = this.setupForm();
+    this.$el.append(form);
   }
 
+  setupForm(){
+    var $form = '<form class="form-holder">';
+
+    let price = '<div class="form-item">';
+    price += '<span class="form-line">Price per Cup</span>';
+    price += '<input type="text" placeholder="25" class="form-input">';
+    price += '<span class="form-line"> Cents</span>';
+    $form += price;
+    $form += '<div> </div>';
+
+    let lemons = '<span class="form-line">Lemons per Pitcher</span>';
+    lemons += '<input type="text" placeholder="4" class="form-input">';
+    lemons += '<span class="form-line"> Lemons</span>';
+    $form += lemons;
+    $form += '<div> </div>';
+
+    let sugar = '<span class="form-line">Sugar per Pitcher</span>';
+    sugar += '<input type="text" placeholder="4" class="form-input">';
+    sugar += '<span class="form-line"> Cups</span>';
+    $form += sugar;
+    $form += '<div> </div>';
+
+    let ice = '<span class="form-line">Ice per Pitcher</span>';
+    ice += '<input type="text" placeholder="4" class="form-input">';
+    ice += '<span class="form-line"> Cubes</span>';
+    $form += ice;
+    $form += '<div> </div>';
+
+    let submit = '<input class="form-submit" id="start-day" type="submit" value="Start Day"/>';
+    $form += submit;
+
+    return $form;
+  }
+
+
   setupDock(){
-    const $div = $("<div>");
-    $div.addClass("dock-holder");
+    var $div = '<div class="dock-holder">';
 
     let day = this.game.day;
-    let $span = $(`<span>Day ${day}</span>`);
-    $span.addClass("dock-day");
-    $div.append($span);
+    $div += `<span class="dock-day">Day ${day}</span>`;
 
     let cash = this.game.cash;
-    $span = $(`<span>Money: $${cash}</span>`);
-    $span.addClass("dock-cash");
-
+    $div += `<span class="dock-cash">Money: $${cash}</span>`;
 
     let weather = this.game.weather;
     let temperature = weather.temperature;
-    let $p = $(`<p>High Temperature: ${temperature} degrees</span>`);
-    $div.append($p);
+    $div += `<span class="dock-temp">Temperature: ${temperature} degrees</span>`;
 
     let forecast = weather.outlook;
+    $div += `<span class="dock-forecast">Forecast: ${forecast}</span>`;
+
+    return $div;
 
   }
 

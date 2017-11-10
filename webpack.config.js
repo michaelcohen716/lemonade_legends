@@ -7,9 +7,9 @@ module.exports = {
     filename: './game_folder/bundle.js'
   },
   devtool: 'source-map',
-  // resolve: {
-  //   extensions:[".js", ".jsx", "*"]
-  // },
+  resolve: {
+    extensions:[".js", ".jsx", "*"]
+  },
 
   module: {
      loaders: [
@@ -24,3 +24,5 @@ module.exports = {
      ]
    },
 };
+
+// presets: ['es2015', 'react']

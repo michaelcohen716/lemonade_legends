@@ -10572,7 +10572,7 @@ var _business_day = __webpack_require__(10);
 
 var _business_day2 = _interopRequireDefault(_business_day);
 
-var _weather = __webpack_require__(19);
+var _weather = __webpack_require__(11);
 
 var _weather2 = _interopRequireDefault(_weather);
 
@@ -10590,6 +10590,7 @@ var Game = function () {
     this.iceCubes = 0;
     this.cash = 20.00;
     this.day = 1;
+    this.today = null;
     this.weather = this.generateWeather();
   }
 
@@ -10609,6 +10610,7 @@ var Game = function () {
     key: 'generateWeather',
     value: function generateWeather() {
       var weather = new _weather2.default();
+      return weather.weather();
     }
   }, {
     key: 'updateInventory',
@@ -10627,14 +10629,127 @@ var Game = function () {
   }, {
     key: 'run',
     value: function run() {
-      var _this = this;
-
       //intro, etc
       //new day
-      Game.DAYS_OF_WEEK.forEach(function (day) {
-        var resources = _this.resources();
-        var newDay = new _business_day2.default(resources);
-      });
+      debugger;
+      var resources = this.resources();
+      this.generateWeather();
+      var potentialCustomers = this.potentialCustomers();
+      var today = this.simulateDay(potentialCustomers);
+      return today;
+    }
+  }, {
+    key: 'simulateDay',
+    value: function simulateDay(potentialCustomers) {
+      var resultArray = [];
+      for (var i = 0; i < potentialCustomers; i++) {
+        if (this.purchaseOrNot()) {
+          resultArray.push(true);
+          this.cupsSold++;
+          this.sales += this.price;
+          // this.updateInventory();
+          //^need to write this
+        } else {
+          resultArray.push(false);
+        }
+      }
+      console.log(resultArray);
+      return resultArray;
+    }
+  }, {
+    key: 'potentialCustomers',
+    value: function potentialCustomers() {
+      var weatherObject = this.weatherToday;
+
+      var outlookQuotients = {
+        "Sunny": 150,
+        "Overcast": 110,
+        "Rainy": 75
+      };
+      var outlookScore = void 0;
+      var tempScore = weatherObject.temperature;
+
+      if (weatherObject.outlook == "Sunny") {
+        outlookScore = Math.floor(Math.random() * outlookQuotients.Sunny);
+      } else if (weatherObject.outlook == "Overcast") {
+        outlookScore = Math.floor(Math.random() * outlookQuotients.Overcast);
+      } else {
+        outlookScore = Math.floor(Math.random() * outlookQuotients.Overcast);
+      }
+
+      var potentialVisitors = tempScore + outlookScore;
+      return potentialVisitors;
+    }
+  }, {
+    key: 'purchaseOrNot',
+    value: function purchaseOrNot() {
+      var likelihood = 100;
+
+      var weatherDecrement = this.weatherPurchaseCalculus();
+      likelihood -= weatherDecrement;
+      //either a neutral or a decrement
+
+      var ingredientsFactor = this.ingredientsPurchaseCalculus();
+      likelihood += ingredientsFactor;
+      //could be positive or negative
+
+      var priceFactor = this.pricePurchaseCalculus();
+      likelihood += priceFactor;
+      //could be positive or negative
+
+      if (likelihood >= 50) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }, {
+    key: 'ingredientsPurchaseCalculus',
+    value: function ingredientsPurchaseCalculus() {
+      var weatherObject = this.weatherToday;
+
+      var iceCubes = this.iceCubes;
+      var iceCubeEquilibrium = weatherObject.temperature / 20;
+      var iceQuotient = (iceCubes - iceCubeEquilibrium) * 10;
+
+      var lemons = this.lemonsPerPitcher;
+      var lemonEquilibrium = 4;
+      var lemonQuotient = (lemons - lemonEquilibrium) * 5;
+
+      var sugar = this.sugarPerPitcher;
+      var sugarEquilibrium = 4;
+      var sugarQuotient = (sugar - sugarEquilibrium) * 5;
+
+      return iceQuotient + lemonQuotient + sugarQuotient;
+    }
+  }, {
+    key: 'pricePurchaseCalculus',
+    value: function pricePurchaseCalculus() {
+      var price = this.price;
+
+      var equilibriumPrice = 0.25;
+      var priceQuotient = (equilibriumPrice - price) * 10;
+      return priceQuotient;
+    }
+  }, {
+    key: 'weatherPurchaseCalculus',
+    value: function weatherPurchaseCalculus() {
+      var weatherObject = this.weatherToday;
+      var outlookQuotients = {
+        "Sunny": 0,
+        "Overcast": 15,
+        "Rainy": 30
+      };
+
+      var outlookDecrement = outlookQuotients[weatherObject.outlook];
+      outlookDecrement *= Math.floor(Math.random() * outlookDecrement);
+
+      var tempConstant = 0.25;
+      var maxTemp = 100;
+      var actualTemp = weatherObject.temperature;
+      var temperatureDecrement = (maxTemp - actualTemp) * tempConstant;
+
+      return outlookDecrement + temperatureDecrement;
     }
   }]);
 
@@ -10668,7 +10783,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 	if ( true ) {
 
 		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1), __webpack_require__(12) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1), __webpack_require__(13) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -11648,7 +11763,7 @@ var _game = __webpack_require__(3);
 
 var _game2 = _interopRequireDefault(_game);
 
-var _view = __webpack_require__(11);
+var _view = __webpack_require__(12);
 
 var _view2 = _interopRequireDefault(_view);
 
@@ -11710,7 +11825,6 @@ var BusinessDay = function () {
   _createClass(BusinessDay, [{
     key: "start",
     value: function start() {
-      //render weather
       //allow player to buy resources at store
       //allow player to set recipe
       //player finalizes and presses start
@@ -11722,113 +11836,6 @@ var BusinessDay = function () {
   }, {
     key: "updateInventory",
     value: function updateInventory(resource, units, price) {}
-  }, {
-    key: "simulateDay",
-    value: function simulateDay() {
-      for (var i = 0; i < this.potentialCustomers; i++) {
-        if (this.purchaseOrNot()) {
-          this.cupsSold++;
-          this.sales += this.price;
-          this.updateInventory();
-          //^need to write this
-        }
-      }
-    }
-  }, {
-    key: "potentialCustomers",
-    value: function potentialCustomers() {
-      var weatherObject = this.weatherToday;
-
-      var outlookQuotients = {
-        "Sunny": 150,
-        "Overcast": 110,
-        "Rainy": 75
-      };
-      var outlookScore = void 0;
-      var tempScore = weatherObject.temperature;
-
-      if (weatherObject.outlook == "Sunny") {
-        outlookScore = Math.floor(Math.random() * outlookQuotients.Sunny);
-      } else if (weatherObject.outlook == "Overcast") {
-        outlookScore = Math.floor(Math.random() * outlookQuotients.Overcast);
-      } else {
-        outlookScore = Math.floor(Math.random() * outlookQuotients.Overcast);
-      }
-
-      var potentialVisitors = tempScore + outlookScore;
-      return potentialVisitors;
-    }
-  }, {
-    key: "purchaseOrNot",
-    value: function purchaseOrNot() {
-      var likelihood = 100;
-
-      var weatherDecrement = this.weatherPurchaseCalculus();
-      likelihood -= weatherDecrement;
-      //either a neutral or a decrement
-
-      var ingredientsFactor = this.ingredientsPurchaseCalculus();
-      likelihood += ingredientsFactor;
-      //could be positive or negative
-
-      var priceFactor = this.pricePurchaseCalculus();
-      likelihood += priceFactor;
-      //could be positive or negative
-
-      if (likelihood >= 50) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }, {
-    key: "ingredientsPurchaseCalculus",
-    value: function ingredientsPurchaseCalculus() {
-      var weatherObject = this.weatherToday;
-
-      var iceCubes = this.iceCubes;
-      var iceCubeEquilibrium = weatherObject.temperature / 20;
-      var iceQuotient = (iceCubes - iceCubeEquilibrium) * 10;
-
-      var lemons = this.lemonsPerPitcher;
-      var lemonEquilibrium = 4;
-      var lemonQuotient = (lemons - lemonEquilibrium) * 5;
-
-      var sugar = this.sugarPerPitcher;
-      var sugarEquilibrium = 4;
-      var sugarQuotient = (sugar - sugarEquilibrium) * 5;
-
-      return iceQuotient + lemonQuotient + sugarQuotient;
-    }
-  }, {
-    key: "pricePurchaseCalculus",
-    value: function pricePurchaseCalculus() {
-      var price = this.price;
-
-      var equilibriumPrice = 0.25;
-      var priceQuotient = (equilibriumPrice - price) * 10;
-      return priceQuotient;
-    }
-  }, {
-    key: "weatherPurchaseCalculus",
-    value: function weatherPurchaseCalculus() {
-      var weatherObject = this.weatherToday;
-      var outlookQuotients = {
-        "Sunny": 0,
-        "Overcast": 15,
-        "Rainy": 30
-      };
-
-      var outlookDecrement = outlookQuotients[weatherObject.outlook];
-      outlookDecrement *= Math.floor(Math.random() * outlookDecrement);
-
-      var tempConstant = 0.25;
-      var maxTemp = 100;
-      var actualTemp = weatherObject.temperature;
-      var temperatureDecrement = (maxTemp - actualTemp) * tempConstant;
-
-      return outlookDecrement + temperatureDecrement;
-    }
   }]);
 
   return BusinessDay;
@@ -11838,6 +11845,54 @@ exports.default = BusinessDay;
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Weather = function () {
+  function Weather() {
+    _classCallCheck(this, Weather);
+  }
+
+  _createClass(Weather, [{
+    key: "weather",
+    value: function weather() {
+      var maxTemp = 100;
+      var minTemp = 50;
+      var temperature = Math.floor(Math.random() * (maxTemp - minTemp) + minTemp);
+      var outlookQuotient = Math.floor(Math.random() * 4);
+      var outlook = void 0;
+      if (outlookQuotient == 0 || outlookQuotient == 1) {
+        outlook = "Sunny";
+      } else if (outlookQuotient == 2) {
+        outlook = "Overcast";
+      } else {
+        outlook = "Rainy";
+      }
+
+      return {
+        temperature: temperature,
+        outlook: outlook
+      };
+    }
+  }]);
+
+  return Weather;
+}();
+
+exports.default = Weather;
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11859,7 +11914,7 @@ var _game = __webpack_require__(3);
 
 var _game2 = _interopRequireDefault(_game);
 
-var _react = __webpack_require__(13);
+var _react = __webpack_require__(14);
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -11876,6 +11931,7 @@ var View = function () {
 
     this.render();
     this.bindEvents();
+    // this.startDay = this.startDay.bind(this)
   }
 
   _createClass(View, [{
@@ -11894,6 +11950,10 @@ var View = function () {
         _this.makePurchase($button);
         _this.render();
       });
+
+      (0, _jquery2.default)("input").click(function () {
+        _this.game.run();
+      });
     }
   }, {
     key: 'makePurchase',
@@ -11908,33 +11968,71 @@ var View = function () {
   }, {
     key: 'setupView',
     value: function setupView() {
-      this.setupDock();
+      var dock = this.setupDock();
+      this.$el.append(dock);
+
       this.setupViewCups();
       this.setupViewLemons();
       this.setupViewSugar();
       this.setupViewIceCubes();
+      this.setupForm();
+      var form = this.setupForm();
+      this.$el.append(form);
+    }
+  }, {
+    key: 'setupForm',
+    value: function setupForm() {
+      var $form = '<form class="form-holder">';
+
+      var price = '<div class="form-item">';
+      price += '<span class="form-line">Price per Cup</span>';
+      price += '<input type="text" placeholder="25" class="form-input">';
+      price += '<span class="form-line"> Cents</span>';
+      $form += price;
+      $form += '<div> </div>';
+
+      var lemons = '<span class="form-line">Lemons per Pitcher</span>';
+      lemons += '<input type="text" placeholder="4" class="form-input">';
+      lemons += '<span class="form-line"> Lemons</span>';
+      $form += lemons;
+      $form += '<div> </div>';
+
+      var sugar = '<span class="form-line">Sugar per Pitcher</span>';
+      sugar += '<input type="text" placeholder="4" class="form-input">';
+      sugar += '<span class="form-line"> Cups</span>';
+      $form += sugar;
+      $form += '<div> </div>';
+
+      var ice = '<span class="form-line">Ice per Pitcher</span>';
+      ice += '<input type="text" placeholder="4" class="form-input">';
+      ice += '<span class="form-line"> Cubes</span>';
+      $form += ice;
+      $form += '<div> </div>';
+
+      var submit = '<input class="form-submit" id="start-day" type="submit" value="Start Day"/>';
+      $form += submit;
+
+      return $form;
     }
   }, {
     key: 'setupDock',
     value: function setupDock() {
-      var $div = (0, _jquery2.default)("<div>");
-      $div.addClass("dock-holder");
+      var $div = '<div class="dock-holder">';
 
       var day = this.game.day;
-      var $span = (0, _jquery2.default)('<span>Day ' + day + '</span>');
-      $span.addClass("dock-day");
-      $div.append($span);
+      $div += '<span class="dock-day">Day ' + day + '</span>';
 
       var cash = this.game.cash;
-      $span = (0, _jquery2.default)('<span>Money: $' + cash + '</span>');
-      $span.addClass("dock-cash");
+      $div += '<span class="dock-cash">Money: $' + cash + '</span>';
 
       var weather = this.game.weather;
       var temperature = weather.temperature;
-      var $p = (0, _jquery2.default)('<p>High Temperature: ' + temperature + ' degrees</span>');
-      $div.append($p);
+      $div += '<span class="dock-temp">Temperature: ' + temperature + ' degrees</span>';
 
       var forecast = weather.outlook;
+      $div += '<span class="dock-forecast">Forecast: ' + forecast + '</span>';
+
+      return $div;
     }
   }, {
     key: 'setupViewCups',
@@ -12080,7 +12178,7 @@ var View = function () {
 exports.default = View;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
@@ -12106,22 +12204,22 @@ return $.ui.version = "1.12.1";
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports = __webpack_require__(14);
-} else {
   module.exports = __webpack_require__(15);
+} else {
+  module.exports = __webpack_require__(16);
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12150,7 +12248,7 @@ version:"16.1.0",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurren
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12174,7 +12272,7 @@ var invariant = __webpack_require__(7);
 var emptyObject = __webpack_require__(6);
 var warning = __webpack_require__(8);
 var emptyFunction = __webpack_require__(2);
-var checkPropTypes = __webpack_require__(16);
+var checkPropTypes = __webpack_require__(17);
 
 // TODO: this is special because it gets imported during build.
 
@@ -13501,7 +13599,7 @@ module.exports = react;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13517,7 +13615,7 @@ module.exports = react;
 if (process.env.NODE_ENV !== 'production') {
   var invariant = __webpack_require__(7);
   var warning = __webpack_require__(8);
-  var ReactPropTypesSecret = __webpack_require__(17);
+  var ReactPropTypesSecret = __webpack_require__(18);
   var loggedTypeFailures = {};
 }
 
@@ -13568,7 +13666,7 @@ module.exports = checkPropTypes;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13585,55 +13683,6 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-
-/***/ }),
-/* 18 */,
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Weather = function () {
-  function Weather() {
-    _classCallCheck(this, Weather);
-  }
-
-  _createClass(Weather, [{
-    key: "weather",
-    value: function weather() {
-      var maxTemp = 100;
-      var minTemp = 50;
-      var temperature = Math.floor(Math.random() * (maxTemp - minTemp) + minTemp);
-      var outlookQuotient = Math.floor(Math.random() * 4);
-      var outlook = void 0;
-      if (outlookQuotient == 0 || outlookQuotient == 1) {
-        outlook = "Sunny";
-      } else if (outlookQuotient == 2) {
-        outlook = "Overcast";
-      } else {
-        outlook = "Rainy";
-      }
-
-      return {
-        temperature: temperature,
-        outlook: outlook
-      };
-    }
-  }]);
-
-  return Weather;
-}();
-
-exports.default = Weather;
 
 /***/ })
 /******/ ]);
