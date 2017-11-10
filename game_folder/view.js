@@ -15,6 +15,7 @@ class View {
 
   render(){
     this.$el.empty();
+    // this.setupView
     this.setupView();
   }
 
@@ -26,10 +27,19 @@ class View {
       this.render();
     }));
 
-    $("input").click(()=> {
-      this.game.run();
+    this.$el.on("submit","form",(e)=>{
+      // debugger
+      e.preventDefault();
+      this.submitInfo();
     });
 
+    // var initialCash = this.game.cash;
+    // var changeCash = can.compute(()=>{
+    //   return initialCash;
+    // });
+    // changeCash.bind("change", ()=>{
+    //   this.render();
+    // });
   }
 
   makePurchase($button){
@@ -55,29 +65,29 @@ class View {
   }
 
   setupForm(){
-    var $form = '<form class="form-holder">';
+    var $form = '<form id="form" class="form-holder">';
 
     let price = '<div class="form-item">';
     price += '<span class="form-line">Price per Cup</span>';
-    price += '<input type="text" placeholder="25" class="form-input">';
+    price += '<input id="price-units" type="text" value="25" class="form-input">';
     price += '<span class="form-line"> Cents</span>';
     $form += price;
     $form += '<div> </div>';
 
     let lemons = '<span class="form-line">Lemons per Pitcher</span>';
-    lemons += '<input type="text" placeholder="4" class="form-input">';
+    lemons += '<input id="lemon-units" type="text" value="4" class="form-input">';
     lemons += '<span class="form-line"> Lemons</span>';
     $form += lemons;
     $form += '<div> </div>';
 
     let sugar = '<span class="form-line">Sugar per Pitcher</span>';
-    sugar += '<input type="text" placeholder="4" class="form-input">';
+    sugar += '<input id="sugar-units" type="text" value="4" class="form-input">';
     sugar += '<span class="form-line"> Cups</span>';
     $form += sugar;
     $form += '<div> </div>';
 
     let ice = '<span class="form-line">Ice per Pitcher</span>';
-    ice += '<input type="text" placeholder="4" class="form-input">';
+    ice += '<input id="ice-units" type="text" value="4" class="form-input">';
     ice += '<span class="form-line"> Cubes</span>';
     $form += ice;
     $form += '<div> </div>';
@@ -88,6 +98,28 @@ class View {
     return $form;
   }
 
+  submitInfo(){
+    let priceInfo = document.getElementById("price-units").value;
+    let lemonInfo = document.getElementById("lemon-units").value;
+    let sugarInfo = document.getElementById("sugar-units").value;
+    let iceInfo = document.getElementById("ice-units").value;
+
+    if(priceInfo == 0 || lemonInfo == 0 || sugarInfo == 0 || iceInfo == 0){
+      debugger
+      alert("item can't be zero");
+      return;
+    }
+    let gameObject = { price: priceInfo,
+                       lemons: lemonInfo,
+                       sugar: sugarInfo,
+                       ice: iceInfo,
+                       weather: this.game.weather};
+
+    // debugger
+    this.game.run(gameObject);
+
+
+  }
 
   setupDock(){
     var $div = '<div class="dock-holder">';

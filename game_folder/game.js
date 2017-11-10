@@ -10,6 +10,7 @@ class Game {
     this.cash = 20.00;
     this.day = 1;
     this.today = null;
+    this.sales = 0;
     this.weather = this.generateWeather();
   }
 
@@ -43,38 +44,50 @@ class Game {
     this.cash -= price;
   }
 
-  run(){
+  run(gameObject){
     //intro, etc
     //new day
-    debugger
+
     const resources = this.resources();
-    this.generateWeather();
+    // this.generateWeather();
     let potentialCustomers = this.potentialCustomers();
-    let today = this.simulateDay(potentialCustomers);
+    // debugger
+    let today = this.simulateDay(potentialCustomers, gameObject);
+    debugger
     return today;
   }
 
-  simulateDay(potentialCustomers){
+  simulateDay(potentialCustomers, gameObject){
+    // debugger
     let resultArray = [];
     for (var i = 0; i < potentialCustomers; i++) {
-      if(this.purchaseOrNot()){
+      // debugger
+      if(this.purchaseOrNot(gameObject)){
         resultArray.push(true);
         this.cupsSold ++;
         this.sales += this.price;
-        // this.updateInventory();
-        //^need to write this
+        this.cash += this.sales;
       }else {
         resultArray.push(false);
       }
     }
-    console.log(resultArray);
+    let numPurchases = 0;
+
+    for (var j = 0; j < resultArray.length; j++) {
+      if(resultArray[j]==true){
+        // debugger
+        numPurchases+=1;
+      }
+    }
+
+    console.log(numPurchases);
     return resultArray;
   }
 
 
 
   potentialCustomers(){
-    const weatherObject = this.weatherToday;
+    const weatherObject = this.weather;
 
     const outlookQuotients = {
       "Sunny": 150,
@@ -96,21 +109,29 @@ class Game {
     return potentialVisitors;
   }
 
-  purchaseOrNot(){
+  purchaseOrNot(gameObject){
+    const price = gameObject.price;
+    const lemons = gameObject.lemons;
+    const sugar = gameObject.sugar;
+    const ice = gameObject.ice;
+    const weather = gameObject.weather;
     let likelihood = 100;
 
-    const weatherDecrement = this.weatherPurchaseCalculus();
+    const weatherDecrement = this.weatherPurchaseCalculus(weather);
     likelihood -= weatherDecrement;
+    // debugger
     //either a neutral or a decrement
 
-    const ingredientsFactor = this.ingredientsPurchaseCalculus();
+    const ingredientsFactor = this.ingredientsPurchaseCalculus(lemons, sugar, ice, weather);
+    // debugger
+
     likelihood += ingredientsFactor;
     //could be positive or negative
 
-    const priceFactor = this.pricePurchaseCalculus();
+    const priceFactor = this.pricePurchaseCalculus(price);
     likelihood += priceFactor;
     //could be positive or negative
-
+    // debugger
     if (likelihood >= 50){
       return true;
     } else {
@@ -118,49 +139,53 @@ class Game {
     }
   }
 
-  ingredientsPurchaseCalculus(){
-    const weatherObject = this.weatherToday;
+  ingredientsPurchaseCalculus(lemons, sugar, ice, weather){
+    const weatherObject = weather;
 
-    const iceCubes = this.iceCubes;
+    // const iceCubes = this.iceCubes;
     const iceCubeEquilibrium = weatherObject.temperature / 20;
-    const iceQuotient = (iceCubes - iceCubeEquilibrium) * 10;
+    const iceQuotient = (ice - iceCubeEquilibrium) * 7;
 
-    const lemons = this.lemonsPerPitcher;
+    // const lemons = this.lemonsPerPitcher;
     const lemonEquilibrium = 4;
     const lemonQuotient = (lemons - lemonEquilibrium) * 5;
 
-    const sugar = this.sugarPerPitcher;
+    // const sugar = this.sugarPerPitcher;
     const sugarEquilibrium = 4;
     const sugarQuotient = (sugar - sugarEquilibrium) * 5;
+    // debugger
 
     return (iceQuotient + lemonQuotient + sugarQuotient);
   }
 
 
-  pricePurchaseCalculus(){
-    const price = this.price;
+  pricePurchaseCalculus(price, weather){
+    // const price = this.price;
 
-    const equilibriumPrice = 0.25;
-    const priceQuotient = (equilibriumPrice - price) * 10;
+    let equilibriumPrice = 0.25;
+    equilibriumPrice = Math.random() * 1.75 * equilibriumPrice;
+    const priceQuotient = (equilibriumPrice - (price/100)) * 500;
     return priceQuotient;
   }
 
-  weatherPurchaseCalculus(){
-    const weatherObject = this.weatherToday;
+  weatherPurchaseCalculus(weather){
+    const weatherObject = weather;
     const outlookQuotients = {
-      "Sunny": 0,
-      "Overcast": 15,
-      "Rainy": 30
+      "Sunny": 5,
+      "Overcast": 25,
+      "Rainy": 50
     };
-
+    // debugger
     let outlookDecrement = outlookQuotients[weatherObject.outlook];
-    outlookDecrement *= Math.floor(Math.random() * outlookDecrement);
+    // debugger
+    outlookDecrement = Math.floor(Math.random() * outlookDecrement);
+    // debugger
 
     const tempConstant = 0.25;
     const maxTemp = 100;
     const actualTemp = weatherObject.temperature;
     const temperatureDecrement = (maxTemp - actualTemp) * (tempConstant);
-
+    // debugger
     return (outlookDecrement + temperatureDecrement);
   }
 

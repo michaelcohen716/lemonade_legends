@@ -10591,6 +10591,7 @@ var Game = function () {
     this.cash = 20.00;
     this.day = 1;
     this.today = null;
+    this.sales = 0;
     this.weather = this.generateWeather();
   }
 
@@ -10628,38 +10629,50 @@ var Game = function () {
     }
   }, {
     key: 'run',
-    value: function run() {
+    value: function run(gameObject) {
       //intro, etc
       //new day
-      debugger;
+
       var resources = this.resources();
-      this.generateWeather();
+      // this.generateWeather();
       var potentialCustomers = this.potentialCustomers();
-      var today = this.simulateDay(potentialCustomers);
+      // debugger
+      var today = this.simulateDay(potentialCustomers, gameObject);
+      debugger;
       return today;
     }
   }, {
     key: 'simulateDay',
-    value: function simulateDay(potentialCustomers) {
+    value: function simulateDay(potentialCustomers, gameObject) {
+      // debugger
       var resultArray = [];
       for (var i = 0; i < potentialCustomers; i++) {
-        if (this.purchaseOrNot()) {
+        // debugger
+        if (this.purchaseOrNot(gameObject)) {
           resultArray.push(true);
           this.cupsSold++;
           this.sales += this.price;
-          // this.updateInventory();
-          //^need to write this
+          this.cash += this.sales;
         } else {
           resultArray.push(false);
         }
       }
-      console.log(resultArray);
+      var numPurchases = 0;
+
+      for (var j = 0; j < resultArray.length; j++) {
+        if (resultArray[j] == true) {
+          // debugger
+          numPurchases += 1;
+        }
+      }
+
+      console.log(numPurchases);
       return resultArray;
     }
   }, {
     key: 'potentialCustomers',
     value: function potentialCustomers() {
-      var weatherObject = this.weatherToday;
+      var weatherObject = this.weather;
 
       var outlookQuotients = {
         "Sunny": 150,
@@ -10682,21 +10695,29 @@ var Game = function () {
     }
   }, {
     key: 'purchaseOrNot',
-    value: function purchaseOrNot() {
+    value: function purchaseOrNot(gameObject) {
+      var price = gameObject.price;
+      var lemons = gameObject.lemons;
+      var sugar = gameObject.sugar;
+      var ice = gameObject.ice;
+      var weather = gameObject.weather;
       var likelihood = 100;
 
-      var weatherDecrement = this.weatherPurchaseCalculus();
+      var weatherDecrement = this.weatherPurchaseCalculus(weather);
       likelihood -= weatherDecrement;
+      // debugger
       //either a neutral or a decrement
 
-      var ingredientsFactor = this.ingredientsPurchaseCalculus();
+      var ingredientsFactor = this.ingredientsPurchaseCalculus(lemons, sugar, ice, weather);
+      // debugger
+
       likelihood += ingredientsFactor;
       //could be positive or negative
 
-      var priceFactor = this.pricePurchaseCalculus();
+      var priceFactor = this.pricePurchaseCalculus(price);
       likelihood += priceFactor;
       //could be positive or negative
-
+      // debugger
       if (likelihood >= 50) {
         return true;
       } else {
@@ -10705,50 +10726,54 @@ var Game = function () {
     }
   }, {
     key: 'ingredientsPurchaseCalculus',
-    value: function ingredientsPurchaseCalculus() {
-      var weatherObject = this.weatherToday;
+    value: function ingredientsPurchaseCalculus(lemons, sugar, ice, weather) {
+      var weatherObject = weather;
 
-      var iceCubes = this.iceCubes;
+      // const iceCubes = this.iceCubes;
       var iceCubeEquilibrium = weatherObject.temperature / 20;
-      var iceQuotient = (iceCubes - iceCubeEquilibrium) * 10;
+      var iceQuotient = (ice - iceCubeEquilibrium) * 7;
 
-      var lemons = this.lemonsPerPitcher;
+      // const lemons = this.lemonsPerPitcher;
       var lemonEquilibrium = 4;
       var lemonQuotient = (lemons - lemonEquilibrium) * 5;
 
-      var sugar = this.sugarPerPitcher;
+      // const sugar = this.sugarPerPitcher;
       var sugarEquilibrium = 4;
       var sugarQuotient = (sugar - sugarEquilibrium) * 5;
+      // debugger
 
       return iceQuotient + lemonQuotient + sugarQuotient;
     }
   }, {
     key: 'pricePurchaseCalculus',
-    value: function pricePurchaseCalculus() {
-      var price = this.price;
+    value: function pricePurchaseCalculus(price, weather) {
+      // const price = this.price;
 
       var equilibriumPrice = 0.25;
-      var priceQuotient = (equilibriumPrice - price) * 10;
+      equilibriumPrice = Math.random() * 1.75 * equilibriumPrice;
+      var priceQuotient = (equilibriumPrice - price / 100) * 500;
       return priceQuotient;
     }
   }, {
     key: 'weatherPurchaseCalculus',
-    value: function weatherPurchaseCalculus() {
-      var weatherObject = this.weatherToday;
+    value: function weatherPurchaseCalculus(weather) {
+      var weatherObject = weather;
       var outlookQuotients = {
-        "Sunny": 0,
-        "Overcast": 15,
-        "Rainy": 30
+        "Sunny": 5,
+        "Overcast": 25,
+        "Rainy": 50
       };
-
+      // debugger
       var outlookDecrement = outlookQuotients[weatherObject.outlook];
-      outlookDecrement *= Math.floor(Math.random() * outlookDecrement);
+      // debugger
+      outlookDecrement = Math.floor(Math.random() * outlookDecrement);
+      // debugger
 
       var tempConstant = 0.25;
       var maxTemp = 100;
       var actualTemp = weatherObject.temperature;
       var temperatureDecrement = (maxTemp - actualTemp) * tempConstant;
-
+      // debugger
       return outlookDecrement + temperatureDecrement;
     }
   }]);
@@ -11938,6 +11963,7 @@ var View = function () {
     key: 'render',
     value: function render() {
       this.$el.empty();
+      // this.setupView
       this.setupView();
     }
   }, {
@@ -11951,9 +11977,19 @@ var View = function () {
         _this.render();
       });
 
-      (0, _jquery2.default)("input").click(function () {
-        _this.game.run();
+      this.$el.on("submit", "form", function (e) {
+        // debugger
+        e.preventDefault();
+        _this.submitInfo();
       });
+
+      // var initialCash = this.game.cash;
+      // var changeCash = can.compute(()=>{
+      //   return initialCash;
+      // });
+      // changeCash.bind("change", ()=>{
+      //   this.render();
+      // });
     }
   }, {
     key: 'makePurchase',
@@ -11982,29 +12018,29 @@ var View = function () {
   }, {
     key: 'setupForm',
     value: function setupForm() {
-      var $form = '<form class="form-holder">';
+      var $form = '<form id="form" class="form-holder">';
 
       var price = '<div class="form-item">';
       price += '<span class="form-line">Price per Cup</span>';
-      price += '<input type="text" placeholder="25" class="form-input">';
+      price += '<input id="price-units" type="text" value="25" class="form-input">';
       price += '<span class="form-line"> Cents</span>';
       $form += price;
       $form += '<div> </div>';
 
       var lemons = '<span class="form-line">Lemons per Pitcher</span>';
-      lemons += '<input type="text" placeholder="4" class="form-input">';
+      lemons += '<input id="lemon-units" type="text" value="4" class="form-input">';
       lemons += '<span class="form-line"> Lemons</span>';
       $form += lemons;
       $form += '<div> </div>';
 
       var sugar = '<span class="form-line">Sugar per Pitcher</span>';
-      sugar += '<input type="text" placeholder="4" class="form-input">';
+      sugar += '<input id="sugar-units" type="text" value="4" class="form-input">';
       sugar += '<span class="form-line"> Cups</span>';
       $form += sugar;
       $form += '<div> </div>';
 
       var ice = '<span class="form-line">Ice per Pitcher</span>';
-      ice += '<input type="text" placeholder="4" class="form-input">';
+      ice += '<input id="ice-units" type="text" value="4" class="form-input">';
       ice += '<span class="form-line"> Cubes</span>';
       $form += ice;
       $form += '<div> </div>';
@@ -12013,6 +12049,28 @@ var View = function () {
       $form += submit;
 
       return $form;
+    }
+  }, {
+    key: 'submitInfo',
+    value: function submitInfo() {
+      var priceInfo = document.getElementById("price-units").value;
+      var lemonInfo = document.getElementById("lemon-units").value;
+      var sugarInfo = document.getElementById("sugar-units").value;
+      var iceInfo = document.getElementById("ice-units").value;
+
+      if (priceInfo == 0 || lemonInfo == 0 || sugarInfo == 0 || iceInfo == 0) {
+        debugger;
+        alert("item can't be zero");
+        return;
+      }
+      var gameObject = { price: priceInfo,
+        lemons: lemonInfo,
+        sugar: sugarInfo,
+        ice: iceInfo,
+        weather: this.game.weather };
+
+      // debugger
+      this.game.run(gameObject);
     }
   }, {
     key: 'setupDock',
