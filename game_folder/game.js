@@ -58,15 +58,42 @@ class Game {
   }
 
   simulateDay(potentialCustomers, gameObject){
-    // debugger
+    debugger
     let resultArray = [];
+    let pitcherCups = 0;
     for (var i = 0; i < potentialCustomers; i++) {
       // debugger
-      if(this.purchaseOrNot(gameObject)){
+
+      if(this.checkInventory() == false && pitcherCups == 0){
+        // debugger
+        resultArray.push(false);
+        console.log("sold out");
+        continue;
+      }
+
+      if(this.iceCubes - gameObject.ice < 0){
+        resultArray.push(false);
+        console.log("sold out");
+        continue;
+      }
+
+      if(this.checkInventory() == true && pitcherCups == 0){
+        debugger
+        pitcherCups = this.makePitcher(gameObject);
+        if (pitcherCups == false){
+          resultArray.push(false);
+          continue;
+        }
+      }
+
+      if(this.purchaseOrNot(gameObject) && this.iceCubes > 0 && this.cups > 0){
         resultArray.push(true);
         this.cupsSold ++;
-        this.sales += this.price;
-        this.cash += this.sales;
+        this.sales += (parseInt(gameObject.price)/100);
+        this.cash += (parseInt(gameObject.price)/100);
+        this.cups -=1;
+        this.iceCubes -= (parseInt(gameObject.ice));
+        debugger
       }else {
         resultArray.push(false);
       }
@@ -75,16 +102,38 @@ class Game {
 
     for (var j = 0; j < resultArray.length; j++) {
       if(resultArray[j]==true){
-        // debugger
-        numPurchases+=1;
+        numPurchases +=1;
+        pitcherCups -=1;
       }
     }
-
+    console.log(potentialCustomers);
     console.log(numPurchases);
+    console.log(this.resources());
     return resultArray;
   }
 
+  makePitcher(gameObject){
+    const lemonsPer = gameObject.lemons;
+    const sugarPer = gameObject.sugar;
+    debugger
+    if(this.lemons > lemonsPer && this.sugar > sugarPer){
+      this.lemons -= lemonsPer;
+      this.sugar -= sugarPer;
+      debugger
+      return 10;
+    } else {
+      return false;
+    }
 
+  }
+
+  checkInventory(){
+    if(this.cups == 0 || this.lemons == 0 || this.sugar == 0 || this.iceCubes == 0){
+      debugger
+      return false;
+    }
+    return true;
+  }
 
   potentialCustomers(){
     const weatherObject = this.weather;

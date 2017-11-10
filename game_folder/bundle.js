@@ -10644,15 +10644,42 @@ var Game = function () {
   }, {
     key: 'simulateDay',
     value: function simulateDay(potentialCustomers, gameObject) {
-      // debugger
+      debugger;
       var resultArray = [];
+      var pitcherCups = 0;
       for (var i = 0; i < potentialCustomers; i++) {
         // debugger
-        if (this.purchaseOrNot(gameObject)) {
+
+        if (this.checkInventory() == false && pitcherCups == 0) {
+          // debugger
+          resultArray.push(false);
+          console.log("sold out");
+          continue;
+        }
+
+        if (this.iceCubes - gameObject.ice < 0) {
+          resultArray.push(false);
+          console.log("sold out");
+          continue;
+        }
+
+        if (this.checkInventory() == true && pitcherCups == 0) {
+          debugger;
+          pitcherCups = this.makePitcher(gameObject);
+          if (pitcherCups == false) {
+            resultArray.push(false);
+            continue;
+          }
+        }
+
+        if (this.purchaseOrNot(gameObject) && this.iceCubes > 0 && this.cups > 0) {
           resultArray.push(true);
           this.cupsSold++;
-          this.sales += this.price;
-          this.cash += this.sales;
+          this.sales += parseInt(gameObject.price) / 100;
+          this.cash += parseInt(gameObject.price) / 100;
+          this.cups -= 1;
+          this.iceCubes -= parseInt(gameObject.ice);
+          debugger;
         } else {
           resultArray.push(false);
         }
@@ -10661,13 +10688,38 @@ var Game = function () {
 
       for (var j = 0; j < resultArray.length; j++) {
         if (resultArray[j] == true) {
-          // debugger
           numPurchases += 1;
+          pitcherCups -= 1;
         }
       }
-
+      console.log(potentialCustomers);
       console.log(numPurchases);
+      console.log(this.resources());
       return resultArray;
+    }
+  }, {
+    key: 'makePitcher',
+    value: function makePitcher(gameObject) {
+      var lemonsPer = gameObject.lemons;
+      var sugarPer = gameObject.sugar;
+      debugger;
+      if (this.lemons > lemonsPer && this.sugar > sugarPer) {
+        this.lemons -= lemonsPer;
+        this.sugar -= sugarPer;
+        debugger;
+        return 10;
+      } else {
+        return false;
+      }
+    }
+  }, {
+    key: 'checkInventory',
+    value: function checkInventory() {
+      if (this.cups == 0 || this.lemons == 0 || this.sugar == 0 || this.iceCubes == 0) {
+        debugger;
+        return false;
+      }
+      return true;
     }
   }, {
     key: 'potentialCustomers',
@@ -11983,13 +12035,14 @@ var View = function () {
         _this.submitInfo();
       });
 
-      // var initialCash = this.game.cash;
-      // var changeCash = can.compute(()=>{
-      //   return initialCash;
-      // });
-      // changeCash.bind("change", ()=>{
-      //   this.render();
-      // });
+      // var cash = {
+      //   get cash(){
+      //     return cash;
+      //   }
+      //   set bar(val){
+      //     g
+      //   }
+      // }
     }
   }, {
     key: 'makePurchase',
@@ -11999,7 +12052,11 @@ var View = function () {
       var units = data.units;
       var price = data.price;
       console.log(data);
-      this.game.updateInventory(resource, units, price);
+      if (this.game.cash - price > 0) {
+        this.game.updateInventory(resource, units, price);
+      } else {
+        console.log("not enough money");
+      }
     }
   }, {
     key: 'setupView',
@@ -12080,7 +12137,7 @@ var View = function () {
       var day = this.game.day;
       $div += '<span class="dock-day">Day ' + day + '</span>';
 
-      var cash = this.game.cash;
+      var cash = this.game.cash.toFixed(2);
       $div += '<span class="dock-cash">Money: $' + cash + '</span>';
 
       var weather = this.game.weather;

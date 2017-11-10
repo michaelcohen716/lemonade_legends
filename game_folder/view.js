@@ -33,13 +33,15 @@ class View {
       this.submitInfo();
     });
 
-    // var initialCash = this.game.cash;
-    // var changeCash = can.compute(()=>{
-    //   return initialCash;
-    // });
-    // changeCash.bind("change", ()=>{
-    //   this.render();
-    // });
+    // var cash = {
+    //   get cash(){
+    //     return cash;
+    //   }
+    //   set bar(val){
+    //     g
+    //   }
+    // }
+
   }
 
   makePurchase($button){
@@ -48,7 +50,11 @@ class View {
     const units = data.units;
     const price = data.price;
     console.log(data);
-    this.game.updateInventory(resource, units, price);
+    if(this.game.cash - price > 0){
+      this.game.updateInventory(resource, units, price);
+    }else {
+      console.log("not enough money");
+    }
   }
 
   setupView(){
@@ -127,7 +133,7 @@ class View {
     let day = this.game.day;
     $div += `<span class="dock-day">Day ${day}</span>`;
 
-    let cash = this.game.cash;
+    let cash = this.game.cash.toFixed(2);
     $div += `<span class="dock-cash">Money: $${cash}</span>`;
 
     let weather = this.game.weather;
