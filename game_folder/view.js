@@ -31,17 +31,21 @@ class View {
   }
 
   setupStore(){
-    let cups = this.setupViewCups();
-    let lemons = this.setupViewLemons();
-    let sugar = this.setupViewSugar();
-    let ice = this.setupViewIceCubes();
+    let $cups = this.setupViewCups();
+    let $lemons = this.setupViewLemons();
+    let $sugar = this.setupViewSugar();
+    let $ice = this.setupViewIceCubes();
 
-    let $div = '<div class="store" id="store">';
-    $div += cups;
-    $div += lemons;
-    $div += sugar;
-    $div += ice;
-    this.$el.append($div);
+    // let $div = '<div class="store" id="store">';
+    // $div += cups;
+    // $div += lemons;
+    // $div += sugar;
+    // $div += ice;
+
+    this.$el.append($cups);
+    this.$el.append($lemons);
+    this.$el.append($sugar);
+    this.$el.append($ice);
   }
 
   bindEvents(){
@@ -57,10 +61,10 @@ class View {
       this.submitInfo();
     });
 
-    $("#begin-game-button").click((e)=>{
-      e.preventDefault();
-      this.beginGame();
-    });
+    // $("#begin-game-button").click((e)=>{
+    //   e.preventDefault();
+    //   this.beginGame();
+    // });
 
   }
 
@@ -112,7 +116,7 @@ class View {
 
     let submit = '<input class="form-submit" id="start-day" type="submit" value="Start Day"/>';
     $form += submit;
-    // var $div = '<div id='
+
     return $form;
   }
 
@@ -194,7 +198,7 @@ class View {
     $li.data("data", {resource: "cups", units: 100, price: 3.00});
     $li.attr("id", "buy-100-cups");
     $div.append($li);
-    this.$el.append($div);
+    return $div;
   }
 
   setupViewLemons(){
@@ -227,7 +231,7 @@ class View {
     $li.data("data", {resource: "lemons", units: 75, price: 3.00});
     $li.attr("id", "buy-75-lemons");
     $div.append($li);
-    this.$el.append($div);
+    return $div;
   }
 
   setupViewSugar(){
@@ -260,7 +264,7 @@ class View {
     $li.data("data", {resource: "sugar", units: 50, price: 3.05});
     $li.attr("id", "buy-50-sugar");
     $div.append($li);
-    this.$el.append($div);
+    return $div;
   }
 
   setupViewIceCubes(){
@@ -293,7 +297,7 @@ class View {
     $li.data("data", {resource: "ice-cubes", units: 500, price: 4.50});
     $li.attr("id", "buy-500-ice");
     $div.append($li);
-    this.$el.append($div);
+    return $div;
   }
 }
 
