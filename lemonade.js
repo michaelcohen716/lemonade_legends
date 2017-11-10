@@ -9,11 +9,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // window.jQuery = jQuery;
 
   const canvas = document.getElementById("canvas");
-  canvas.height = 500;
-  canvas.width = 800;
+  canvas.height = 200;
+  canvas.width = 300;
   const ctx = canvas.getContext('2d');
 
   const game = new Game();
+  const dock = $('.dock');
   const rootEl = $('.inventory');
   new View(game, rootEl);
+  // game.run();
 });

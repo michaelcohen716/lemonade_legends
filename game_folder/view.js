@@ -7,16 +7,41 @@ class View {
   constructor(game, $el){
     this.game = game;
     this.$el = $el;
-
+    // this.$dock = $dock;
+    // this.loadModal();
+    // debugger
     this.render();
     this.bindEvents();
-    // this.startDay = this.startDay.bind(this)
   }
+
 
   render(){
     this.$el.empty();
-    // this.setupView
-    this.setupView();
+    let dock = this.setupDock();
+    this.$el.append(dock);
+  }
+
+  setupView(){
+    let dock = this.setupDock();
+    this.$el.append(dock);
+
+    this.setupForm();
+    let form = this.setupForm();
+    this.$el.append(form);
+  }
+
+  setupStore(){
+    let cups = this.setupViewCups();
+    let lemons = this.setupViewLemons();
+    let sugar = this.setupViewSugar();
+    let ice = this.setupViewIceCubes();
+
+    let $div = '<div class="store" id="store">';
+    $div += cups;
+    $div += lemons;
+    $div += sugar;
+    $div += ice;
+    this.$el.append($div);
   }
 
   bindEvents(){
@@ -28,20 +53,20 @@ class View {
     }));
 
     this.$el.on("submit","form",(e)=>{
-      // debugger
       e.preventDefault();
       this.submitInfo();
     });
 
-    // var cash = {
-    //   get cash(){
-    //     return cash;
-    //   }
-    //   set bar(val){
-    //     g
-    //   }
-    // }
+    $("#begin-game-button").click((e)=>{
+      e.preventDefault();
+      this.beginGame();
+    });
 
+  }
+
+  beginGame(){
+    this.setupStore();
+    $("#begin-game-button").addClass("hidden");
   }
 
   makePurchase($button){
@@ -55,19 +80,6 @@ class View {
     }else {
       console.log("not enough money");
     }
-  }
-
-  setupView(){
-    let dock = this.setupDock();
-    this.$el.append(dock);
-
-    this.setupViewCups();
-    this.setupViewLemons();
-    this.setupViewSugar();
-    this.setupViewIceCubes();
-    this.setupForm();
-    let form = this.setupForm();
-    this.$el.append(form);
   }
 
   setupForm(){
@@ -92,7 +104,7 @@ class View {
     $form += sugar;
     $form += '<div> </div>';
 
-    let ice = '<span class="form-line">Ice per Pitcher</span>';
+    let ice = '<span class="form-line">Ice Cubes per Cup</span>';
     ice += '<input id="ice-units" type="text" value="4" class="form-input">';
     ice += '<span class="form-line"> Cubes</span>';
     $form += ice;
@@ -100,7 +112,7 @@ class View {
 
     let submit = '<input class="form-submit" id="start-day" type="submit" value="Start Day"/>';
     $form += submit;
-
+    // var $div = '<div id='
     return $form;
   }
 
@@ -111,7 +123,7 @@ class View {
     let iceInfo = document.getElementById("ice-units").value;
 
     if(priceInfo == 0 || lemonInfo == 0 || sugarInfo == 0 || iceInfo == 0){
-      debugger
+      // debugger
       alert("item can't be zero");
       return;
     }
@@ -123,11 +135,14 @@ class View {
 
     // debugger
     this.game.run(gameObject);
-
+    setInterval(()=>{
+      this.render();
+    }, 200);
 
   }
 
   setupDock(){
+    // debugger
     var $div = '<div class="dock-holder">';
 
     let day = this.game.day;
@@ -142,6 +157,8 @@ class View {
 
     let forecast = weather.outlook;
     $div += `<span class="dock-forecast">Forecast: ${forecast}</span>`;
+
+    $div += '<button id="begin-game-button">Begin Game</button>';
 
     return $div;
 

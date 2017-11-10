@@ -20,7 +20,7 @@ class Game {
       lemons: this.lemons,
       sugar: this.sugar,
       iceCubes: this.iceCubes,
-      cash: this.cash,
+      cash: this.cash.toFixed(2),
       day: this.day,
     };
   }
@@ -47,7 +47,14 @@ class Game {
   run(gameObject){
     //intro, etc
     //new day
+    // $(window).load(()=> {
+    //
+    // })
 
+
+
+
+    
     const resources = this.resources();
     // this.generateWeather();
     let potentialCustomers = this.potentialCustomers();
@@ -106,20 +113,25 @@ class Game {
         pitcherCups -=1;
       }
     }
+    console.log("potentialCustomers");
     console.log(potentialCustomers);
+    console.log("numPurchases");
     console.log(numPurchases);
+    console.log("remaining resources");
     console.log(this.resources());
+    console.log("Sales today");
+    console.log(this.sales);
     return resultArray;
   }
 
   makePitcher(gameObject){
     const lemonsPer = gameObject.lemons;
     const sugarPer = gameObject.sugar;
-    debugger
+    // debugger
     if(this.lemons > lemonsPer && this.sugar > sugarPer){
       this.lemons -= lemonsPer;
       this.sugar -= sugarPer;
-      debugger
+      // debugger
       return 10;
     } else {
       return false;
@@ -129,7 +141,7 @@ class Game {
 
   checkInventory(){
     if(this.cups == 0 || this.lemons == 0 || this.sugar == 0 || this.iceCubes == 0){
-      debugger
+      // debugger
       return false;
     }
     return true;

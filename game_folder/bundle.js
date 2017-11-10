@@ -10603,7 +10603,7 @@ var Game = function () {
         lemons: this.lemons,
         sugar: this.sugar,
         iceCubes: this.iceCubes,
-        cash: this.cash,
+        cash: this.cash.toFixed(2),
         day: this.day
       };
     }
@@ -10632,6 +10632,10 @@ var Game = function () {
     value: function run(gameObject) {
       //intro, etc
       //new day
+      // $(window).load(()=> {
+      //
+      // })
+
 
       var resources = this.resources();
       // this.generateWeather();
@@ -10692,9 +10696,14 @@ var Game = function () {
           pitcherCups -= 1;
         }
       }
+      console.log("potentialCustomers");
       console.log(potentialCustomers);
+      console.log("numPurchases");
       console.log(numPurchases);
+      console.log("remaining resources");
       console.log(this.resources());
+      console.log("Sales today");
+      console.log(this.sales);
       return resultArray;
     }
   }, {
@@ -10702,11 +10711,11 @@ var Game = function () {
     value: function makePitcher(gameObject) {
       var lemonsPer = gameObject.lemons;
       var sugarPer = gameObject.sugar;
-      debugger;
+      // debugger
       if (this.lemons > lemonsPer && this.sugar > sugarPer) {
         this.lemons -= lemonsPer;
         this.sugar -= sugarPer;
-        debugger;
+        // debugger
         return 10;
       } else {
         return false;
@@ -10716,7 +10725,7 @@ var Game = function () {
     key: 'checkInventory',
     value: function checkInventory() {
       if (this.cups == 0 || this.lemons == 0 || this.sugar == 0 || this.iceCubes == 0) {
-        debugger;
+        // debugger
         return false;
       }
       return true;
@@ -11858,13 +11867,15 @@ document.addEventListener("DOMContentLoaded", function () {
   // window.jQuery = jQuery;
 
   var canvas = document.getElementById("canvas");
-  canvas.height = 500;
-  canvas.width = 800;
+  canvas.height = 200;
+  canvas.width = 300;
   var ctx = canvas.getContext('2d');
 
   var game = new _game2.default();
+  var dock = (0, _jquery2.default)('.dock');
   var rootEl = (0, _jquery2.default)('.inventory');
   new _view2.default(game, rootEl);
+  // game.run();
 });
 
 /***/ }),
@@ -12005,18 +12016,44 @@ var View = function () {
 
     this.game = game;
     this.$el = $el;
-
+    // this.$dock = $dock;
+    // this.loadModal();
+    // debugger
     this.render();
     this.bindEvents();
-    // this.startDay = this.startDay.bind(this)
   }
 
   _createClass(View, [{
     key: 'render',
     value: function render() {
       this.$el.empty();
-      // this.setupView
-      this.setupView();
+      var dock = this.setupDock();
+      this.$el.append(dock);
+    }
+  }, {
+    key: 'setupView',
+    value: function setupView() {
+      var dock = this.setupDock();
+      this.$el.append(dock);
+
+      this.setupForm();
+      var form = this.setupForm();
+      this.$el.append(form);
+    }
+  }, {
+    key: 'setupStore',
+    value: function setupStore() {
+      var cups = this.setupViewCups();
+      var lemons = this.setupViewLemons();
+      var sugar = this.setupViewSugar();
+      var ice = this.setupViewIceCubes();
+
+      var $div = '<div class="store" id="store">';
+      $div += cups;
+      $div += lemons;
+      $div += sugar;
+      $div += ice;
+      this.$el.append($div);
     }
   }, {
     key: 'bindEvents',
@@ -12030,19 +12067,20 @@ var View = function () {
       });
 
       this.$el.on("submit", "form", function (e) {
-        // debugger
         e.preventDefault();
         _this.submitInfo();
       });
 
-      // var cash = {
-      //   get cash(){
-      //     return cash;
-      //   }
-      //   set bar(val){
-      //     g
-      //   }
-      // }
+      (0, _jquery2.default)("#begin-game-button").click(function (e) {
+        e.preventDefault();
+        _this.beginGame();
+      });
+    }
+  }, {
+    key: 'beginGame',
+    value: function beginGame() {
+      this.setupStore();
+      (0, _jquery2.default)("#begin-game-button").addClass("hidden");
     }
   }, {
     key: 'makePurchase',
@@ -12057,20 +12095,6 @@ var View = function () {
       } else {
         console.log("not enough money");
       }
-    }
-  }, {
-    key: 'setupView',
-    value: function setupView() {
-      var dock = this.setupDock();
-      this.$el.append(dock);
-
-      this.setupViewCups();
-      this.setupViewLemons();
-      this.setupViewSugar();
-      this.setupViewIceCubes();
-      this.setupForm();
-      var form = this.setupForm();
-      this.$el.append(form);
     }
   }, {
     key: 'setupForm',
@@ -12096,7 +12120,7 @@ var View = function () {
       $form += sugar;
       $form += '<div> </div>';
 
-      var ice = '<span class="form-line">Ice per Pitcher</span>';
+      var ice = '<span class="form-line">Ice Cubes per Cup</span>';
       ice += '<input id="ice-units" type="text" value="4" class="form-input">';
       ice += '<span class="form-line"> Cubes</span>';
       $form += ice;
@@ -12104,19 +12128,21 @@ var View = function () {
 
       var submit = '<input class="form-submit" id="start-day" type="submit" value="Start Day"/>';
       $form += submit;
-
+      // var $div = '<div id='
       return $form;
     }
   }, {
     key: 'submitInfo',
     value: function submitInfo() {
+      var _this2 = this;
+
       var priceInfo = document.getElementById("price-units").value;
       var lemonInfo = document.getElementById("lemon-units").value;
       var sugarInfo = document.getElementById("sugar-units").value;
       var iceInfo = document.getElementById("ice-units").value;
 
       if (priceInfo == 0 || lemonInfo == 0 || sugarInfo == 0 || iceInfo == 0) {
-        debugger;
+        // debugger
         alert("item can't be zero");
         return;
       }
@@ -12128,10 +12154,14 @@ var View = function () {
 
       // debugger
       this.game.run(gameObject);
+      setInterval(function () {
+        _this2.render();
+      }, 200);
     }
   }, {
     key: 'setupDock',
     value: function setupDock() {
+      // debugger
       var $div = '<div class="dock-holder">';
 
       var day = this.game.day;
@@ -12146,6 +12176,8 @@ var View = function () {
 
       var forecast = weather.outlook;
       $div += '<span class="dock-forecast">Forecast: ' + forecast + '</span>';
+
+      $div += '<button id="begin-game-button">Begin Game</button>';
 
       return $div;
     }

@@ -7,6 +7,7 @@
   </head>
   <body>
     <script type="text/javascript" src="./bundle.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <style>
       canvas {
         border: 5px solid yellow;
@@ -14,11 +15,12 @@
       }
     </style>
     <div class="game-holder">
-
-      <canvas id="canvas">
-      </canvas>
-      <figure id="dock" class="dock-holder">
-      </figure>
+      <div class="canvas-holder">
+        <canvas id="canvas-background" width="300" height="300">
+        </canvas>
+        <canvas id="canvas" width="300" height="200">
+        </canvas>
+      </div>
 
       <figure class="inventory">
 
