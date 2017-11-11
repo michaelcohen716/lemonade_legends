@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const game = new Game();
   const dock = $('.dock');
-  const rootEl = $('.inventory');
+  const rootEl = $('.game');
   new View(game, rootEl);
   // game.run();
 });

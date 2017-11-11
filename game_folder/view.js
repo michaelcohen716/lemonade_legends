@@ -23,12 +23,13 @@ class View {
     this.showInventory();
     this.setupDock();
     $("#begin-game-button").remove();
+    this.bindEvents();
   }
 
   render(){
     this.$el.empty();
-    let dock = this.setupDock();
-    this.$el.append(dock);
+    this.setupDock();
+    this.setupStore();
   }
 
   setupView(){
@@ -41,21 +42,21 @@ class View {
   }
 
   setupStore(){
-    // let $cups = this.setupViewCups();
-    // let $lemons = this.setupViewLemons();
-    // let $sugar = this.setupViewSugar();
-    // let $ice = this.setupViewIceCubes();
 
-    let $div = this.setupViewCups();
-    $div += this.setupViewLemons();
-    $div += this.setupViewSugar();
-    $div += this.setupViewIceCubes();
+    let $cups = this.setupViewCups();
+    let $lemons = this.setupViewLemons();
+    let $sugar = this.setupViewSugar();
+    let $ice = this.setupViewIceCubes();
+
+    let $div = $('<div class="store" id="store">');
+    let $button = $('<button class="done-shopping-button" id="done-shopping-button">Done Shopping</button>');
+    $div.append($button);
+    $div.append($cups);
+    $div.append($lemons);
+    $div.append($sugar);
+    $div.append($ice);
+
     this.$el.append($div);
-
-    // this.$el.append($cups);
-    // this.$el.append($lemons);
-    // this.$el.append($sugar);
-    // this.$el.append($ice);
   }
 
   bindEvents(){
@@ -63,7 +64,7 @@ class View {
     this.$el.on("click", "li", (e => {
       const $button = $(e.currentTarget);
       this.makePurchase($button);
-      // this.render();
+      // debugger
     }));
 
     this.$el.on("submit","form",(e)=>{
@@ -81,10 +82,22 @@ class View {
       this.goShopping();
     });
 
+    $("#done-shopping-button").click((e)=>{
+      e.preventDefault();
+      this.setupForm();
+
+    });
+
   }
 
+  goShopping(){
+    $("#my-inventory").remove();
+    this.setupStore();
+    this.bindEvents();
+  }
 
   makePurchase($button){
+    // debugger
     const data = $button.data("data");
     const resource = data.resource;
     const units = data.units;
@@ -95,13 +108,21 @@ class View {
     }else {
       console.log("not enough money");
     }
+    this.render();
+    this.bindEvents();
   }
 
   setupForm(){
-    var $form = '<form id="form" class="form-holder">';
+    $("#store").remove();
+    // $("#done-shopping-button").remove();
+    this.bindEvents();
 
-    let price = '<div class="form-item">';
-    price += '<span class="form-line">Price per Cup</span>';
+    let $form = '<form id="form" class="form-holder">';
+    let span = '<span class="form-header">Today\'s Recipe</span>';
+    $form += span;
+    $form += '<div> </div>';
+
+    let price = '<span class="form-line">Price per Cup</span>';
     price += '<input id="price-units" type="text" value="25" class="form-input">';
     price += '<span class="form-line"> Cents</span>';
     $form += price;
@@ -127,11 +148,11 @@ class View {
 
     let submit = '<input class="form-submit" id="start-day" type="submit" value="Start Day"/>';
     $form += submit;
-
-    return $form;
+    this.$el.append($form);
   }
 
   submitInfo(){
+    debugger
     let priceInfo = document.getElementById("price-units").value;
     let lemonInfo = document.getElementById("lemon-units").value;
     let sugarInfo = document.getElementById("sugar-units").value;
@@ -148,7 +169,6 @@ class View {
                        ice: iceInfo,
                        weather: this.game.weather};
 
-    // debugger
     this.game.run(gameObject);
     setInterval(()=>{
       this.render();
@@ -176,7 +196,7 @@ class View {
   }
 
   showInventory(){
-    let $div = $('<div class="my-inventory">');
+    let $div = $('<div class="my-inventory" id="my-inventory">');
     let $span = $('<span class="my-inventory-header">My Inventory</span>');
     $div.append($span);
 
@@ -196,7 +216,7 @@ class View {
     $span = $(`<span class="inventory-line">${iceInventory} ice cubes</span>`);
     $div.append($span);
 
-    let $button = $('<button id="go-shopping-button" class="go-shopping-button">Go Shopping</button>');
+    let $button = $('<button id="go-shopping-button" type="submit" class="go-shopping-button">Go Shopping</button>');
     $div.append($button);
 
     this.$el.append($div);
@@ -204,11 +224,10 @@ class View {
 
   setupViewCups(){
     const $div = $("<div>");
-    // var $div = '<div class="inventory-holder">';
-    $div.addClass("inventory-holder");
+    $div.addClass("inventory-holder-cups");
 
     let cupsInventory = this.game.cups;
-    let $span = $(`<span>You have ${cupsInventory} cups</span>`);
+    let $span = $(`<span class="store-header">You have ${cupsInventory} cups</span>`);
     $span.addClass("inventory-number");
     $span.attr("id", "cups-counter");
     $div.append($span);
@@ -234,11 +253,12 @@ class View {
     $li.attr("id", "buy-100-cups");
     $div.append($li);
     return $div;
+    // this.$el.append($div);
   }
 
   setupViewLemons(){
     const $div = $("<div>");
-    $div.addClass("inventory-holder");
+    $div.addClass("inventory-holder-lemons");
 
     let lemonsInventory = this.game.lemons;
     let $span = $(`<span>You have ${lemonsInventory} lemons</span>`);
@@ -267,11 +287,13 @@ class View {
     $li.attr("id", "buy-75-lemons");
     $div.append($li);
     return $div;
+    // this.$el.append($div);
+
   }
 
   setupViewSugar(){
     const $div = $("<div>");
-    $div.addClass("inventory-holder");
+    $div.addClass("inventory-holder-sugar");
 
     let sugarInventory = this.game.sugar;
     let $span = $(`<span>You have ${sugarInventory} cups of sugar</span>`);
@@ -299,12 +321,14 @@ class View {
     $li.data("data", {resource: "sugar", units: 50, price: 3.05});
     $li.attr("id", "buy-50-sugar");
     $div.append($li);
+    // this.$el.append($div);
+
     return $div;
   }
 
   setupViewIceCubes(){
     const $div = $("<div>");
-    $div.addClass("inventory-holder");
+    $div.addClass("inventory-holder-ice");
 
     let iceInventory = this.game.iceCubes;
     let $span = $(`<span>You have ${iceInventory} ice cubes</span>`);
@@ -332,6 +356,8 @@ class View {
     $li.data("data", {resource: "ice-cubes", units: 500, price: 4.50});
     $li.attr("id", "buy-500-ice");
     $div.append($li);
+    // this.$el.append($div);
+
     return $div;
   }
 }

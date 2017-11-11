@@ -54,7 +54,7 @@ class Game {
 
 
 
-    
+
     const resources = this.resources();
     // this.generateWeather();
     let potentialCustomers = this.potentialCustomers();
@@ -65,7 +65,7 @@ class Game {
   }
 
   simulateDay(potentialCustomers, gameObject){
-    debugger
+    // debugger
     let resultArray = [];
     let pitcherCups = 0;
     for (var i = 0; i < potentialCustomers; i++) {
@@ -85,7 +85,7 @@ class Game {
       }
 
       if(this.checkInventory() == true && pitcherCups == 0){
-        debugger
+        // debugger
         pitcherCups = this.makePitcher(gameObject);
         if (pitcherCups == false){
           resultArray.push(false);
@@ -100,7 +100,7 @@ class Game {
         this.cash += (parseInt(gameObject.price)/100);
         this.cups -=1;
         this.iceCubes -= (parseInt(gameObject.ice));
-        debugger
+        // debugger
       }else {
         resultArray.push(false);
       }
