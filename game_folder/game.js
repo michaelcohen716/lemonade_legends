@@ -53,75 +53,104 @@ class Game {
 
 
 
-
-
     const resources = this.resources();
     // this.generateWeather();
     let potentialCustomers = this.potentialCustomers();
     // debugger
     let today = this.simulateDay(potentialCustomers, gameObject);
-    debugger
+    // debugger
     return today;
   }
 
+  // i=0
+  // function customer() {
+  //   setTimeout(function (){
+  //     i++
+  //     if (i <potentialCustomers){
+  //       calculate logic
+  //
+  //     }
+  //   }, 100)
+  // }
+
+
   simulateDay(potentialCustomers, gameObject){
-    // debugger
+
     let resultArray = [];
     let pitcherCups = 0;
-    for (var i = 0; i < potentialCustomers; i++) {
-      // debugger
 
-      if(this.checkInventory() == false && pitcherCups == 0){
-        // debugger
-        resultArray.push(false);
-        console.log("sold out");
-        continue;
-      }
 
-      if(this.iceCubes - gameObject.ice < 0){
-        resultArray.push(false);
-        console.log("sold out");
-        continue;
-      }
 
-      if(this.checkInventory() == true && pitcherCups == 0){
-        // debugger
-        pitcherCups = this.makePitcher(gameObject);
-        if (pitcherCups == false){
-          resultArray.push(false);
-          continue;
+
+    var iterator = 0;
+    const runDay= () => {
+      setTimeout(() => {
+        iterator++;
+        if(iterator < potentialCustomers){
+          runDay();
+          if(this.checkInventory() == false && pitcherCups == 0){
+            // debugger
+            resultArray.push(false);
+            console.log("sold out");
+            return;
+          }
+
+
+          if(this.iceCubes - gameObject.ice < 0){
+            resultArray.push(false);
+            console.log("sold out");
+            return;
+          }
+
+          if(this.checkInventory() == true && pitcherCups == 0){
+            // debugger
+            pitcherCups = this.makePitcher(gameObject);
+            if (pitcherCups == false){
+              resultArray.push(false);
+              return;
+
+            }
+          }
+          // debugger
+          if(this.purchaseOrNot(gameObject) && this.iceCubes > 0 && this.cups > 0){
+            resultArray.push(true);
+            this.cupsSold ++;
+            this.sales += (parseInt(gameObject.price)/100);
+            this.cash += (parseInt(gameObject.price)/100);
+            this.cups -=1;
+            this.iceCubes -= (parseInt(gameObject.ice));
+            // debugger
+          }else {
+            resultArray.push(false);
+          }
         }
-      }
+        let numPurchases = 0;
 
-      if(this.purchaseOrNot(gameObject) && this.iceCubes > 0 && this.cups > 0){
-        resultArray.push(true);
-        this.cupsSold ++;
-        this.sales += (parseInt(gameObject.price)/100);
-        this.cash += (parseInt(gameObject.price)/100);
-        this.cups -=1;
-        this.iceCubes -= (parseInt(gameObject.ice));
-        // debugger
-      }else {
-        resultArray.push(false);
-      }
-    }
-    let numPurchases = 0;
+        for (var j = 0; j < resultArray.length; j++) {
+          if(resultArray[j]==true){
+            numPurchases +=1;
+            pitcherCups -=1;
+          }
+        }
+        if(resultArray.length == potentialCustomers){
+          console.log(resultArray.length);
+          console.log(potentialCustomers);
 
-    for (var j = 0; j < resultArray.length; j++) {
-      if(resultArray[j]==true){
-        numPurchases +=1;
-        pitcherCups -=1;
-      }
-    }
-    console.log("potentialCustomers");
-    console.log(potentialCustomers);
-    console.log("numPurchases");
-    console.log(numPurchases);
-    console.log("remaining resources");
-    console.log(this.resources());
-    console.log("Sales today");
-    console.log(this.sales);
-    return resultArray;
+        }
+
+        }, 200);
+    };
+    runDay();
+    // console.log("potentialCustomers");
+    // console.log(potentialCustomers);
+    // console.log("numPurchases");
+    // console.log(numPurchases);
+    // console.log("remaining resources");
+    // console.log(this.resources());
+    // console.log("Sales today");
+    // console.log(this.sales);
+
+    // return resultArray;
   }
 
   makePitcher(gameObject){
@@ -171,6 +200,8 @@ class Game {
   }
 
   purchaseOrNot(gameObject){
+
+
     const price = gameObject.price;
     const lemons = gameObject.lemons;
     const sugar = gameObject.sugar;
@@ -224,7 +255,7 @@ class Game {
     // const price = this.price;
 
     let equilibriumPrice = 0.25;
-    equilibriumPrice = Math.random() * 1.75 * equilibriumPrice;
+    equilibriumPrice = Math.random() * 2 * equilibriumPrice;
     const priceQuotient = (equilibriumPrice - (price/100)) * 500;
     return priceQuotient;
   }

@@ -10642,69 +10642,95 @@ var Game = function () {
       var potentialCustomers = this.potentialCustomers();
       // debugger
       var today = this.simulateDay(potentialCustomers, gameObject);
-      debugger;
+      // debugger
       return today;
     }
+
+    // i=0
+    // function customer() {
+    //   setTimeout(function (){
+    //     i++
+    //     if (i <potentialCustomers){
+    //       calculate logic
+    //
+    //     }
+    //   }, 100)
+    // }
+
+
   }, {
     key: 'simulateDay',
     value: function simulateDay(potentialCustomers, gameObject) {
-      // debugger
+      var _this = this;
+
       var resultArray = [];
       var pitcherCups = 0;
-      for (var i = 0; i < potentialCustomers; i++) {
-        // debugger
 
-        if (this.checkInventory() == false && pitcherCups == 0) {
-          // debugger
-          resultArray.push(false);
-          console.log("sold out");
-          continue;
-        }
+      var iterator = 0;
+      var runDay = function runDay() {
+        setTimeout(function () {
+          iterator++;
+          if (iterator < potentialCustomers) {
+            runDay();
+            if (_this.checkInventory() == false && pitcherCups == 0) {
+              // debugger
+              resultArray.push(false);
+              console.log("sold out");
+              return;
+            }
 
-        if (this.iceCubes - gameObject.ice < 0) {
-          resultArray.push(false);
-          console.log("sold out");
-          continue;
-        }
+            if (_this.iceCubes - gameObject.ice < 0) {
+              resultArray.push(false);
+              console.log("sold out");
+              return;
+            }
 
-        if (this.checkInventory() == true && pitcherCups == 0) {
-          // debugger
-          pitcherCups = this.makePitcher(gameObject);
-          if (pitcherCups == false) {
-            resultArray.push(false);
-            continue;
+            if (_this.checkInventory() == true && pitcherCups == 0) {
+              // debugger
+              pitcherCups = _this.makePitcher(gameObject);
+              if (pitcherCups == false) {
+                resultArray.push(false);
+                return;
+              }
+            }
+            // debugger
+            if (_this.purchaseOrNot(gameObject) && _this.iceCubes > 0 && _this.cups > 0) {
+              resultArray.push(true);
+              _this.cupsSold++;
+              _this.sales += parseInt(gameObject.price) / 100;
+              _this.cash += parseInt(gameObject.price) / 100;
+              _this.cups -= 1;
+              _this.iceCubes -= parseInt(gameObject.ice);
+              // debugger
+            } else {
+              resultArray.push(false);
+            }
           }
-        }
+          var numPurchases = 0;
 
-        if (this.purchaseOrNot(gameObject) && this.iceCubes > 0 && this.cups > 0) {
-          resultArray.push(true);
-          this.cupsSold++;
-          this.sales += parseInt(gameObject.price) / 100;
-          this.cash += parseInt(gameObject.price) / 100;
-          this.cups -= 1;
-          this.iceCubes -= parseInt(gameObject.ice);
-          // debugger
-        } else {
-          resultArray.push(false);
-        }
-      }
-      var numPurchases = 0;
+          for (var j = 0; j < resultArray.length; j++) {
+            if (resultArray[j] == true) {
+              numPurchases += 1;
+              pitcherCups -= 1;
+            }
+          }
+          if (resultArray.length == potentialCustomers) {
+            console.log(resultArray.length);
+            console.log(potentialCustomers);
+          }
+        }, 200);
+      };
+      runDay();
+      // console.log("potentialCustomers");
+      // console.log(potentialCustomers);
+      // console.log("numPurchases");
+      // console.log(numPurchases);
+      // console.log("remaining resources");
+      // console.log(this.resources());
+      // console.log("Sales today");
+      // console.log(this.sales);
 
-      for (var j = 0; j < resultArray.length; j++) {
-        if (resultArray[j] == true) {
-          numPurchases += 1;
-          pitcherCups -= 1;
-        }
-      }
-      console.log("potentialCustomers");
-      console.log(potentialCustomers);
-      console.log("numPurchases");
-      console.log(numPurchases);
-      console.log("remaining resources");
-      console.log(this.resources());
-      console.log("Sales today");
-      console.log(this.sales);
-      return resultArray;
+      // return resultArray;
     }
   }, {
     key: 'makePitcher',
@@ -10757,6 +10783,7 @@ var Game = function () {
   }, {
     key: 'purchaseOrNot',
     value: function purchaseOrNot(gameObject) {
+
       var price = gameObject.price;
       var lemons = gameObject.lemons;
       var sugar = gameObject.sugar;
@@ -10811,7 +10838,7 @@ var Game = function () {
       // const price = this.price;
 
       var equilibriumPrice = 0.25;
-      equilibriumPrice = Math.random() * 1.75 * equilibriumPrice;
+      equilibriumPrice = Math.random() * 2 * equilibriumPrice;
       var priceQuotient = (equilibriumPrice - price / 100) * 500;
       return priceQuotient;
     }
@@ -12035,6 +12062,7 @@ var View = function () {
       this.showInventory();
       this.setupDock();
       (0, _jquery2.default)("#begin-game-button").remove();
+      this.unbindEvents();
       this.bindEvents();
     }
   }, {
@@ -12081,7 +12109,6 @@ var View = function () {
       this.$el.on("click", "li", function (e) {
         var $button = (0, _jquery2.default)(e.currentTarget);
         _this.makePurchase($button);
-        // debugger
       });
 
       this.$el.on("submit", "form", function (e) {
@@ -12105,10 +12132,17 @@ var View = function () {
       });
     }
   }, {
+    key: 'unbindEvents',
+    value: function unbindEvents() {
+      // debugger
+      (0, _jquery2.default)(document).add('*').off();
+    }
+  }, {
     key: 'goShopping',
     value: function goShopping() {
       (0, _jquery2.default)("#my-inventory").remove();
       this.setupStore();
+      this.unbindEvents();
       this.bindEvents();
     }
   }, {
@@ -12126,6 +12160,7 @@ var View = function () {
         console.log("not enough money");
       }
       this.render();
+      this.unbindEvents();
       this.bindEvents();
     }
   }, {
@@ -12133,6 +12168,7 @@ var View = function () {
     value: function setupForm() {
       (0, _jquery2.default)("#store").remove();
       // $("#done-shopping-button").remove();
+      this.unbindEvents();
       this.bindEvents();
 
       var $form = '<form id="form" class="form-holder">';
@@ -12173,7 +12209,7 @@ var View = function () {
     value: function submitInfo() {
       var _this2 = this;
 
-      debugger;
+      // debugger
       var priceInfo = document.getElementById("price-units").value;
       var lemonInfo = document.getElementById("lemon-units").value;
       var sugarInfo = document.getElementById("sugar-units").value;

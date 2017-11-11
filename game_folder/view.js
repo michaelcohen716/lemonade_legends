@@ -23,6 +23,7 @@ class View {
     this.showInventory();
     this.setupDock();
     $("#begin-game-button").remove();
+    this.unbindEvents();
     this.bindEvents();
   }
 
@@ -60,11 +61,9 @@ class View {
   }
 
   bindEvents(){
-
     this.$el.on("click", "li", (e => {
       const $button = $(e.currentTarget);
       this.makePurchase($button);
-      // debugger
     }));
 
     this.$el.on("submit","form",(e)=>{
@@ -85,14 +84,18 @@ class View {
     $("#done-shopping-button").click((e)=>{
       e.preventDefault();
       this.setupForm();
-
     });
+  }
 
+  unbindEvents(){
+    // debugger
+    $(document).add('*').off();
   }
 
   goShopping(){
     $("#my-inventory").remove();
     this.setupStore();
+    this.unbindEvents();
     this.bindEvents();
   }
 
@@ -109,12 +112,14 @@ class View {
       console.log("not enough money");
     }
     this.render();
+    this.unbindEvents();
     this.bindEvents();
   }
 
   setupForm(){
     $("#store").remove();
     // $("#done-shopping-button").remove();
+    this.unbindEvents();
     this.bindEvents();
 
     let $form = '<form id="form" class="form-holder">';
@@ -152,7 +157,7 @@ class View {
   }
 
   submitInfo(){
-    debugger
+    // debugger
     let priceInfo = document.getElementById("price-units").value;
     let lemonInfo = document.getElementById("lemon-units").value;
     let sugarInfo = document.getElementById("sugar-units").value;
