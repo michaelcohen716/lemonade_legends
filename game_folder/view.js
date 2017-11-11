@@ -7,13 +7,23 @@ class View {
   constructor(game, $el){
     this.game = game;
     this.$el = $el;
-    // this.$dock = $dock;
-    // this.loadModal();
-    // debugger
-    this.render();
+
+    this.renderStartButton();
+    // this.render();
     this.bindEvents();
   }
 
+  renderStartButton(){
+    let $div = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
+    this.$el.append($div);
+    //onclick, this calls beginGame()
+  }
+
+  beginGame(){
+    this.showInventory();
+    this.setupDock();
+    $("#begin-game-button").remove();
+  }
 
   render(){
     this.$el.empty();
@@ -31,21 +41,21 @@ class View {
   }
 
   setupStore(){
-    let $cups = this.setupViewCups();
-    let $lemons = this.setupViewLemons();
-    let $sugar = this.setupViewSugar();
-    let $ice = this.setupViewIceCubes();
+    // let $cups = this.setupViewCups();
+    // let $lemons = this.setupViewLemons();
+    // let $sugar = this.setupViewSugar();
+    // let $ice = this.setupViewIceCubes();
 
-    // let $div = '<div class="store" id="store">';
-    // $div += cups;
-    // $div += lemons;
-    // $div += sugar;
-    // $div += ice;
+    let $div = this.setupViewCups();
+    $div += this.setupViewLemons();
+    $div += this.setupViewSugar();
+    $div += this.setupViewIceCubes();
+    this.$el.append($div);
 
-    this.$el.append($cups);
-    this.$el.append($lemons);
-    this.$el.append($sugar);
-    this.$el.append($ice);
+    // this.$el.append($cups);
+    // this.$el.append($lemons);
+    // this.$el.append($sugar);
+    // this.$el.append($ice);
   }
 
   bindEvents(){
@@ -53,7 +63,7 @@ class View {
     this.$el.on("click", "li", (e => {
       const $button = $(e.currentTarget);
       this.makePurchase($button);
-      this.render();
+      // this.render();
     }));
 
     this.$el.on("submit","form",(e)=>{
@@ -61,17 +71,18 @@ class View {
       this.submitInfo();
     });
 
-    // $("#begin-game-button").click((e)=>{
-    //   e.preventDefault();
-    //   this.beginGame();
-    // });
+    $("#begin-game-button").click((e)=>{
+      e.preventDefault();
+      this.beginGame();
+    });
+
+    $("#go-shopping-button").click((e)=>{
+      e.preventDefault();
+      this.goShopping();
+    });
 
   }
 
-  beginGame(){
-    this.setupStore();
-    $("#begin-game-button").addClass("hidden");
-  }
 
   makePurchase($button){
     const data = $button.data("data");
@@ -146,7 +157,6 @@ class View {
   }
 
   setupDock(){
-    // debugger
     var $div = '<div class="dock-holder">';
 
     let day = this.game.day;
@@ -162,14 +172,39 @@ class View {
     let forecast = weather.outlook;
     $div += `<span class="dock-forecast">Forecast: ${forecast}</span>`;
 
-    $div += '<button id="begin-game-button">Begin Game</button>';
+    this.$el.append($div);
+  }
 
-    return $div;
+  showInventory(){
+    let $div = $('<div class="my-inventory">');
+    let $span = $('<span class="my-inventory-header">My Inventory</span>');
+    $div.append($span);
 
+    let cupsInventory = this.game.cups;
+    $span = $(`<span class="inventory-line">${cupsInventory} cups</span>`);
+    $div.append($span);
+
+    let lemonsInventory = this.game.lemons;
+    $span = $(`<span class="inventory-line">${lemonsInventory} lemons</span>`);
+    $div.append($span);
+
+    let sugarInventory = this.game.sugar;
+    $span = $(`<span class="inventory-line">${sugarInventory} cups of sugar</span>`);
+    $div.append($span);
+
+    let iceInventory = this.game.iceCubes;
+    $span = $(`<span class="inventory-line">${iceInventory} ice cubes</span>`);
+    $div.append($span);
+
+    let $button = $('<button id="go-shopping-button" class="go-shopping-button">Go Shopping</button>');
+    $div.append($button);
+
+    this.$el.append($div);
   }
 
   setupViewCups(){
     const $div = $("<div>");
+    // var $div = '<div class="inventory-holder">';
     $div.addClass("inventory-holder");
 
     let cupsInventory = this.game.cups;
