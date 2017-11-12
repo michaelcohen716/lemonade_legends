@@ -10,8 +10,11 @@ class Game {
     this.cash = 20.00;
     this.day = 1;
     this.today = null;
-    this.sales = 0;
+    this.cupsSoldToday = 0;
+    this.salesToday = 0;
+    this.customersToday = [];
     this.weather = this.generateWeather();
+    this.dayOver = false;
   }
 
   resources(){
@@ -56,101 +59,74 @@ class Game {
     const resources = this.resources();
     // this.generateWeather();
     let potentialCustomers = this.potentialCustomers();
+    console.log("potentialCustomers");
+    console.log(potentialCustomers);
     // debugger
     let today = this.simulateDay(potentialCustomers, gameObject);
     // debugger
     return today;
   }
 
-  // i=0
-  // function customer() {
-  //   setTimeout(function (){
-  //     i++
-  //     if (i <potentialCustomers){
-  //       calculate logic
-  //
-  //     }
-  //   }, 100)
-  // }
-
-
   simulateDay(potentialCustomers, gameObject){
-
-    let resultArray = [];
+    // debugger
     let pitcherCups = 0;
-
-
-
+    let numPurchases = 0;
 
     var iterator = 0;
-    const runDay= () => {
+    const runDay = () => {
       setTimeout(() => {
+        if(this.customersToday.length == potentialCustomers - 1){
+          console.log("numPurchases");
+          console.log(numPurchases);
+          this.dayOver = true;
+          // debugger
+          return;
+        }
+
         iterator++;
         if(iterator < potentialCustomers){
           runDay();
           if(this.checkInventory() == false && pitcherCups == 0){
             // debugger
-            resultArray.push(false);
+            // resultArray.push(false);
+            this.customersToday.push(false);
             console.log("sold out");
             return;
           }
 
-
           if(this.iceCubes - gameObject.ice < 0){
-            resultArray.push(false);
+            this.customersToday.push(false);
+
             console.log("sold out");
             return;
           }
 
           if(this.checkInventory() == true && pitcherCups == 0){
-            // debugger
             pitcherCups = this.makePitcher(gameObject);
+            // debugger
             if (pitcherCups == false){
-              resultArray.push(false);
+              this.customersToday.push(false);
               return;
-
             }
           }
-          // debugger
+
           if(this.purchaseOrNot(gameObject) && this.iceCubes > 0 && this.cups > 0){
-            resultArray.push(true);
-            this.cupsSold ++;
-            this.sales += (parseInt(gameObject.price)/100);
+            this.customersToday.push(true);
+            this.cupsSoldToday += 1;
+            this.salesToday += (parseInt(gameObject.price)/100);
             this.cash += (parseInt(gameObject.price)/100);
             this.cups -=1;
-            this.iceCubes -= (parseInt(gameObject.ice));
-            // debugger
-          }else {
-            resultArray.push(false);
-          }
-        }
-        let numPurchases = 0;
-
-        for (var j = 0; j < resultArray.length; j++) {
-          if(resultArray[j]==true){
             numPurchases +=1;
             pitcherCups -=1;
+            this.iceCubes -= (parseInt(gameObject.ice));
+          }else {
+            this.customersToday.push(false);
           }
-        }
-        if(resultArray.length == potentialCustomers){
-          console.log(resultArray.length);
-          console.log(potentialCustomers);
-
-        }
-
-        }, 200);
+        }}, 50);
     };
     runDay();
-    // console.log("potentialCustomers");
-    // console.log(potentialCustomers);
-    // console.log("numPurchases");
-    // console.log(numPurchases);
-    // console.log("remaining resources");
-    // console.log(this.resources());
-    // console.log("Sales today");
-    // console.log(this.sales);
 
-    // return resultArray;
+    return;
   }
 
   makePitcher(gameObject){

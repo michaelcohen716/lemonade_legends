@@ -9,8 +9,8 @@ class View {
     this.$el = $el;
 
     this.renderStartButton();
-    // this.render();
     this.bindEvents();
+    this.intervals = [];
   }
 
   renderStartButton(){
@@ -175,14 +175,50 @@ class View {
                        weather: this.game.weather};
 
     this.game.run(gameObject);
-    setInterval(()=>{
+
+    let renderInterval = setInterval(()=>{
       this.render();
     }, 200);
 
+    let dayInterval = setInterval(()=>{
+      if (this.game.dayOver){
+        let resultsObject = {
+          potentialCustomers: this.game.customersToday.length,
+          cupsSold: this.game.cupsSoldToday,
+          salesToday: this.game.salesToday,
+          weather: this.game.weather,
+          resources: this.game.resources(),
+          cash: this.game.cash
+        };
+        // console.log("sales$");
+        // console.log(this.game.salesToday);
+        // console.log("total customers");
+        // console.log(this.game.customersToday);
+        this.reset(resultsObject);
+        clearInterval(dayInterval);
+        clearInterval(renderInterval);
+      }
+    }, 200);
+
+  }
+  reset(resultsObject){
+    // debugger
+    $("#store").remove();
+    $("#dock-holder").remove();
+    this.renderResults(resultsObject);
+  }
+
+  renderResults(resultsObject){
+    let $div = '<div class="results-day" id="results-day">';
+    let $span = `<span>Congrats! You sold ${resultsObject.cupsSold} cups
+        to ${resultsObject.potentialCustomers} potential customers </span>`;
+
+    $div += $span;
+    this.$el.append($div);
   }
 
   setupDock(){
-    var $div = '<div class="dock-holder">';
+    var $div = '<div class="dock-holder" id="dock-holder">';
 
     let day = this.game.day;
     $div += `<span class="dock-day">Day ${day}</span>`;

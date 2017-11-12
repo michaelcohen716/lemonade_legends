@@ -10591,8 +10591,11 @@ var Game = function () {
     this.cash = 20.00;
     this.day = 1;
     this.today = null;
-    this.sales = 0;
+    this.cupsSoldToday = 0;
+    this.salesToday = 0;
+    this.customersToday = [];
     this.weather = this.generateWeather();
+    this.dayOver = false;
   }
 
   _createClass(Game, [{
@@ -10640,97 +10643,78 @@ var Game = function () {
       var resources = this.resources();
       // this.generateWeather();
       var potentialCustomers = this.potentialCustomers();
+      console.log("potentialCustomers");
+      console.log(potentialCustomers);
       // debugger
       var today = this.simulateDay(potentialCustomers, gameObject);
       // debugger
       return today;
     }
-
-    // i=0
-    // function customer() {
-    //   setTimeout(function (){
-    //     i++
-    //     if (i <potentialCustomers){
-    //       calculate logic
-    //
-    //     }
-    //   }, 100)
-    // }
-
-
   }, {
     key: 'simulateDay',
     value: function simulateDay(potentialCustomers, gameObject) {
       var _this = this;
 
-      var resultArray = [];
+      // debugger
       var pitcherCups = 0;
+      var numPurchases = 0;
 
       var iterator = 0;
       var runDay = function runDay() {
         setTimeout(function () {
+          if (_this.customersToday.length == potentialCustomers - 1) {
+            console.log("numPurchases");
+            console.log(numPurchases);
+            _this.dayOver = true;
+            // debugger
+            return;
+          }
+
           iterator++;
           if (iterator < potentialCustomers) {
             runDay();
             if (_this.checkInventory() == false && pitcherCups == 0) {
               // debugger
-              resultArray.push(false);
+              // resultArray.push(false);
+              _this.customersToday.push(false);
               console.log("sold out");
               return;
             }
 
             if (_this.iceCubes - gameObject.ice < 0) {
-              resultArray.push(false);
+              _this.customersToday.push(false);
+
               console.log("sold out");
               return;
             }
 
             if (_this.checkInventory() == true && pitcherCups == 0) {
-              // debugger
               pitcherCups = _this.makePitcher(gameObject);
+              // debugger
               if (pitcherCups == false) {
-                resultArray.push(false);
+                _this.customersToday.push(false);
                 return;
               }
             }
-            // debugger
+
             if (_this.purchaseOrNot(gameObject) && _this.iceCubes > 0 && _this.cups > 0) {
-              resultArray.push(true);
-              _this.cupsSold++;
-              _this.sales += parseInt(gameObject.price) / 100;
+              _this.customersToday.push(true);
+              _this.cupsSoldToday += 1;
+              _this.salesToday += parseInt(gameObject.price) / 100;
               _this.cash += parseInt(gameObject.price) / 100;
               _this.cups -= 1;
-              _this.iceCubes -= parseInt(gameObject.ice);
-              // debugger
-            } else {
-              resultArray.push(false);
-            }
-          }
-          var numPurchases = 0;
-
-          for (var j = 0; j < resultArray.length; j++) {
-            if (resultArray[j] == true) {
               numPurchases += 1;
               pitcherCups -= 1;
+              _this.iceCubes -= parseInt(gameObject.ice);
+            } else {
+              _this.customersToday.push(false);
             }
           }
-          if (resultArray.length == potentialCustomers) {
-            console.log(resultArray.length);
-            console.log(potentialCustomers);
-          }
-        }, 200);
+        }, 50);
       };
       runDay();
-      // console.log("potentialCustomers");
-      // console.log(potentialCustomers);
-      // console.log("numPurchases");
-      // console.log(numPurchases);
-      // console.log("remaining resources");
-      // console.log(this.resources());
-      // console.log("Sales today");
-      // console.log(this.sales);
 
-      // return resultArray;
+      return;
     }
   }, {
     key: 'makePitcher',
@@ -12045,8 +12029,8 @@ var View = function () {
     this.$el = $el;
 
     this.renderStartButton();
-    // this.render();
     this.bindEvents();
+    this.intervals = [];
   }
 
   _createClass(View, [{
@@ -12227,14 +12211,52 @@ var View = function () {
         weather: this.game.weather };
 
       this.game.run(gameObject);
-      setInterval(function () {
+
+      var renderInterval = setInterval(function () {
         _this2.render();
       }, 200);
+
+      var dayInterval = setInterval(function () {
+        if (_this2.game.dayOver) {
+          var resultsObject = {
+            potentialCustomers: _this2.game.customersToday.length,
+            cupsSold: _this2.game.cupsSoldToday,
+            salesToday: _this2.game.salesToday,
+            weather: _this2.game.weather,
+            resources: _this2.game.resources(),
+            cash: _this2.game.cash
+          };
+          // console.log("sales$");
+          // console.log(this.game.salesToday);
+          // console.log("total customers");
+          // console.log(this.game.customersToday);
+          _this2.reset(resultsObject);
+          clearInterval(dayInterval);
+          clearInterval(renderInterval);
+        }
+      }, 200);
+    }
+  }, {
+    key: 'reset',
+    value: function reset(resultsObject) {
+      // debugger
+      (0, _jquery2.default)("#store").remove();
+      (0, _jquery2.default)("#dock-holder").remove();
+      this.renderResults(resultsObject);
+    }
+  }, {
+    key: 'renderResults',
+    value: function renderResults(resultsObject) {
+      var $div = '<div class="results-day" id="results-day">';
+      var $span = '<span>Congrats! You sold ' + resultsObject.cupsSold + ' cups\n        to ' + resultsObject.potentialCustomers + ' potential customers </span>';
+
+      $div += $span;
+      this.$el.append($div);
     }
   }, {
     key: 'setupDock',
     value: function setupDock() {
-      var $div = '<div class="dock-holder">';
+      var $div = '<div class="dock-holder" id="dock-holder">';
 
       var day = this.game.day;
       $div += '<span class="dock-day">Day ' + day + '</span>';
