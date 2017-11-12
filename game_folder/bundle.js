@@ -10767,6 +10767,7 @@ var Game = function () {
   }, {
     key: 'purchaseOrNot',
     value: function purchaseOrNot(gameObject) {
+      // debugger
 
       var price = gameObject.price;
       var lemons = gameObject.lemons;
@@ -12090,6 +12091,7 @@ var View = function () {
     value: function bindEvents() {
       var _this = this;
 
+      // this.unbindEvents();
       this.$el.on("click", "li", function (e) {
         var $button = (0, _jquery2.default)(e.currentTarget);
         _this.makePurchase($button);
@@ -12099,6 +12101,11 @@ var View = function () {
         e.preventDefault();
         _this.submitInfo();
       });
+      // $("#start-day-button").click((e)=>{
+      //   e.preventDefault();
+      //   this.submitInfo();
+      // });
+
 
       (0, _jquery2.default)("#begin-game-button").click(function (e) {
         e.preventDefault();
@@ -12113,6 +12120,12 @@ var View = function () {
       (0, _jquery2.default)("#done-shopping-button").click(function (e) {
         e.preventDefault();
         _this.setupForm();
+      });
+
+      (0, _jquery2.default)("#tomorrow-button").click(function (e) {
+        // debugger
+        e.preventDefault();
+        _this.advanceDay();
       });
     }
   }, {
@@ -12152,8 +12165,6 @@ var View = function () {
     value: function setupForm() {
       (0, _jquery2.default)("#store").remove();
       // $("#done-shopping-button").remove();
-      this.unbindEvents();
-      this.bindEvents();
 
       var $form = '<form id="form" class="form-holder">';
       var span = '<span class="form-header">Today\'s Recipe</span>';
@@ -12187,6 +12198,7 @@ var View = function () {
       var submit = '<input class="form-submit" id="start-day" type="submit" value="Start Day"/>';
       $form += submit;
       this.$el.append($form);
+      // this.bindEvents();
     }
   }, {
     key: 'submitInfo',
@@ -12247,11 +12259,28 @@ var View = function () {
   }, {
     key: 'renderResults',
     value: function renderResults(resultsObject) {
+
       var $div = '<div class="results-day" id="results-day">';
       var $span = '<span>Congrats! You sold ' + resultsObject.cupsSold + ' cups\n        to ' + resultsObject.potentialCustomers + ' potential customers </span>';
-
       $div += $span;
+      var $button = '<button class="tomorrow-button" id="tomorrow-button">Tomorrow</button>>';
+      $div += $button;
       this.$el.append($div);
+      this.bindEvents();
+    }
+  }, {
+    key: 'advanceDay',
+    value: function advanceDay() {
+      // debugger
+
+      (0, _jquery2.default)("#results-day").remove();
+      this.game.day += 1;
+      this.game.iceCubes = 0;
+      this.game.dayOver = false;
+      this.showInventory();
+      this.setupDock();
+
+      this.bindEvents();
     }
   }, {
     key: 'setupDock',

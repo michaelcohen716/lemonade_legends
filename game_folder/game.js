@@ -176,7 +176,7 @@ class Game {
   }
 
   purchaseOrNot(gameObject){
-
+    // debugger
 
     const price = gameObject.price;
     const lemons = gameObject.lemons;

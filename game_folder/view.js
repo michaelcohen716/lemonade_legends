@@ -61,6 +61,7 @@ class View {
   }
 
   bindEvents(){
+    // this.unbindEvents();
     this.$el.on("click", "li", (e => {
       const $button = $(e.currentTarget);
       this.makePurchase($button);
@@ -70,6 +71,11 @@ class View {
       e.preventDefault();
       this.submitInfo();
     });
+    // $("#start-day-button").click((e)=>{
+    //   e.preventDefault();
+    //   this.submitInfo();
+    // });
+
 
     $("#begin-game-button").click((e)=>{
       e.preventDefault();
@@ -84,6 +90,12 @@ class View {
     $("#done-shopping-button").click((e)=>{
       e.preventDefault();
       this.setupForm();
+    });
+
+    $("#tomorrow-button").click((e)=>{
+      // debugger
+      e.preventDefault();
+      this.advanceDay();
     });
   }
 
@@ -119,8 +131,6 @@ class View {
   setupForm(){
     $("#store").remove();
     // $("#done-shopping-button").remove();
-    this.unbindEvents();
-    this.bindEvents();
 
     let $form = '<form id="form" class="form-holder">';
     let span = '<span class="form-header">Today\'s Recipe</span>';
@@ -154,6 +164,7 @@ class View {
     let submit = '<input class="form-submit" id="start-day" type="submit" value="Start Day"/>';
     $form += submit;
     this.$el.append($form);
+    // this.bindEvents();
   }
 
   submitInfo(){
@@ -209,12 +220,28 @@ class View {
   }
 
   renderResults(resultsObject){
+
     let $div = '<div class="results-day" id="results-day">';
     let $span = `<span>Congrats! You sold ${resultsObject.cupsSold} cups
         to ${resultsObject.potentialCustomers} potential customers </span>`;
-
     $div += $span;
+    let $button = '<button class="tomorrow-button" id="tomorrow-button">Tomorrow</button>>';
+    $div += $button;
     this.$el.append($div);
+    this.bindEvents();
+  }
+
+  advanceDay(){
+    // debugger
+
+    $("#results-day").remove();
+    this.game.day += 1;
+    this.game.iceCubes = 0;
+    this.game.dayOver = false;
+    this.showInventory();
+    this.setupDock();
+
+    this.bindEvents();
   }
 
   setupDock(){
