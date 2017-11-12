@@ -10593,6 +10593,7 @@ var Game = function () {
     this.today = null;
     this.cupsSoldToday = 0;
     this.salesToday = 0;
+    this.totalSales = 0;
     this.customersToday = [];
     this.weather = this.generateWeather();
     this.dayOver = false;
@@ -10634,11 +10635,6 @@ var Game = function () {
     key: 'run',
     value: function run(gameObject) {
       //intro, etc
-      //new day
-      // $(window).load(()=> {
-      //
-      // })
-
 
       var resources = this.resources();
       // this.generateWeather();
@@ -10682,6 +10678,7 @@ var Game = function () {
             }
 
             if (_this.iceCubes - gameObject.ice < 0) {
+              //add sugar and lemon sold out conditions
               _this.customersToday.push(false);
 
               console.log("sold out");
@@ -10746,9 +10743,9 @@ var Game = function () {
       var weatherObject = this.weather;
 
       var outlookQuotients = {
-        "Sunny": 150,
-        "Overcast": 110,
-        "Rainy": 75
+        "Sunny": 100,
+        "Overcast": 60,
+        "Rainy": 15
       };
       var outlookScore = void 0;
       var tempScore = weatherObject.temperature;
@@ -12058,6 +12055,12 @@ var View = function () {
       this.setupStore();
     }
   }, {
+    key: 'updateStatus',
+    value: function updateStatus() {
+      this.$el.empty();
+      this.setupDock();
+    }
+  }, {
     key: 'setupView',
     value: function setupView() {
       var dock = this.setupDock();
@@ -12070,7 +12073,7 @@ var View = function () {
   }, {
     key: 'setupStore',
     value: function setupStore() {
-
+      // debugger
       var $cups = this.setupViewCups();
       var $lemons = this.setupViewLemons();
       var $sugar = this.setupViewSugar();
@@ -12101,11 +12104,6 @@ var View = function () {
         e.preventDefault();
         _this.submitInfo();
       });
-      // $("#start-day-button").click((e)=>{
-      //   e.preventDefault();
-      //   this.submitInfo();
-      // });
-
 
       (0, _jquery2.default)("#begin-game-button").click(function (e) {
         e.preventDefault();
@@ -12222,10 +12220,11 @@ var View = function () {
         ice: iceInfo,
         weather: this.game.weather };
 
+      // $("#store").remove();
       this.game.run(gameObject);
 
       var renderInterval = setInterval(function () {
-        _this2.render();
+        _this2.updateStatus();
       }, 200);
 
       var dayInterval = setInterval(function () {
@@ -12259,11 +12258,20 @@ var View = function () {
   }, {
     key: 'renderResults',
     value: function renderResults(resultsObject) {
-
+      var text = "Tomorrow";
+      if (this.game.day == 7) {
+        text = "See Results";
+      }
       var $div = '<div class="results-day" id="results-day">';
       var $span = '<span>Congrats! You sold ' + resultsObject.cupsSold + ' cups\n        to ' + resultsObject.potentialCustomers + ' potential customers </span>';
       $div += $span;
-      var $button = '<button class="tomorrow-button" id="tomorrow-button">Tomorrow</button>>';
+      $div += '<div></div>';
+
+      $span = '<span class="ice-melted">Your remaining ice melted...</span>';
+      $div += $span;
+      $div += '<div></div>';
+
+      var $button = '<button class="tomorrow-button" id="tomorrow-button">' + text + '</button>>';
       $div += $button;
       this.$el.append($div);
       this.bindEvents();
@@ -12271,16 +12279,42 @@ var View = function () {
   }, {
     key: 'advanceDay',
     value: function advanceDay() {
-      // debugger
-
       (0, _jquery2.default)("#results-day").remove();
-      this.game.day += 1;
-      this.game.iceCubes = 0;
-      this.game.dayOver = false;
-      this.showInventory();
-      this.setupDock();
+      if (this.game.day < 7) {
+        this.game.totalSales += this.game.salesToday;
+        this.game.salesToday = 0;
+        this.game.day += 1;
+        this.game.iceCubes = 0;
+        this.game.dayOver = false;
+        this.game.cupsSoldToday = 0;
+        this.game.customersToday = [];
+        this.game.weather = this.game.generateWeather();
+        this.showInventory();
+        this.setupDock();
+      } else if (this.game.day == 7) {
+        this.game.iceCubes = 0;
+        this.completeGame();
+      }
 
       this.bindEvents();
+    }
+  }, {
+    key: 'completeGame',
+    value: function completeGame() {
+      var $section = '<section class="final-results id="final-results>';
+
+      var totalSales = this.game.totalSales;
+      var $div = '<div class="total-sales">You earned $' + totalSales.toFixed(2) + ' in revenue</div>';
+      $section += $div;
+
+      var totalExpenses = totalSales - this.game.cash;
+      $div = '<div class="total-expenses">You spent $' + totalExpenses.toFixed(2) + '</div>';
+      $section += $div;
+
+      $div = '<div class="total-profit">For a profit of $' + (totalSales - totalExpenses).toFixed(2) + '</div>';
+      $section += $div;
+
+      this.$el.append($section);
     }
   }, {
     key: 'setupDock',

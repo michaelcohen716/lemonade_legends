@@ -33,6 +33,11 @@ class View {
     this.setupStore();
   }
 
+  updateStatus(){
+    this.$el.empty();
+    this.setupDock();
+  }
+
   setupView(){
     let dock = this.setupDock();
     this.$el.append(dock);
@@ -43,7 +48,7 @@ class View {
   }
 
   setupStore(){
-
+    // debugger
     let $cups = this.setupViewCups();
     let $lemons = this.setupViewLemons();
     let $sugar = this.setupViewSugar();
@@ -71,11 +76,6 @@ class View {
       e.preventDefault();
       this.submitInfo();
     });
-    // $("#start-day-button").click((e)=>{
-    //   e.preventDefault();
-    //   this.submitInfo();
-    // });
-
 
     $("#begin-game-button").click((e)=>{
       e.preventDefault();
@@ -185,10 +185,11 @@ class View {
                        ice: iceInfo,
                        weather: this.game.weather};
 
+    // $("#store").remove();
     this.game.run(gameObject);
 
     let renderInterval = setInterval(()=>{
-      this.render();
+      this.updateStatus();
     }, 200);
 
     let dayInterval = setInterval(()=>{
@@ -220,28 +221,62 @@ class View {
   }
 
   renderResults(resultsObject){
-
+    let text = "Tomorrow";
+    if(this.game.day == 7){
+      text = "See Results";
+    }
     let $div = '<div class="results-day" id="results-day">';
     let $span = `<span>Congrats! You sold ${resultsObject.cupsSold} cups
         to ${resultsObject.potentialCustomers} potential customers </span>`;
     $div += $span;
-    let $button = '<button class="tomorrow-button" id="tomorrow-button">Tomorrow</button>>';
+    $div += '<div></div>';
+
+    $span = '<span class="ice-melted">Your remaining ice melted...</span>';
+    $div += $span;
+    $div += '<div></div>';
+
+    let $button = `<button class="tomorrow-button" id="tomorrow-button">${text}</button>>`;
     $div += $button;
     this.$el.append($div);
     this.bindEvents();
   }
 
   advanceDay(){
-    // debugger
-
     $("#results-day").remove();
-    this.game.day += 1;
-    this.game.iceCubes = 0;
-    this.game.dayOver = false;
-    this.showInventory();
-    this.setupDock();
+    if(this.game.day < 7){
+      this.game.totalSales += this.game.salesToday;
+      this.game.salesToday = 0;
+      this.game.day += 1;
+      this.game.iceCubes = 0;
+      this.game.dayOver = false;
+      this.game.cupsSoldToday = 0;
+      this.game.customersToday = [];
+      this.game.weather = this.game.generateWeather();
+      this.showInventory();
+      this.setupDock();
+    } else if (this.game.day == 7){
+      this.game.iceCubes = 0;
+      this.completeGame();
+    }
 
     this.bindEvents();
+  }
+
+  completeGame(){
+    let $section = '<section class="final-results id="final-results>';
+
+    const totalSales = this.game.totalSales;
+    let $div = `<div class="total-sales">You earned $${totalSales.toFixed(2)} in revenue</div>`;
+    $section += $div;
+
+    const totalExpenses = totalSales - this.game.cash;
+    $div = `<div class="total-expenses">You spent $${totalExpenses.toFixed(2)}</div>`;
+    $section += $div;
+
+    $div = `<div class="total-profit">For a profit of $${(totalSales - totalExpenses).toFixed(2)}</div>`;
+    $section += $div;
+
+    this.$el.append($section);
   }
 
   setupDock(){

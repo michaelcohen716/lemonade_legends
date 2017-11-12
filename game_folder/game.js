@@ -12,6 +12,7 @@ class Game {
     this.today = null;
     this.cupsSoldToday = 0;
     this.salesToday = 0;
+    this.totalSales = 0;
     this.customersToday = [];
     this.weather = this.generateWeather();
     this.dayOver = false;
@@ -49,12 +50,6 @@ class Game {
 
   run(gameObject){
     //intro, etc
-    //new day
-    // $(window).load(()=> {
-    //
-    // })
-
-
 
     const resources = this.resources();
     // this.generateWeather();
@@ -95,6 +90,7 @@ class Game {
           }
 
           if(this.iceCubes - gameObject.ice < 0){
+            //add sugar and lemon sold out conditions
             this.customersToday.push(false);
 
             console.log("sold out");
@@ -156,9 +152,9 @@ class Game {
     const weatherObject = this.weather;
 
     const outlookQuotients = {
-      "Sunny": 150,
-      "Overcast": 110,
-      "Rainy": 75
+      "Sunny": 100,
+      "Overcast": 60,
+      "Rainy": 15
     };
     let outlookScore;
     const tempScore = weatherObject.temperature;
