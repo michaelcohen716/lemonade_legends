@@ -17,6 +17,7 @@ class Game {
     this.weather = this.generateWeather();
     this.dayOver = false;
     this.soldOut = false;
+    this.time = {hour: 9, minutes: 0};
   }
 
   resources(){
@@ -63,14 +64,33 @@ class Game {
     return today;
   }
 
+  updateClock(timeIncrement){
+    // debugger
+    if(this.time.minutes + timeIncrement >= 60){
+      this.time.minutes = this.time.minutes - 60 + timeIncrement;
+      this.time.hour += 1;
+      // this.time.minutes += timeIncrement;
+    } else {
+      this.time.minutes += timeIncrement;
+    }
+    if(this.time.hour == 13){
+      this.time.hour = 1;
+    }
+    // debugger
+  }
+
   simulateDay(potentialCustomers, gameObject){
     // debugger
     let pitcherCups = 0;
     let numPurchases = 0;
+    let timeIncrement = ((8*60)/potentialCustomers);
+    //8 hour day
 
     var iterator = 0;
     const runDay = () => {
       setTimeout(() => {
+        this.updateClock(timeIncrement);
+
         if(this.customersToday.length == potentialCustomers - 1){
           console.log("numPurchases");
           console.log(numPurchases);
@@ -82,9 +102,7 @@ class Game {
         iterator++;
         if(iterator < potentialCustomers){
           runDay();
-          if(this.checkInventory() == false && pitcherCups == 0){
-            // debugger
-            // resultArray.push(false);
+          if(this.checkInventory(gameObject) == false && pitcherCups == 0){
             this.customersToday.push(false);
             console.log("sold out");
             this.soldOut = true;
@@ -92,7 +110,6 @@ class Game {
           }
 
           if(this.iceCubes - gameObject.ice < 0){
-            //add sugar and lemon sold out conditions
             this.customersToday.push(false);
 
             console.log("sold out");
@@ -113,11 +130,11 @@ class Game {
             this.customersToday.push(false);
             console.log("sold out");
             this.soldOut = true;
-            
+
             return;
           }
 
-          if(this.checkInventory() == true && pitcherCups == 0){
+          if(this.checkInventory(gameObject) == true && pitcherCups == 0){
             pitcherCups = this.makePitcher(gameObject);
             // debugger
             if (pitcherCups == false){
@@ -138,6 +155,8 @@ class Game {
           }else {
             this.customersToday.push(false);
           }
+
+
         }}, 50);
     };
     runDay();
@@ -160,11 +179,20 @@ class Game {
 
   }
 
-  checkInventory(){
-    if(this.cups == 0 || this.lemons == 0 || this.sugar == 0 || this.iceCubes == 0){
-      // debugger
+  checkInventory(gameObject){
+    if(this.cups == 0){
       return false;
     }
+    if(this.iceCubes - gameObject.ice < 0){
+      return false;
+    }
+    if(this.lemons - gameObject.lemons < 0){
+      return false;
+    }
+    if(this.sugar - gameObject.sugar < 0){
+      return false;
+    }
+
     return true;
   }
 

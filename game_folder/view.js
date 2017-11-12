@@ -71,6 +71,19 @@ class View {
     $section += $div;
     $section += '<div></div>';
 
+    let hours = ("0" + (this.game.time.hour)).slice(1, 3);
+    let minutes = ("0" + (this.game.time.minutes).toFixed(0)).slice(-2);
+    let ampm = null;
+    if(hours < 12 && hours > 8){
+      ampm = "am";
+    } else {
+      ampm = "pm";
+    }
+    // debugger
+    $div = `<div class="time">${hours}:${minutes} ${ampm}</div>`;
+    $section += $div;
+    $section += '<div></div>';
+
     $div = `<div class="sold-out">${text}</div>`;
     $section += $div;
     $section += '<div></div>';
@@ -170,7 +183,6 @@ class View {
 
   setupForm(){
     $("#store").remove();
-    // $("#done-shopping-button").remove();
 
     let $form = '<form id="form" class="form-holder">';
     let span = '<span class="form-header">Today\'s Recipe</span>';
@@ -268,7 +280,7 @@ class View {
     }
     let $div = '<div class="results-day" id="results-day">';
     let $span = `<span>Congrats! You sold ${resultsObject.cupsSold} cups
-        to ${resultsObject.potentialCustomers} potential customers </span>`;
+        to ${resultsObject.potentialCustomers} potential customers. </span>`;
     $div += $span;
     $div += '<div></div>';
 
@@ -276,7 +288,7 @@ class View {
     $div += $span;
     $div += '<div></div>';
 
-    let $button = `<button class="tomorrow-button" id="tomorrow-button">${text}</button>>`;
+    let $button = `<button class="tomorrow-button" id="tomorrow-button">${text}</button>`;
     $div += $button;
     this.$el.append($div);
     this.bindEvents();
@@ -294,6 +306,8 @@ class View {
       this.game.customersToday = [];
       this.game.soldOut = false;
       this.game.weather = this.game.generateWeather();
+      this.game.time.hour = 9;
+      this.game.time.minutes = 0;
       this.showInventory();
       this.setupDock();
     } else if (this.game.day == 7){

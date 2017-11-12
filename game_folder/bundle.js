@@ -10598,6 +10598,7 @@ var Game = function () {
     this.weather = this.generateWeather();
     this.dayOver = false;
     this.soldOut = false;
+    this.time = { hour: 9, minutes: 0 };
   }
 
   _createClass(Game, [{
@@ -10648,6 +10649,22 @@ var Game = function () {
       return today;
     }
   }, {
+    key: 'updateClock',
+    value: function updateClock(timeIncrement) {
+      // debugger
+      if (this.time.minutes + timeIncrement >= 60) {
+        this.time.minutes = this.time.minutes - 60 + timeIncrement;
+        this.time.hour += 1;
+        // this.time.minutes += timeIncrement;
+      } else {
+        this.time.minutes += timeIncrement;
+      }
+      if (this.time.hour == 13) {
+        this.time.hour = 1;
+      }
+      // debugger
+    }
+  }, {
     key: 'simulateDay',
     value: function simulateDay(potentialCustomers, gameObject) {
       var _this = this;
@@ -10655,10 +10672,14 @@ var Game = function () {
       // debugger
       var pitcherCups = 0;
       var numPurchases = 0;
+      var timeIncrement = 8 * 60 / potentialCustomers;
+      //8 hour day
 
       var iterator = 0;
       var runDay = function runDay() {
         setTimeout(function () {
+          _this.updateClock(timeIncrement);
+
           if (_this.customersToday.length == potentialCustomers - 1) {
             console.log("numPurchases");
             console.log(numPurchases);
@@ -10670,9 +10691,7 @@ var Game = function () {
           iterator++;
           if (iterator < potentialCustomers) {
             runDay();
-            if (_this.checkInventory() == false && pitcherCups == 0) {
-              // debugger
-              // resultArray.push(false);
+            if (_this.checkInventory(gameObject) == false && pitcherCups == 0) {
               _this.customersToday.push(false);
               console.log("sold out");
               _this.soldOut = true;
@@ -10680,7 +10699,6 @@ var Game = function () {
             }
 
             if (_this.iceCubes - gameObject.ice < 0) {
-              //add sugar and lemon sold out conditions
               _this.customersToday.push(false);
 
               console.log("sold out");
@@ -10705,7 +10723,7 @@ var Game = function () {
               return;
             }
 
-            if (_this.checkInventory() == true && pitcherCups == 0) {
+            if (_this.checkInventory(gameObject) == true && pitcherCups == 0) {
               pitcherCups = _this.makePitcher(gameObject);
               // debugger
               if (pitcherCups == false) {
@@ -10750,11 +10768,20 @@ var Game = function () {
     }
   }, {
     key: 'checkInventory',
-    value: function checkInventory() {
-      if (this.cups == 0 || this.lemons == 0 || this.sugar == 0 || this.iceCubes == 0) {
-        // debugger
+    value: function checkInventory(gameObject) {
+      if (this.cups == 0) {
         return false;
       }
+      if (this.iceCubes - gameObject.ice < 0) {
+        return false;
+      }
+      if (this.lemons - gameObject.lemons < 0) {
+        return false;
+      }
+      if (this.sugar - gameObject.sugar < 0) {
+        return false;
+      }
+
       return true;
     }
   }, {
@@ -12115,6 +12142,19 @@ var View = function () {
       $section += $div;
       $section += '<div></div>';
 
+      var hours = ("0" + this.game.time.hour).slice(1, 3);
+      var minutes = ("0" + this.game.time.minutes.toFixed(0)).slice(-2);
+      var ampm = null;
+      if (hours < 12 && hours > 8) {
+        ampm = "am";
+      } else {
+        ampm = "pm";
+      }
+      // debugger
+      $div = '<div class="time">' + hours + ':' + minutes + ' ' + ampm + '</div>';
+      $section += $div;
+      $section += '<div></div>';
+
       $div = '<div class="sold-out">' + text + '</div>';
       $section += $div;
       $section += '<div></div>';
@@ -12223,7 +12263,6 @@ var View = function () {
     key: 'setupForm',
     value: function setupForm() {
       (0, _jquery2.default)("#store").remove();
-      // $("#done-shopping-button").remove();
 
       var $form = '<form id="form" class="form-holder">';
       var span = '<span class="form-header">Today\'s Recipe</span>';
@@ -12325,7 +12364,7 @@ var View = function () {
         text = "See Results";
       }
       var $div = '<div class="results-day" id="results-day">';
-      var $span = '<span>Congrats! You sold ' + resultsObject.cupsSold + ' cups\n        to ' + resultsObject.potentialCustomers + ' potential customers </span>';
+      var $span = '<span>Congrats! You sold ' + resultsObject.cupsSold + ' cups\n        to ' + resultsObject.potentialCustomers + ' potential customers. </span>';
       $div += $span;
       $div += '<div></div>';
 
@@ -12333,7 +12372,7 @@ var View = function () {
       $div += $span;
       $div += '<div></div>';
 
-      var $button = '<button class="tomorrow-button" id="tomorrow-button">' + text + '</button>>';
+      var $button = '<button class="tomorrow-button" id="tomorrow-button">' + text + '</button>';
       $div += $button;
       this.$el.append($div);
       this.bindEvents();
@@ -12352,6 +12391,8 @@ var View = function () {
         this.game.customersToday = [];
         this.game.soldOut = false;
         this.game.weather = this.game.generateWeather();
+        this.game.time.hour = 9;
+        this.game.time.minutes = 0;
         this.showInventory();
         this.setupDock();
       } else if (this.game.day == 7) {
