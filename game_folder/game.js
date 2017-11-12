@@ -16,6 +16,7 @@ class Game {
     this.customersToday = [];
     this.weather = this.generateWeather();
     this.dayOver = false;
+    this.soldOut = false;
   }
 
   resources(){
@@ -86,6 +87,7 @@ class Game {
             // resultArray.push(false);
             this.customersToday.push(false);
             console.log("sold out");
+            this.soldOut = true;
             return;
           }
 
@@ -94,6 +96,24 @@ class Game {
             this.customersToday.push(false);
 
             console.log("sold out");
+            this.soldOut = true;
+
+            return;
+          }
+
+          if(this.lemons - gameObject.lemons < 0 && pitcherCups==0){
+            this.customersToday.push(false);
+            console.log("sold out");
+            this.soldOut = true;
+
+            return;
+          }
+
+          if(this.sugar - gameObject.sugar < 0 && pitcherCups==0){
+            this.customersToday.push(false);
+            console.log("sold out");
+            this.soldOut = true;
+            
             return;
           }
 

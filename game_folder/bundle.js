@@ -10597,6 +10597,7 @@ var Game = function () {
     this.customersToday = [];
     this.weather = this.generateWeather();
     this.dayOver = false;
+    this.soldOut = false;
   }
 
   _createClass(Game, [{
@@ -10674,6 +10675,7 @@ var Game = function () {
               // resultArray.push(false);
               _this.customersToday.push(false);
               console.log("sold out");
+              _this.soldOut = true;
               return;
             }
 
@@ -10682,6 +10684,24 @@ var Game = function () {
               _this.customersToday.push(false);
 
               console.log("sold out");
+              _this.soldOut = true;
+
+              return;
+            }
+
+            if (_this.lemons - gameObject.lemons < 0 && pitcherCups == 0) {
+              _this.customersToday.push(false);
+              console.log("sold out");
+              _this.soldOut = true;
+
+              return;
+            }
+
+            if (_this.sugar - gameObject.sugar < 0 && pitcherCups == 0) {
+              _this.customersToday.push(false);
+              console.log("sold out");
+              _this.soldOut = true;
+
               return;
             }
 
@@ -12034,7 +12054,11 @@ var View = function () {
   _createClass(View, [{
     key: 'renderStartButton',
     value: function renderStartButton() {
-      var $div = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
+      var $div = '<div class="begin-game-holder" id="begin-game-holder">';
+      var $span = '<span class="lemonade-legends">Lemonade Legends</span>';
+      $div += $span;
+      var $button = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
+      $div += $button;
       this.$el.append($div);
       //onclick, this calls beginGame()
     }
@@ -12043,7 +12067,7 @@ var View = function () {
     value: function beginGame() {
       this.showInventory();
       this.setupDock();
-      (0, _jquery2.default)("#begin-game-button").remove();
+      (0, _jquery2.default)("#begin-game-holder").remove();
       this.unbindEvents();
       this.bindEvents();
     }
@@ -12059,6 +12083,43 @@ var View = function () {
     value: function updateStatus() {
       this.$el.empty();
       this.setupDock();
+      this.setupProgressBar();
+    }
+  }, {
+    key: 'setupProgressBar',
+    value: function setupProgressBar() {
+      var $section = '<section id="progress-bar" class="progress-bar">';
+      var myCups = this.game.cups;
+      var myLemons = this.game.lemons;
+      var mySugar = this.game.sugar;
+      var myIce = this.game.iceCubes;
+      var text = "";
+
+      if (this.game.soldOut == true) {
+        text = "SOLD OUT";
+      }
+
+      var $div = '<div class="inventory-figure">' + myCups + ' cups</div>';
+      $section += $div;
+      $section += '<div></div>';
+
+      $div = '<div class="inventory-figure">' + myLemons + ' lemons</div>';
+      $section += $div;
+      $section += '<div></div>';
+
+      $div = '<div class="inventory-figure">' + mySugar + ' cups of sugar</div>';
+      $section += $div;
+      $section += '<div></div>';
+
+      $div = '<div class="inventory-figure">' + myIce + ' ice cubes</div>';
+      $section += $div;
+      $section += '<div></div>';
+
+      $div = '<div class="sold-out">' + text + '</div>';
+      $section += $div;
+      $section += '<div></div>';
+
+      this.$el.append($section);
     }
   }, {
     key: 'setupView',
@@ -12251,6 +12312,7 @@ var View = function () {
     key: 'reset',
     value: function reset(resultsObject) {
       // debugger
+      (0, _jquery2.default)("#progress-bar").remove();
       (0, _jquery2.default)("#store").remove();
       (0, _jquery2.default)("#dock-holder").remove();
       this.renderResults(resultsObject);
@@ -12288,6 +12350,7 @@ var View = function () {
         this.game.dayOver = false;
         this.game.cupsSoldToday = 0;
         this.game.customersToday = [];
+        this.game.soldOut = false;
         this.game.weather = this.game.generateWeather();
         this.showInventory();
         this.setupDock();
@@ -12368,11 +12431,11 @@ var View = function () {
     key: 'setupViewCups',
     value: function setupViewCups() {
       var $div = (0, _jquery2.default)("<div>");
-      $div.addClass("inventory-holder-cups");
+      $div.addClass("inventory-holder");
 
       var cupsInventory = this.game.cups;
-      var $span = (0, _jquery2.default)('<span class="store-header">You have ' + cupsInventory + ' cups</span>');
-      $span.addClass("inventory-number");
+      var $span = (0, _jquery2.default)('<span>You have ' + cupsInventory + ' cups</span>');
+      $span.addClass("inventory-number-cups");
       $span.attr("id", "cups-counter");
       $div.append($span);
 
@@ -12403,11 +12466,11 @@ var View = function () {
     key: 'setupViewLemons',
     value: function setupViewLemons() {
       var $div = (0, _jquery2.default)("<div>");
-      $div.addClass("inventory-holder-lemons");
+      $div.addClass("inventory-holder");
 
       var lemonsInventory = this.game.lemons;
       var $span = (0, _jquery2.default)('<span>You have ' + lemonsInventory + ' lemons</span>');
-      $span.addClass("inventory-number");
+      $span.addClass("inventory-number-lemons");
       $span.attr("id", "lemons-counter");
       $div.append($span);
 
@@ -12438,11 +12501,11 @@ var View = function () {
     key: 'setupViewSugar',
     value: function setupViewSugar() {
       var $div = (0, _jquery2.default)("<div>");
-      $div.addClass("inventory-holder-sugar");
+      $div.addClass("inventory-holder");
 
       var sugarInventory = this.game.sugar;
       var $span = (0, _jquery2.default)('<span>You have ' + sugarInventory + ' cups of sugar</span>');
-      $span.addClass("inventory-number");
+      $span.addClass("inventory-number-sugar");
       $span.attr("id", "sugar-counter");
       $div.append($span);
 
@@ -12474,11 +12537,11 @@ var View = function () {
     key: 'setupViewIceCubes',
     value: function setupViewIceCubes() {
       var $div = (0, _jquery2.default)("<div>");
-      $div.addClass("inventory-holder-ice");
+      $div.addClass("inventory-holder");
 
       var iceInventory = this.game.iceCubes;
       var $span = (0, _jquery2.default)('<span>You have ' + iceInventory + ' ice cubes</span>');
-      $span.addClass("inventory-number");
+      $span.addClass("inventory-number-ice");
       $span.attr("id", "ice-counter");
       $div.append($span);
 

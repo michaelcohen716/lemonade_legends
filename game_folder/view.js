@@ -14,7 +14,11 @@ class View {
   }
 
   renderStartButton(){
-    let $div = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
+    let $div = '<div class="begin-game-holder" id="begin-game-holder">';
+    let $span = '<span class="lemonade-legends">Lemonade Legends</span>';
+    $div += $span;
+    let $button = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
+    $div += $button;
     this.$el.append($div);
     //onclick, this calls beginGame()
   }
@@ -22,7 +26,7 @@ class View {
   beginGame(){
     this.showInventory();
     this.setupDock();
-    $("#begin-game-button").remove();
+    $("#begin-game-holder").remove();
     this.unbindEvents();
     this.bindEvents();
   }
@@ -36,6 +40,42 @@ class View {
   updateStatus(){
     this.$el.empty();
     this.setupDock();
+    this.setupProgressBar();
+  }
+
+  setupProgressBar(){
+    let $section = '<section id="progress-bar" class="progress-bar">';
+    let myCups = this.game.cups;
+    let myLemons = this.game.lemons;
+    let mySugar = this.game.sugar;
+    let myIce = this.game.iceCubes;
+    let text = "";
+
+    if(this.game.soldOut == true){
+      text = "SOLD OUT";
+    }
+
+    let $div = `<div class="inventory-figure">${myCups} cups</div>`;
+    $section += $div;
+    $section += '<div></div>';
+
+    $div = `<div class="inventory-figure">${myLemons} lemons</div>`;
+    $section += $div;
+    $section += '<div></div>';
+
+    $div = `<div class="inventory-figure">${mySugar} cups of sugar</div>`;
+    $section += $div;
+    $section += '<div></div>';
+
+    $div = `<div class="inventory-figure">${myIce} ice cubes</div>`;
+    $section += $div;
+    $section += '<div></div>';
+
+    $div = `<div class="sold-out">${text}</div>`;
+    $section += $div;
+    $section += '<div></div>';
+
+    this.$el.append($section);
   }
 
   setupView(){
@@ -215,6 +255,7 @@ class View {
   }
   reset(resultsObject){
     // debugger
+    $("#progress-bar").remove();
     $("#store").remove();
     $("#dock-holder").remove();
     this.renderResults(resultsObject);
@@ -251,6 +292,7 @@ class View {
       this.game.dayOver = false;
       this.game.cupsSoldToday = 0;
       this.game.customersToday = [];
+      this.game.soldOut = false;
       this.game.weather = this.game.generateWeather();
       this.showInventory();
       this.setupDock();
@@ -327,11 +369,11 @@ class View {
 
   setupViewCups(){
     const $div = $("<div>");
-    $div.addClass("inventory-holder-cups");
+    $div.addClass("inventory-holder");
 
     let cupsInventory = this.game.cups;
-    let $span = $(`<span class="store-header">You have ${cupsInventory} cups</span>`);
-    $span.addClass("inventory-number");
+    let $span = $(`<span>You have ${cupsInventory} cups</span>`);
+    $span.addClass("inventory-number-cups");
     $span.attr("id", "cups-counter");
     $div.append($span);
 
@@ -361,11 +403,11 @@ class View {
 
   setupViewLemons(){
     const $div = $("<div>");
-    $div.addClass("inventory-holder-lemons");
+    $div.addClass("inventory-holder");
 
     let lemonsInventory = this.game.lemons;
     let $span = $(`<span>You have ${lemonsInventory} lemons</span>`);
-    $span.addClass("inventory-number");
+    $span.addClass("inventory-number-lemons");
     $span.attr("id", "lemons-counter");
     $div.append($span);
 
@@ -396,11 +438,11 @@ class View {
 
   setupViewSugar(){
     const $div = $("<div>");
-    $div.addClass("inventory-holder-sugar");
+    $div.addClass("inventory-holder");
 
     let sugarInventory = this.game.sugar;
     let $span = $(`<span>You have ${sugarInventory} cups of sugar</span>`);
-    $span.addClass("inventory-number");
+    $span.addClass("inventory-number-sugar");
     $span.attr("id", "sugar-counter");
     $div.append($span);
 
@@ -431,11 +473,11 @@ class View {
 
   setupViewIceCubes(){
     const $div = $("<div>");
-    $div.addClass("inventory-holder-ice");
+    $div.addClass("inventory-holder");
 
     let iceInventory = this.game.iceCubes;
     let $span = $(`<span>You have ${iceInventory} ice cubes</span>`);
-    $span.addClass("inventory-number");
+    $span.addClass("inventory-number-ice");
     $span.attr("id", "ice-counter");
     $div.append($span);
 
