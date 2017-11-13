@@ -1,5 +1,5 @@
 {
-  "name": "lemonade-stand",
+  "name": "lemonade-legends",
   "version": "1.0.0",
   "description": "## Background",
   "main": "index.js",
@@ -23,13 +23,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/michaelcohen716/lemonade_stand.git"
+    "url": "git+https://github.com/michaelcohen716/lemonade_legends.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/michaelcohen716/lemonade_stand/issues"
+    "url": "https://github.com/michaelcohen716/lemonade_legends/issues"
   },
-  "homepage": "https://github.com/michaelcohen716/lemonade_stand#readme"
+  "homepage": "https://github.com/michaelcohen716/lemonade_legends#readme"
 }

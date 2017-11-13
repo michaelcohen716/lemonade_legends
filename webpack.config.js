@@ -8,13 +8,13 @@ module.exports = {
   },
   devtool: 'source-map',
   resolve: {
-    extensions:[".js", ".jsx", "*"]
+    extensions:[".js", "*"]
   },
 
   module: {
      loaders: [
        {
-         test: [/\.jsx?$/, /\.js?$/],
+         test: [/\.js?$/],
          exclude: /node_modules/,
          loader: 'babel-loader',
          query: {
@@ -24,5 +24,3 @@ module.exports = {
      ]
    },
 };
-
-// presets: ['es2015', 'react']

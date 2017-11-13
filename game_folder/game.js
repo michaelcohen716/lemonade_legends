@@ -229,11 +229,10 @@ class Game {
 
     const weatherDecrement = this.weatherPurchaseCalculus(weather);
     likelihood -= weatherDecrement;
-    // debugger
     //either a neutral or a decrement
 
     const ingredientsFactor = this.ingredientsPurchaseCalculus(lemons, sugar, ice, weather);
-    // debugger
+
 
     likelihood += ingredientsFactor;
     //could be positive or negative
@@ -263,15 +262,12 @@ class Game {
     // const sugar = this.sugarPerPitcher;
     const sugarEquilibrium = 4;
     const sugarQuotient = (sugar - sugarEquilibrium) * 7;
-    // debugger
 
     return (iceQuotient + lemonQuotient + sugarQuotient);
   }
 
 
   pricePurchaseCalculus(price, weather){
-    // const price = this.price;
-
     let equilibriumPrice = 0.25;
     equilibriumPrice = Math.random() * 2 * equilibriumPrice;
     const priceQuotient = (equilibriumPrice - (price/100)) * 500;
@@ -285,25 +281,18 @@ class Game {
       "Overcast": 35,
       "Rainy": 60
     };
-    // debugger
+
     let outlookDecrement = outlookQuotients[weatherObject.outlook];
-    // debugger
     outlookDecrement = Math.floor(Math.random() * outlookDecrement);
-    // debugger
 
     const tempConstant = 0.55;
     const maxTemp = 100;
     const actualTemp = weatherObject.temperature;
     const temperatureDecrement = (maxTemp - actualTemp) * (tempConstant);
-    // debugger
     return (outlookDecrement + temperatureDecrement);
   }
 
-
-
-
 }
 
-Game.DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export default Game;

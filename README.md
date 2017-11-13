@@ -20,7 +20,7 @@ Then, you finalize the details of your offering:
 
 These questions and answers are a function of the day's weather forecast. The game give its best prediction of temperature, sunniness and precipitation, so you can make data-based decisions.
 
-Finally, the clock strikes 9 am and you're open for business. Based on your price, the quality of your product and the weather, passersby decide whether they want to snag a cup of lemonade or be on their way.
+Finally, the clock strikes 9 am and you're open for business. Based on your price, the weather, and the quality of your product, passersby decide whether they want to snag a cup of lemonade or be on their way.
 
 At close, your remaining ice cubes melt. And, if luck is working against you, your lemons or sugar may spoil as well. Tomorrow is another day.
 

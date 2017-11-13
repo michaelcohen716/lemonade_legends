@@ -2,16 +2,85 @@ import $ from 'jquery';
 import 'jquery-ui';
 import Game from './game';
 import React from 'react';
+const cupImage = new Image();
+cupImage.src = "assets/cup.png";
+const lemonImage = new Image();
+lemonImage.src = "assets/lemon.png";
+const sugarImage = new Image();
+sugarImage.src = "assets/sugar.png";
 
 class View {
-  constructor(game, $el){
+  constructor(game, $el, canvas){
     this.game = game;
     this.$el = $el;
-
+    this.canvas = canvas;
+    this.ctx = canvas.getContext("2d");
     this.renderStartButton();
     this.bindEvents();
     this.intervals = [];
   }
+
+  rerenderCanvas(){
+    this.$el.append(this.canvas);
+    this.ctx.fillStyle = 'black';
+    this.ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
+  }
+
+  canvasPurchase(){
+    this.ctx.fillStyle = 'white';
+    this.ctx.font = '16px Arial';
+    this.ctx.fillText('Cups', 20, 190);
+    this.ctx.fillText('Lemons', 85, 190);
+    this.ctx.fillText('Sugar', 165, 190);
+    this.ctx.fillText('Ice', 245, 190);
+
+    let numCupPics = Math.floor(this.game.cups / 20);
+    let xCoord;
+    let yCoord = 185;
+    for (var i = 0; i < numCupPics; i++) {
+      if (i % 2 == 0){
+        xCoord = 17;
+        yCoord -= 36;
+      } else {
+        xCoord = 42;
+      }
+      this.ctx.drawImage(cupImage, xCoord, yCoord);
+    }
+
+    let numLemonPics = Math.floor(this.game.lemons / 8);
+    yCoord = 182;
+    xCoord = 85;
+    for (var j = 0; j < numLemonPics; j++) {
+      if (j % 2 == 0){
+        xCoord = 82;
+        yCoord -= 32;
+      } else {
+        xCoord = 112;
+      }
+      this.ctx.drawImage(lemonImage, xCoord, yCoord);
+    }
+
+    let numSugarPics = Math.floor(this.game.sugar / 8);
+    yCoord = 182;
+    xCoord = 147;
+    for (var k = 0; k < numSugarPics; k++) {
+      if (k % 2 == 0){
+        xCoord = 161;
+        yCoord -= 32;
+      } else {
+        xCoord = 191;
+      }
+      this.ctx.drawImage(sugarImage, xCoord, yCoord);
+
+    }
+
+  }
+
+  renderCanvas(){
+    $("#canvas").removeClass("display-none");
+  }
+
+
 
   renderStartButton(){
     let $div = '<div class="begin-game-holder" id="begin-game-holder">';
@@ -19,8 +88,6 @@ class View {
     $div += $span;
     let $button = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
     $div += $button;
-    // $span = `<img class="pic" src="/assets/lemonade.jpg">`;
-    // $div += $span;
     this.$el.append($div);
     //onclick, this calls beginGame()
   }
@@ -37,6 +104,7 @@ class View {
   }
 
   beginGame(){
+    console.log("debugger here");
     $("#instructions-holder").remove();
     this.showInventory();
     this.setupDock();
@@ -45,6 +113,7 @@ class View {
 
   render(){
     this.$el.empty();
+    this.renderCanvas();
     this.setupDock();
     this.setupStore();
   }
@@ -53,6 +122,7 @@ class View {
     this.$el.empty();
     this.setupDock();
     this.setupProgressBar();
+    this.renderCanvas();
   }
 
   setupProgressBar(){
@@ -91,7 +161,7 @@ class View {
     } else {
       ampm = "pm";
     }
-    // debugger
+
     $div = `<div class="time">${hours}:${minutes} ${ampm}</div>`;
     $section += $div;
     $section += '<div class="filler"></div>';
@@ -106,17 +176,7 @@ class View {
     this.$el.append($section);
   }
 
-  setupView(){
-    let dock = this.setupDock();
-    this.$el.append(dock);
-
-    this.setupForm();
-    let form = this.setupForm();
-    this.$el.append(form);
-  }
-
   setupStore(){
-    // debugger
     let $cups = this.setupViewCups();
     let $lemons = this.setupViewLemons();
     let $sugar = this.setupViewSugar();
@@ -134,7 +194,7 @@ class View {
   }
 
   bindEvents(){
-    // this.unbindEvents();
+    this.unbindEvents();
     this.$el.on("click", "li", (e => {
       const $button = $(e.currentTarget);
       this.makePurchase($button);
@@ -147,19 +207,19 @@ class View {
 
     $("#begin-game-button").click((e)=>{
       e.preventDefault();
-      // this.beginGame();
       this.showInstructions();
     });
 
     $("#go-button").click((e)=>{
       e.preventDefault();
-      // this.beginGame();
       this.beginGame();
+      this.renderCanvas();
     });
 
     $("#go-shopping-button").click((e)=>{
       e.preventDefault();
       this.goShopping();
+      this.canvasPurchase();
     });
 
     $("#done-shopping-button").click((e)=>{
@@ -200,7 +260,8 @@ class View {
     }
     this.game.totalExpenses += price;
     this.render();
-    this.unbindEvents();
+    this.rerenderCanvas();
+    this.canvasPurchase();
     this.bindEvents();
   }
 

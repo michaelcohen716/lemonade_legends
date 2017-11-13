@@ -10821,11 +10821,9 @@ var Game = function () {
 
       var weatherDecrement = this.weatherPurchaseCalculus(weather);
       likelihood -= weatherDecrement;
-      // debugger
       //either a neutral or a decrement
 
       var ingredientsFactor = this.ingredientsPurchaseCalculus(lemons, sugar, ice, weather);
-      // debugger
 
       likelihood += ingredientsFactor;
       //could be positive or negative
@@ -10856,15 +10854,12 @@ var Game = function () {
       // const sugar = this.sugarPerPitcher;
       var sugarEquilibrium = 4;
       var sugarQuotient = (sugar - sugarEquilibrium) * 7;
-      // debugger
 
       return iceQuotient + lemonQuotient + sugarQuotient;
     }
   }, {
     key: 'pricePurchaseCalculus',
     value: function pricePurchaseCalculus(price, weather) {
-      // const price = this.price;
-
       var equilibriumPrice = 0.25;
       equilibriumPrice = Math.random() * 2 * equilibriumPrice;
       var priceQuotient = (equilibriumPrice - price / 100) * 500;
@@ -10879,25 +10874,20 @@ var Game = function () {
         "Overcast": 35,
         "Rainy": 60
       };
-      // debugger
+
       var outlookDecrement = outlookQuotients[weatherObject.outlook];
-      // debugger
       outlookDecrement = Math.floor(Math.random() * outlookDecrement);
-      // debugger
 
       var tempConstant = 0.55;
       var maxTemp = 100;
       var actualTemp = weatherObject.temperature;
       var temperatureDecrement = (maxTemp - actualTemp) * tempConstant;
-      // debugger
       return outlookDecrement + temperatureDecrement;
     }
   }]);
 
   return Game;
 }();
-
-Game.DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 exports.default = Game;
 
@@ -11917,20 +11907,14 @@ __webpack_require__(4);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // window.$ = $;
-  // var $ = window.$;
-  // window.jQuery = jQuery;
 
-  // const canvas = document.getElementById("canvas");
-  // canvas.height = 200;
-  // canvas.width = 300;
-  // const ctx = canvas.getContext('2d');
+  var canvas = document.getElementById("canvas");
+  canvas.height = 200;
+  canvas.width = 300;
 
   var game = new _game2.default();
-  var dock = (0, _jquery2.default)('.dock');
   var rootEl = (0, _jquery2.default)('.game');
-  new _view2.default(game, rootEl);
-  // game.run();
+  new _view2.default(game, rootEl, canvas);
 });
 
 /***/ }),
@@ -12065,19 +12049,88 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var cupImage = new Image();
+cupImage.src = "assets/cup.png";
+var lemonImage = new Image();
+lemonImage.src = "assets/lemon.png";
+var sugarImage = new Image();
+sugarImage.src = "assets/sugar.png";
+
 var View = function () {
-  function View(game, $el) {
+  function View(game, $el, canvas) {
     _classCallCheck(this, View);
 
     this.game = game;
     this.$el = $el;
-
+    this.canvas = canvas;
+    this.ctx = canvas.getContext("2d");
     this.renderStartButton();
     this.bindEvents();
     this.intervals = [];
   }
 
   _createClass(View, [{
+    key: 'rerenderCanvas',
+    value: function rerenderCanvas() {
+      this.$el.append(this.canvas);
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+  }, {
+    key: 'canvasPurchase',
+    value: function canvasPurchase() {
+      this.ctx.fillStyle = 'white';
+      this.ctx.font = '16px Arial';
+      this.ctx.fillText('Cups', 20, 190);
+      this.ctx.fillText('Lemons', 85, 190);
+      this.ctx.fillText('Sugar', 165, 190);
+      this.ctx.fillText('Ice', 245, 190);
+
+      var numCupPics = Math.floor(this.game.cups / 20);
+      var xCoord = void 0;
+      var yCoord = 185;
+      for (var i = 0; i < numCupPics; i++) {
+        if (i % 2 == 0) {
+          xCoord = 17;
+          yCoord -= 36;
+        } else {
+          xCoord = 42;
+        }
+        this.ctx.drawImage(cupImage, xCoord, yCoord);
+      }
+
+      var numLemonPics = Math.floor(this.game.lemons / 8);
+      yCoord = 182;
+      xCoord = 85;
+      for (var j = 0; j < numLemonPics; j++) {
+        if (j % 2 == 0) {
+          xCoord = 82;
+          yCoord -= 32;
+        } else {
+          xCoord = 112;
+        }
+        this.ctx.drawImage(lemonImage, xCoord, yCoord);
+      }
+
+      var numSugarPics = Math.floor(this.game.sugar / 8);
+      yCoord = 182;
+      xCoord = 147;
+      for (var k = 0; k < numSugarPics; k++) {
+        if (k % 2 == 0) {
+          xCoord = 161;
+          yCoord -= 32;
+        } else {
+          xCoord = 191;
+        }
+        this.ctx.drawImage(sugarImage, xCoord, yCoord);
+      }
+    }
+  }, {
+    key: 'renderCanvas',
+    value: function renderCanvas() {
+      (0, _jquery2.default)("#canvas").removeClass("display-none");
+    }
+  }, {
     key: 'renderStartButton',
     value: function renderStartButton() {
       var $div = '<div class="begin-game-holder" id="begin-game-holder">';
@@ -12085,8 +12138,6 @@ var View = function () {
       $div += $span;
       var $button = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
       $div += $button;
-      // $span = `<img class="pic" src="/assets/lemonade.jpg">`;
-      // $div += $span;
       this.$el.append($div);
       //onclick, this calls beginGame()
     }
@@ -12105,6 +12156,7 @@ var View = function () {
   }, {
     key: 'beginGame',
     value: function beginGame() {
+      console.log("debugger here");
       (0, _jquery2.default)("#instructions-holder").remove();
       this.showInventory();
       this.setupDock();
@@ -12114,6 +12166,7 @@ var View = function () {
     key: 'render',
     value: function render() {
       this.$el.empty();
+      this.renderCanvas();
       this.setupDock();
       this.setupStore();
     }
@@ -12123,6 +12176,7 @@ var View = function () {
       this.$el.empty();
       this.setupDock();
       this.setupProgressBar();
+      this.renderCanvas();
     }
   }, {
     key: 'setupProgressBar',
@@ -12162,7 +12216,7 @@ var View = function () {
       } else {
         ampm = "pm";
       }
-      // debugger
+
       $div = '<div class="time">' + hours + ':' + minutes + ' ' + ampm + '</div>';
       $section += $div;
       $section += '<div class="filler"></div>';
@@ -12177,19 +12231,8 @@ var View = function () {
       this.$el.append($section);
     }
   }, {
-    key: 'setupView',
-    value: function setupView() {
-      var dock = this.setupDock();
-      this.$el.append(dock);
-
-      this.setupForm();
-      var form = this.setupForm();
-      this.$el.append(form);
-    }
-  }, {
     key: 'setupStore',
     value: function setupStore() {
-      // debugger
       var $cups = this.setupViewCups();
       var $lemons = this.setupViewLemons();
       var $sugar = this.setupViewSugar();
@@ -12210,7 +12253,7 @@ var View = function () {
     value: function bindEvents() {
       var _this = this;
 
-      // this.unbindEvents();
+      this.unbindEvents();
       this.$el.on("click", "li", function (e) {
         var $button = (0, _jquery2.default)(e.currentTarget);
         _this.makePurchase($button);
@@ -12223,19 +12266,19 @@ var View = function () {
 
       (0, _jquery2.default)("#begin-game-button").click(function (e) {
         e.preventDefault();
-        // this.beginGame();
         _this.showInstructions();
       });
 
       (0, _jquery2.default)("#go-button").click(function (e) {
         e.preventDefault();
-        // this.beginGame();
         _this.beginGame();
+        _this.renderCanvas();
       });
 
       (0, _jquery2.default)("#go-shopping-button").click(function (e) {
         e.preventDefault();
         _this.goShopping();
+        _this.canvasPurchase();
       });
 
       (0, _jquery2.default)("#done-shopping-button").click(function (e) {
@@ -12279,7 +12322,8 @@ var View = function () {
       }
       this.game.totalExpenses += price;
       this.render();
-      this.unbindEvents();
+      this.rerenderCanvas();
+      this.canvasPurchase();
       this.bindEvents();
     }
   }, {
@@ -12690,7 +12734,7 @@ if (process.env.NODE_ENV === 'production') {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/** @license React v16.1.0
+/** @license React v16.1.1
  * react.production.min.js
  *
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -12711,7 +12755,7 @@ e?"object with keys {"+Object.keys(a).join(", ")+"}":e,""));return h}function N(
 function P(a,b,e){var d=a.result,c=a.keyPrefix;a=a.func.call(a.context,b,a.count++);Array.isArray(a)?Q(a,d,e,p.thatReturnsArgument):null!=a&&(E(a)&&(b=c+(!a.key||b&&b.key===a.key?"":(""+a.key).replace(I,"$\x26/")+"/")+e,a={$$typeof:B,type:a.type,key:b,ref:a.ref,props:a.props,_owner:a._owner}),d.push(a))}function Q(a,b,e,d,c){var h="";null!=e&&(h=(""+e).replace(I,"$\x26/")+"/");b=K(b,h,d,c);null==a||M(a,"",P,b);L(b)}"function"===typeof Symbol&&Symbol["for"]&&Symbol["for"]("react.fragment");
 var R={Children:{map:function(a,b,e){if(null==a)return a;var d=[];Q(a,d,null,b,e);return d},forEach:function(a,b,e){if(null==a)return a;b=K(null,null,b,e);null==a||M(a,"",O,b);L(b)},count:function(a){return null==a?0:M(a,"",p.thatReturnsNull,null)},toArray:function(a){var b=[];Q(a,b,null,p.thatReturnsArgument);return b},only:function(a){E(a)?void 0:q("143");return a}},Component:t,PureComponent:u,unstable_AsyncComponent:x,createElement:D,cloneElement:function(a,b,e){var d=m({},a.props),c=a.key,h=a.ref,
 k=a._owner;if(null!=b){void 0!==b.ref&&(h=b.ref,k=z.current);void 0!==b.key&&(c=""+b.key);if(a.type&&a.type.defaultProps)var f=a.type.defaultProps;for(g in b)A.call(b,g)&&!C.hasOwnProperty(g)&&(d[g]=void 0===b[g]&&void 0!==f?f[g]:b[g])}var g=arguments.length-2;if(1===g)d.children=e;else if(1<g){f=Array(g);for(var l=0;l<g;l++)f[l]=arguments[l+2];d.children=f}return{$$typeof:B,type:a.type,key:c,ref:h,props:d,_owner:k}},createFactory:function(a){var b=D.bind(null,a);b.type=a;return b},isValidElement:E,
-version:"16.1.0",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurrentOwner:z,assign:m}},S=Object.freeze({default:R}),T=S&&R||S;module.exports=T["default"]?T["default"]:T;
+version:"16.1.1",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurrentOwner:z,assign:m}},S=Object.freeze({default:R}),T=S&&R||S;module.exports=T["default"]?T["default"]:T;
 
 
 /***/ }),
@@ -12719,7 +12763,7 @@ version:"16.1.0",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurren
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/** @license React v16.1.0
+/* WEBPACK VAR INJECTION */(function(process) {/** @license React v16.1.1
  * react.development.js
  *
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -12743,7 +12787,7 @@ var checkPropTypes = __webpack_require__(17);
 
 // TODO: this is special because it gets imported during build.
 
-var ReactVersion = '16.1.0';
+var ReactVersion = '16.1.1';
 
 /**
  * WARNING: DO NOT manually require this module.
@@ -13931,7 +13975,7 @@ function createElementWithValidation(type, props, children) {
   if (!validType) {
     var info = '';
     if (type === undefined || typeof type === 'object' && type !== null && Object.keys(type).length === 0) {
-      info += ' You likely forgot to export your component from the file ' + "it's defined in.";
+      info += ' You likely forgot to export your component from the file ' + "it's defined in, or you might have mixed up default and named imports.";
     }
 
     var sourceInfo = getSourceInfoErrorAddendum(props);
