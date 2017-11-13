@@ -1,10 +1,10 @@
-# **Lemonade Stand**
+# **Lemonade Legends**
 
-Think your business skills are up to snuff? Try running this Lemonade Stand for a week and see if you can turn a profit.
+Think your business skills are up to snuff? Try running this lemonade stand for a week and see if you can turn a profit.
 
 # **Background**
 
-Lemonade Stand is a simple game with real world parallels. You start with $20.00, a ramshackle wooden stand, and unbridled optimism. But, the reality of the dog-eat-dog lemonade business soon sets in as you struggle to serve a quality product at an affordable price to a demanding clientele.
+Lemonade Legends is a simple game with real world parallels. You start with $20.00, a ramshackle wooden stand, and unbridled optimism. But, the reality of the dog-eat-dog lemonade business soon sets in as you struggle to serve a quality product at an affordable price to a demanding clientele.
 
 # **Functionality and MVP**
 
@@ -39,20 +39,3 @@ This project will be implemented with the following technologies:
 * Canvas/HTML5 for basic game graphics
 * Sprite animations to render potential customers
 
-# **Implementation Timeline**
-
-### Day 1
-* Setup, including webpack and mapping out file structure
-* Build out game logic
-
-### Day 2
-* Finish game logic
-* Design game layout and begin to render game details
-
-### Day 3
-* Animate with fixed elements and Sprite characters
-* Model user interaction and link to game actions
-
-### Day 4
-* Make it pretty
-* Manage bugs
