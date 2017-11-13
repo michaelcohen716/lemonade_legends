@@ -9,7 +9,7 @@
   display: flex;
   background: yellow;
   color: black;
-  font-family: sans-serif;
+  font-family: Helvetica, Arial, Verdana, sans-serif;
   /*-webkit-text-stroke-width: 1px;*/
   /*-webkit-text-stroke-color: black;*/
 }
@@ -20,19 +20,60 @@
 }
 
 .begin-game-holder {
-  width: 200px;
-  height: 140px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   background: black;
-  top: 10%;
-  left: 38%;
+  /*top: 10%;*/
+  /*left: 38%;*/
   color: white;
   text-align: center;
-  border-radius: 5%;
+  /*border-radius: 5%;*/
 }
 
 .lemonade-legends {
-  font-size: 25px;
+  font-size: 55px;
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+  /*padding-top: 18%;*/
+  width: 50%;
+  position: absolute;
+  top: 50px;
+  margin-left: -26%;
+  /*margin-left: 2%;*/
+}
+
+.pic {
+  width: 100px;
+  height: 100px;
+}
+
+.instructions-holder {
+  width: 100%;
+  height: 100%;
+  background: black;
+  color: white;
+  position: relative;
+}
+
+.instructions {
+  position: absolute;
+  top: 12%;
+  left: 36%;
+  width: 24%;
+  text-align: center;
+  font-size: 16px;
+}
+
+.go-button {
+  background: yellow;
+  color: black;
+  width: 100px;
+  height: 40px;
+  position: absolute;
+  top: 36%;
+  left: 44.2%;
+  font-size: 20px;
+
 }
 
 .begin-game-button {
@@ -40,8 +81,9 @@
   position: absolute;
   width: 100px;
   height: 50px;
-  top: 56%;
-  left: 24%;
+  top: 22%;
+  left: 44%;
+  background-image: image("lemonade.jpg");
   /*vertical-align: center;*/
   /*text-align: center;*/
   color: white;
@@ -99,6 +141,12 @@
   border: 1px solid black;
   text-align: center;
   cursor: pointer;
+  width: 200px;
+  margin: 5px;
+  border-radius: 10%;
+  /*box-shadow: 2px black black;*/
+  -webkit-box-shadow: 2px 2px 2px 0px black;
+
 }
 
 .inventory-number-cups {
@@ -183,13 +231,6 @@
   margin-top: 18px;
 }
 
-.inventory-buy-button {
-  width: 200px;
-  margin: 5px;
-  /*border: 1px solid yellow;
-  background: pink;*/
-  border-radius: 10%;
-}
 
 .form-submit {
   width: 80px;
@@ -228,6 +269,14 @@
   text-align: center;
 }
 
+.congrats {
+  margin: 5px;
+}
+
+.ice-melted {
+  margin: 5px;
+}
+
 .progress-bar {
   min-width: 140px;
   max-height: 160px;
@@ -242,8 +291,20 @@
   margin: 4px;
 }
 
+.final-results {
+  position: absolute;
+  top: 20%;
+  left: 40%;
+  text-align: right;
+  font-size: 18px;
+  border: 1px solid black;
+  border-radius: 100%;
+  width: 200px;
+  height: 200px;
+  text-align: center;
+}
 
-#canvas{
-  /*width: 600
-  border: 10px solid yellow;*/
+.final-results-header {
+  font-size: 22px;
+  margin-top: 10%;
 }

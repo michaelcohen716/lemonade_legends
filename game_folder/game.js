@@ -13,6 +13,7 @@ class Game {
     this.cupsSoldToday = 0;
     this.salesToday = 0;
     this.totalSales = 0;
+    this.totalExpenses = 0;
     this.customersToday = [];
     this.weather = this.generateWeather();
     this.dayOver = false;
@@ -109,7 +110,7 @@ class Game {
             return;
           }
 
-          if(this.iceCubes - gameObject.ice < 0){
+          if(this.iceCubes - gameObject.ice < 0 || this.cups == 0){
             this.customersToday.push(false);
 
             console.log("sold out");
@@ -293,7 +294,7 @@ class Game {
     outlookDecrement = Math.floor(Math.random() * outlookDecrement);
     // debugger
 
-    const tempConstant = 0.25;
+    const tempConstant = 0.35;
     const maxTemp = 100;
     const actualTemp = weatherObject.temperature;
     const temperatureDecrement = (maxTemp - actualTemp) * (tempConstant);

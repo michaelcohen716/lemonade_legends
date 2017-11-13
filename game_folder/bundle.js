@@ -10594,6 +10594,7 @@ var Game = function () {
     this.cupsSoldToday = 0;
     this.salesToday = 0;
     this.totalSales = 0;
+    this.totalExpenses = 0;
     this.customersToday = [];
     this.weather = this.generateWeather();
     this.dayOver = false;
@@ -10698,7 +10699,7 @@ var Game = function () {
               return;
             }
 
-            if (_this.iceCubes - gameObject.ice < 0) {
+            if (_this.iceCubes - gameObject.ice < 0 || _this.cups == 0) {
               _this.customersToday.push(false);
 
               console.log("sold out");
@@ -10886,7 +10887,7 @@ var Game = function () {
       outlookDecrement = Math.floor(Math.random() * outlookDecrement);
       // debugger
 
-      var tempConstant = 0.25;
+      var tempConstant = 0.35;
       var maxTemp = 100;
       var actualTemp = weatherObject.temperature;
       var temperatureDecrement = (maxTemp - actualTemp) * tempConstant;
@@ -12086,15 +12087,30 @@ var View = function () {
       $div += $span;
       var $button = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
       $div += $button;
+      // $span = `<img class="pic" src="/assets/lemonade.jpg">`;
+      // $div += $span;
       this.$el.append($div);
       //onclick, this calls beginGame()
     }
   }, {
+    key: 'showInstructions',
+    value: function showInstructions() {
+      (0, _jquery2.default)("#begin-game-holder").remove();
+      var $div = '<div class="instructions-holder" id="instructions-holder">';
+      var $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- each of the neighbors has a discerning palette. Some have tight pocketbooks. Now, you\'re open for business. Good luck.</span>';
+      $div += $span;
+      var $button = '<button id="go-button" class="go-button">Go</button>';
+      $div += $button;
+      this.$el.append($div);
+      this.bindEvents();
+    }
+  }, {
     key: 'beginGame',
     value: function beginGame() {
+      (0, _jquery2.default)("#instructions-holder").remove();
       this.showInventory();
       this.setupDock();
-      (0, _jquery2.default)("#begin-game-holder").remove();
+      // $("#begin-game-holder").remove();
       this.unbindEvents();
       this.bindEvents();
     }
@@ -12208,6 +12224,13 @@ var View = function () {
 
       (0, _jquery2.default)("#begin-game-button").click(function (e) {
         e.preventDefault();
+        // this.beginGame();
+        _this.showInstructions();
+      });
+
+      (0, _jquery2.default)("#go-button").click(function (e) {
+        e.preventDefault();
+        // this.beginGame();
         _this.beginGame();
       });
 
@@ -12253,8 +12276,9 @@ var View = function () {
       if (this.game.cash - price > 0) {
         this.game.updateInventory(resource, units, price);
       } else {
-        console.log("not enough money");
+        alert("Not enough money, dude");
       }
+      this.game.totalExpenses += price;
       this.render();
       this.unbindEvents();
       this.bindEvents();
@@ -12264,7 +12288,7 @@ var View = function () {
     value: function setupForm() {
       (0, _jquery2.default)("#store").remove();
 
-      var $form = '<form id="form" class="form-holder">';
+      var $form = '<form id="form" class="form-holder" autocomplete="off">';
       var span = '<span class="form-header">Today\'s Recipe</span>';
       $form += span;
       $form += '<div> </div>';
@@ -12364,7 +12388,7 @@ var View = function () {
         text = "See Results";
       }
       var $div = '<div class="results-day" id="results-day">';
-      var $span = '<span>Congrats! You sold ' + resultsObject.cupsSold + ' cups\n        to ' + resultsObject.potentialCustomers + ' potential customers. </span>';
+      var $span = '<span class"congrats">Congrats! You sold ' + resultsObject.cupsSold + ' cups\n        to ' + resultsObject.potentialCustomers + ' potential customers. </span>';
       $div += $span;
       $div += '<div></div>';
 
@@ -12405,17 +12429,21 @@ var View = function () {
   }, {
     key: 'completeGame',
     value: function completeGame() {
-      var $section = '<section class="final-results id="final-results>';
+      var $section = '<section class="final-results" id="final-results">';
+      $section += '<div class="final-results-header">Final Results</div>';
 
       var totalSales = this.game.totalSales;
-      var $div = '<div class="total-sales">You earned $' + totalSales.toFixed(2) + ' in revenue</div>';
+      var $div = '<div class="total-sales">Revenue: $' + totalSales.toFixed(2) + '</div>';
       $section += $div;
 
-      var totalExpenses = totalSales - this.game.cash;
-      $div = '<div class="total-expenses">You spent $' + totalExpenses.toFixed(2) + '</div>';
+      var totalExpenses = this.game.totalExpenses;
+      $div = '<div class="total-expenses">Expenses: $' + totalExpenses.toFixed(2) + '</div>';
       $section += $div;
 
-      $div = '<div class="total-profit">For a profit of $' + (totalSales - totalExpenses).toFixed(2) + '</div>';
+      $div = '<div class="initial-cash">Initial Cash: $20.00</div>';
+      $section += $div;
+
+      $div = '<div class="total-profit">Profit: $' + (totalSales - totalExpenses - 20).toFixed(2) + '</div>';
       $section += $div;
 
       this.$el.append($section);

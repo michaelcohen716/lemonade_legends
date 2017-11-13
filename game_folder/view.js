@@ -19,14 +19,28 @@ class View {
     $div += $span;
     let $button = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
     $div += $button;
+    // $span = `<img class="pic" src="/assets/lemonade.jpg">`;
+    // $div += $span;
     this.$el.append($div);
     //onclick, this calls beginGame()
   }
 
+  showInstructions(){
+    $("#begin-game-holder").remove();
+    let $div = '<div class="instructions-holder" id="instructions-holder">';
+    let $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- each of the neighbors has a discerning palette. Some have tight pocketbooks. Now, you\'re open for business. Good luck.</span>';
+    $div += $span;
+    let $button = '<button id="go-button" class="go-button">Go</button>';
+    $div += $button;
+    this.$el.append($div);
+    this.bindEvents();
+  }
+
   beginGame(){
+    $("#instructions-holder").remove();
     this.showInventory();
     this.setupDock();
-    $("#begin-game-holder").remove();
+    // $("#begin-game-holder").remove();
     this.unbindEvents();
     this.bindEvents();
   }
@@ -132,6 +146,13 @@ class View {
 
     $("#begin-game-button").click((e)=>{
       e.preventDefault();
+      // this.beginGame();
+      this.showInstructions();
+    });
+
+    $("#go-button").click((e)=>{
+      e.preventDefault();
+      // this.beginGame();
       this.beginGame();
     });
 
@@ -174,8 +195,9 @@ class View {
     if(this.game.cash - price > 0){
       this.game.updateInventory(resource, units, price);
     }else {
-      console.log("not enough money");
+      alert("Not enough money, dude");
     }
+    this.game.totalExpenses += price;
     this.render();
     this.unbindEvents();
     this.bindEvents();
@@ -184,7 +206,7 @@ class View {
   setupForm(){
     $("#store").remove();
 
-    let $form = '<form id="form" class="form-holder">';
+    let $form = '<form id="form" class="form-holder" autocomplete="off">';
     let span = '<span class="form-header">Today\'s Recipe</span>';
     $form += span;
     $form += '<div> </div>';
@@ -279,7 +301,7 @@ class View {
       text = "See Results";
     }
     let $div = '<div class="results-day" id="results-day">';
-    let $span = `<span>Congrats! You sold ${resultsObject.cupsSold} cups
+    let $span = `<span class"congrats">Congrats! You sold ${resultsObject.cupsSold} cups
         to ${resultsObject.potentialCustomers} potential customers. </span>`;
     $div += $span;
     $div += '<div></div>';
@@ -319,17 +341,21 @@ class View {
   }
 
   completeGame(){
-    let $section = '<section class="final-results id="final-results>';
+    let $section = '<section class="final-results" id="final-results">';
+    $section += '<div class="final-results-header">Final Results</div>';
 
     const totalSales = this.game.totalSales;
-    let $div = `<div class="total-sales">You earned $${totalSales.toFixed(2)} in revenue</div>`;
+    let $div = `<div class="total-sales">Revenue: $${totalSales.toFixed(2)}</div>`;
     $section += $div;
 
-    const totalExpenses = totalSales - this.game.cash;
-    $div = `<div class="total-expenses">You spent $${totalExpenses.toFixed(2)}</div>`;
+    const totalExpenses = this.game.totalExpenses;
+    $div = `<div class="total-expenses">Expenses: $${totalExpenses.toFixed(2)}</div>`;
     $section += $div;
 
-    $div = `<div class="total-profit">For a profit of $${(totalSales - totalExpenses).toFixed(2)}</div>`;
+    $div = '<div class="initial-cash">Initial Cash: $20.00</div>';
+    $section += $div;
+
+    $div = `<div class="total-profit">Profit: $${(totalSales - totalExpenses - 20).toFixed(2)}</div>`;
     $section += $div;
 
     this.$el.append($section);
