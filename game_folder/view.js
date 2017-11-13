@@ -8,6 +8,8 @@ const lemonImage = new Image();
 lemonImage.src = "assets/lemon.png";
 const sugarImage = new Image();
 sugarImage.src = "assets/sugar.png";
+const iceImage = new Image();
+iceImage.src = "assets/ice.png";
 
 class View {
   constructor(game, $el, canvas){
@@ -71,7 +73,19 @@ class View {
         xCoord = 191;
       }
       this.ctx.drawImage(sugarImage, xCoord, yCoord);
+    }
 
+    let numIcePics = Math.floor(this.game.iceCubes / 50);
+    yCoord = 182;
+    xCoord = 228;
+    for (var l = 0; l < numIcePics; l++) {
+      if (l % 2 == 0){
+        xCoord = 228;
+        yCoord -= 32;
+      } else {
+        xCoord = 258;
+      }
+      this.ctx.drawImage(iceImage, xCoord, yCoord);
     }
 
   }

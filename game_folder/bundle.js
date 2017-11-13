@@ -12055,6 +12055,8 @@ var lemonImage = new Image();
 lemonImage.src = "assets/lemon.png";
 var sugarImage = new Image();
 sugarImage.src = "assets/sugar.png";
+var iceImage = new Image();
+iceImage.src = "assets/ice.png";
 
 var View = function () {
   function View(game, $el, canvas) {
@@ -12123,6 +12125,19 @@ var View = function () {
           xCoord = 191;
         }
         this.ctx.drawImage(sugarImage, xCoord, yCoord);
+      }
+
+      var numIcePics = Math.floor(this.game.iceCubes / 50);
+      yCoord = 182;
+      xCoord = 228;
+      for (var l = 0; l < numIcePics; l++) {
+        if (l % 2 == 0) {
+          xCoord = 228;
+          yCoord -= 32;
+        } else {
+          xCoord = 258;
+        }
+        this.ctx.drawImage(iceImage, xCoord, yCoord);
       }
     }
   }, {
