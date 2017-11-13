@@ -28,7 +28,7 @@ class View {
   showInstructions(){
     $("#begin-game-holder").remove();
     let $div = '<div class="instructions-holder" id="instructions-holder">';
-    let $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- each of the neighbors has a discerning palette. Some have tight pocketbooks. Now, you\'re open for business. Good luck.</span>';
+    let $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- each of the neighbors has a discerning palate. Some have tight pocketbooks. Now, you\'re open for business. Good luck.</span>';
     $div += $span;
     let $button = '<button id="go-button" class="go-button">Go</button>';
     $div += $button;
@@ -40,8 +40,6 @@ class View {
     $("#instructions-holder").remove();
     this.showInventory();
     this.setupDock();
-    // $("#begin-game-holder").remove();
-    this.unbindEvents();
     this.bindEvents();
   }
 
@@ -69,7 +67,7 @@ class View {
       text = "SOLD OUT";
     }
 
-    let $div = `<div class="inventory-figure">${myCups} cups</div>`;
+    let $div = `<div class="inventory-figure-cups">${myCups} cups</div>`;
     $section += $div;
     $section += '<div></div>';
 
@@ -96,11 +94,14 @@ class View {
     // debugger
     $div = `<div class="time">${hours}:${minutes} ${ampm}</div>`;
     $section += $div;
-    $section += '<div></div>';
+    $section += '<div class="filler"></div>';
+
+    $div = `<div class="sales-today">Sales: $${this.game.salesToday.toFixed(2)}</div>`;
+    $section += $div;
 
     $div = `<div class="sold-out">${text}</div>`;
     $section += $div;
-    $section += '<div></div>';
+    $section += '<div class="filler"></div>';
 
     this.$el.append($section);
   }

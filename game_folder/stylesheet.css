@@ -7,16 +7,19 @@
   top: 200;
   left: 100;
   display: flex;
-  background: yellow;
-  color: black;
+  background: black;
+  color: white;
   font-family: Helvetica, Arial, Verdana, sans-serif;
   /*-webkit-text-stroke-width: 1px;*/
   /*-webkit-text-stroke-color: black;*/
 }
 
 .game-holder {
-  height: 900px;
+  height: 100%;
+  /*this is where to look for bug*/
   width: 100%;
+  background: black;
+  color: white;
 }
 
 .begin-game-holder {
@@ -37,7 +40,7 @@
   /*padding-top: 18%;*/
   width: 50%;
   position: absolute;
-  top: 50px;
+  top: 100px;
   margin-left: -26%;
   /*margin-left: 2%;*/
 }
@@ -57,7 +60,7 @@
 
 .instructions {
   position: absolute;
-  top: 12%;
+  top: 10%;
   left: 36%;
   width: 24%;
   text-align: center;
@@ -70,23 +73,29 @@
   width: 100px;
   height: 40px;
   position: absolute;
-  top: 36%;
+  top: 34%;
   left: 44.2%;
   font-size: 20px;
 
 }
 
 .begin-game-button {
-  background: black;
+  background: yellow;
+  color: black;
   position: absolute;
   width: 100px;
   height: 50px;
   top: 22%;
   left: 44%;
-  background-image: image("lemonade.jpg");
-  /*vertical-align: center;*/
-  /*text-align: center;*/
-  color: white;
+  /*background-image: image("lemonade.jpg");*/
+}
+
+.tomorrow-button {
+  margin-top: 4px;
+  background: yellow;
+  color: black;
+  font-size: 18px;
+
 }
 
 .hidden {
@@ -122,6 +131,13 @@
 
 .done-shopping-button {
   margin-left: 25%;
+  background: yellow;
+  color: black;
+}
+
+.go-shopping-button {
+  background: yellow;
+  color: black;
 }
 
 .inventory-line {
@@ -138,7 +154,9 @@
 }
 
 .inventory-buy-button {
-  border: 1px solid black;
+  border: 1px solid white;
+  background: yellow;
+  color: black;
   text-align: center;
   cursor: pointer;
   width: 200px;
@@ -184,13 +202,23 @@
 }
 
 .form-input {
-  padding-left: 1%;
+  padding-left: 0.6%;
   margin-left: 2%;
+  background: yellow;
+  color: black;
+  height: 25px;
 }
 
 .form-header {
   margin-left: 11%;
   font-size: 25px;
+}
+
+.form-submit {
+  background: yellow;
+  color: black;
+  margin-left: 61px;
+  margin-top: 10px;
 }
 
 .store {
@@ -232,7 +260,7 @@
 }
 
 
-.form-submit {
+.it {
   width: 80px;
   height: 26px;
   margin-left: 26%;
@@ -244,7 +272,7 @@
   font-size: 15px;
   position: absolute;
   top: 10px;
-  left: 15px;
+  left: 33px;
 }
 
 .form-input {
@@ -260,40 +288,78 @@
 }
 
 .results-day {
-  margin-left: 37%;
+  margin-left: 33.5%;
   margin-top: 20%;
-  width: 360px;
+  width: 450px;
   height: 90px;
   border: 2px solid black;
   border-radius: 5%;
   text-align: center;
+  font-size: 18px;
+
 }
 
 .congrats {
   margin: 5px;
+  font-size: 18px;
 }
 
 .ice-melted {
   margin: 5px;
+  font-size: 18px;
+
+}
+
+.filler {
+  background: yellow;
+  color: black;
+  height: 20%;
+  /*border-radius: 15%;*/
+
 }
 
 .progress-bar {
   min-width: 140px;
-  max-height: 160px;
+  max-height: 140px;
   position: absolute;
   top: 50px;
   left: 50px;
-  border: 2px solid yellow;
+  /*border: 2px solid yellow;*/
+  background: yellow;
+  color: black;
+  border-radius: 15%;
 }
 
 .inventory-figure, .sold-out {
   font-size: 17px;
-  margin: 4px;
+  /*margin: 4px;*/
+  background: yellow;
+  /*background: transparent;*/
+  color: black;
+}
+
+.inventory-figure-cups {
+  padding-top: 10px;
+  background: yellow;
+  color: black;
+  font-size: 17px;
+}
+
+.time, .sold-out, .sales-today {
+  background: yellow;
+  color: black;
+  font-size: 17px;
+
+}
+
+body {
+  background: yellow;
+  color: black;
 }
 
 .final-results {
   position: absolute;
-  top: 20%;
+  top: 24%;
   left: 40%;
   text-align: right;
   font-size: 18px;
@@ -302,9 +368,11 @@
   width: 200px;
   height: 200px;
   text-align: center;
+  background: yellow;
+  color: black;
 }
 
 .final-results-header {
   font-size: 22px;
-  margin-top: 10%;
+  margin-top: 17%;
 }

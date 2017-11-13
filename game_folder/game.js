@@ -157,8 +157,7 @@ class Game {
             this.customersToday.push(false);
           }
 
-
-        }}, 50);
+        }}, 80);
     };
     runDay();
 
@@ -221,8 +220,6 @@ class Game {
   }
 
   purchaseOrNot(gameObject){
-    // debugger
-
     const price = gameObject.price;
     const lemons = gameObject.lemons;
     const sugar = gameObject.sugar;
@@ -256,16 +253,16 @@ class Game {
     const weatherObject = weather;
 
     // const iceCubes = this.iceCubes;
-    const iceCubeEquilibrium = weatherObject.temperature / 20;
-    const iceQuotient = (ice - iceCubeEquilibrium) * 7;
+    const iceCubeEquilibrium = weatherObject.temperature / 16;
+    const iceQuotient = (ice - iceCubeEquilibrium) * 10;
 
     // const lemons = this.lemonsPerPitcher;
     const lemonEquilibrium = 4;
-    const lemonQuotient = (lemons - lemonEquilibrium) * 5;
+    const lemonQuotient = (lemons - lemonEquilibrium) * 7;
 
     // const sugar = this.sugarPerPitcher;
     const sugarEquilibrium = 4;
-    const sugarQuotient = (sugar - sugarEquilibrium) * 5;
+    const sugarQuotient = (sugar - sugarEquilibrium) * 7;
     // debugger
 
     return (iceQuotient + lemonQuotient + sugarQuotient);
@@ -284,9 +281,9 @@ class Game {
   weatherPurchaseCalculus(weather){
     const weatherObject = weather;
     const outlookQuotients = {
-      "Sunny": 5,
-      "Overcast": 25,
-      "Rainy": 50
+      "Sunny": 0,
+      "Overcast": 35,
+      "Rainy": 60
     };
     // debugger
     let outlookDecrement = outlookQuotients[weatherObject.outlook];
@@ -294,7 +291,7 @@ class Game {
     outlookDecrement = Math.floor(Math.random() * outlookDecrement);
     // debugger
 
-    const tempConstant = 0.35;
+    const tempConstant = 0.55;
     const maxTemp = 100;
     const actualTemp = weatherObject.temperature;
     const temperatureDecrement = (maxTemp - actualTemp) * (tempConstant);

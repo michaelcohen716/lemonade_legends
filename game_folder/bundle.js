@@ -10746,7 +10746,7 @@ var Game = function () {
               _this.customersToday.push(false);
             }
           }
-        }, 50);
+        }, 80);
       };
       runDay();
 
@@ -10812,8 +10812,6 @@ var Game = function () {
   }, {
     key: 'purchaseOrNot',
     value: function purchaseOrNot(gameObject) {
-      // debugger
-
       var price = gameObject.price;
       var lemons = gameObject.lemons;
       var sugar = gameObject.sugar;
@@ -10848,16 +10846,16 @@ var Game = function () {
       var weatherObject = weather;
 
       // const iceCubes = this.iceCubes;
-      var iceCubeEquilibrium = weatherObject.temperature / 20;
-      var iceQuotient = (ice - iceCubeEquilibrium) * 7;
+      var iceCubeEquilibrium = weatherObject.temperature / 16;
+      var iceQuotient = (ice - iceCubeEquilibrium) * 10;
 
       // const lemons = this.lemonsPerPitcher;
       var lemonEquilibrium = 4;
-      var lemonQuotient = (lemons - lemonEquilibrium) * 5;
+      var lemonQuotient = (lemons - lemonEquilibrium) * 7;
 
       // const sugar = this.sugarPerPitcher;
       var sugarEquilibrium = 4;
-      var sugarQuotient = (sugar - sugarEquilibrium) * 5;
+      var sugarQuotient = (sugar - sugarEquilibrium) * 7;
       // debugger
 
       return iceQuotient + lemonQuotient + sugarQuotient;
@@ -10877,9 +10875,9 @@ var Game = function () {
     value: function weatherPurchaseCalculus(weather) {
       var weatherObject = weather;
       var outlookQuotients = {
-        "Sunny": 5,
-        "Overcast": 25,
-        "Rainy": 50
+        "Sunny": 0,
+        "Overcast": 35,
+        "Rainy": 60
       };
       // debugger
       var outlookDecrement = outlookQuotients[weatherObject.outlook];
@@ -10887,7 +10885,7 @@ var Game = function () {
       outlookDecrement = Math.floor(Math.random() * outlookDecrement);
       // debugger
 
-      var tempConstant = 0.35;
+      var tempConstant = 0.55;
       var maxTemp = 100;
       var actualTemp = weatherObject.temperature;
       var temperatureDecrement = (maxTemp - actualTemp) * tempConstant;
@@ -12097,7 +12095,7 @@ var View = function () {
     value: function showInstructions() {
       (0, _jquery2.default)("#begin-game-holder").remove();
       var $div = '<div class="instructions-holder" id="instructions-holder">';
-      var $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- each of the neighbors has a discerning palette. Some have tight pocketbooks. Now, you\'re open for business. Good luck.</span>';
+      var $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- each of the neighbors has a discerning palate. Some have tight pocketbooks. Now, you\'re open for business. Good luck.</span>';
       $div += $span;
       var $button = '<button id="go-button" class="go-button">Go</button>';
       $div += $button;
@@ -12110,8 +12108,6 @@ var View = function () {
       (0, _jquery2.default)("#instructions-holder").remove();
       this.showInventory();
       this.setupDock();
-      // $("#begin-game-holder").remove();
-      this.unbindEvents();
       this.bindEvents();
     }
   }, {
@@ -12142,7 +12138,7 @@ var View = function () {
         text = "SOLD OUT";
       }
 
-      var $div = '<div class="inventory-figure">' + myCups + ' cups</div>';
+      var $div = '<div class="inventory-figure-cups">' + myCups + ' cups</div>';
       $section += $div;
       $section += '<div></div>';
 
@@ -12169,11 +12165,14 @@ var View = function () {
       // debugger
       $div = '<div class="time">' + hours + ':' + minutes + ' ' + ampm + '</div>';
       $section += $div;
-      $section += '<div></div>';
+      $section += '<div class="filler"></div>';
+
+      $div = '<div class="sales-today">Sales: $' + this.game.salesToday.toFixed(2) + '</div>';
+      $section += $div;
 
       $div = '<div class="sold-out">' + text + '</div>';
       $section += $div;
-      $section += '<div></div>';
+      $section += '<div class="filler"></div>';
 
       this.$el.append($section);
     }
