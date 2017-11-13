@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // const ctx = canvas.getContext('2d');
 
   const game = new Game();
-  const dock = $('.dock');
+  // const dock = $('.dock');
   const rootEl = $('.game');
   new View(game, rootEl);
   // game.run();
