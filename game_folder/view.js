@@ -233,6 +233,7 @@ class View {
     $("#go-shopping-button").click((e)=>{
       e.preventDefault();
       this.goShopping();
+      this.rerenderCanvas();
       this.canvasPurchase();
     });
 
@@ -283,7 +284,7 @@ class View {
     $("#store").remove();
 
     let $form = '<form id="form" class="form-holder" autocomplete="off">';
-    let span = '<span class="form-header">Today\'s Recipe</span>';
+    let span = '<span class="form-header">Set Today\'s Recipe</span>';
     $form += span;
     $form += '<div> </div>';
 
@@ -428,10 +429,7 @@ class View {
     $div = `<div class="total-expenses">Expenses: $${totalExpenses.toFixed(2)}</div>`;
     $section += $div;
 
-    $div = '<div class="initial-cash">Initial Cash: $20.00</div>';
-    $section += $div;
-
-    $div = `<div class="total-profit">Profit: $${(totalSales - totalExpenses - 20).toFixed(2)}</div>`;
+    $div = `<div class="total-profit">Profit: $${(totalSales - totalExpenses).toFixed(2)}</div>`;
     $section += $div;
 
     this.$el.append($section);

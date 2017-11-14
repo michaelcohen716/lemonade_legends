@@ -233,14 +233,12 @@ class Game {
 
     const ingredientsFactor = this.ingredientsPurchaseCalculus(lemons, sugar, ice, weather);
 
-
     likelihood += ingredientsFactor;
     //could be positive or negative
 
     const priceFactor = this.pricePurchaseCalculus(price);
     likelihood += priceFactor;
     //could be positive or negative
-    // debugger
     if (likelihood >= 50){
       return true;
     } else {
@@ -277,15 +275,15 @@ class Game {
   weatherPurchaseCalculus(weather){
     const weatherObject = weather;
     const outlookQuotients = {
-      "Sunny": 0,
-      "Overcast": 35,
-      "Rainy": 60
+      "Sunny": 10,
+      "Overcast": 45,
+      "Rainy": 80
     };
 
     let outlookDecrement = outlookQuotients[weatherObject.outlook];
     outlookDecrement = Math.floor(Math.random() * outlookDecrement);
 
-    const tempConstant = 0.55;
+    const tempConstant = 0.65;
     const maxTemp = 100;
     const actualTemp = weatherObject.temperature;
     const temperatureDecrement = (maxTemp - actualTemp) * (tempConstant);

@@ -10831,7 +10831,6 @@ var Game = function () {
       var priceFactor = this.pricePurchaseCalculus(price);
       likelihood += priceFactor;
       //could be positive or negative
-      // debugger
       if (likelihood >= 50) {
         return true;
       } else {
@@ -10870,15 +10869,15 @@ var Game = function () {
     value: function weatherPurchaseCalculus(weather) {
       var weatherObject = weather;
       var outlookQuotients = {
-        "Sunny": 0,
-        "Overcast": 35,
-        "Rainy": 60
+        "Sunny": 10,
+        "Overcast": 45,
+        "Rainy": 80
       };
 
       var outlookDecrement = outlookQuotients[weatherObject.outlook];
       outlookDecrement = Math.floor(Math.random() * outlookDecrement);
 
-      var tempConstant = 0.55;
+      var tempConstant = 0.65;
       var maxTemp = 100;
       var actualTemp = weatherObject.temperature;
       var temperatureDecrement = (maxTemp - actualTemp) * tempConstant;
@@ -12293,6 +12292,7 @@ var View = function () {
       (0, _jquery2.default)("#go-shopping-button").click(function (e) {
         e.preventDefault();
         _this.goShopping();
+        _this.rerenderCanvas();
         _this.canvasPurchase();
       });
 
@@ -12347,7 +12347,7 @@ var View = function () {
       (0, _jquery2.default)("#store").remove();
 
       var $form = '<form id="form" class="form-holder" autocomplete="off">';
-      var span = '<span class="form-header">Today\'s Recipe</span>';
+      var span = '<span class="form-header">Set Today\'s Recipe</span>';
       $form += span;
       $form += '<div> </div>';
 
@@ -12498,10 +12498,7 @@ var View = function () {
       $div = '<div class="total-expenses">Expenses: $' + totalExpenses.toFixed(2) + '</div>';
       $section += $div;
 
-      $div = '<div class="initial-cash">Initial Cash: $20.00</div>';
-      $section += $div;
-
-      $div = '<div class="total-profit">Profit: $' + (totalSales - totalExpenses - 20).toFixed(2) + '</div>';
+      $div = '<div class="total-profit">Profit: $' + (totalSales - totalExpenses).toFixed(2) + '</div>';
       $section += $div;
 
       this.$el.append($section);
