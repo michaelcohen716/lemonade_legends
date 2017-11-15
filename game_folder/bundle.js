@@ -10746,7 +10746,7 @@ var Game = function () {
               _this.customersToday.push(false);
             }
           }
-        }, 200);
+        }, 100);
       };
       runDay();
 
@@ -12061,6 +12061,8 @@ var madLady = new Image();
 madLady.src = "assets/madlady.png";
 var happyGirl = new Image();
 happyGirl.src = "assets/happygirl.png";
+var chillGuy = new Image();
+chillGuy.src = "assets/chillGuy.png";
 
 var View = function () {
   function View(game, $el, canvas) {
@@ -12207,7 +12209,7 @@ var View = function () {
       var directComments = ['"Sold out? Pathetic"', '"No more lemonade?!"', '"Ice tea is better anyway"', '"Not enough ice"', '"Too expensive"'];
       var generalComments = ['"Tasty!"', '"Meh, honestly"', '"Too bitter"', '"Just what I needed!"', '"Yummy in my tummy!"', '"Do you guys sell hot dogs?"', '"I like lemonade"', '"Just like grandma used to make it"'];
 
-      var characters = [madLady, happyGirl];
+      var characters = [madLady, happyGirl, chillGuy];
 
       var commentSample = [];
 
@@ -12226,9 +12228,9 @@ var View = function () {
       }
 
       var comment = commentSample[Math.floor(Math.random() * commentSample.length)];
-      // debugger
-      var commentObject = { comment: comment, image: happyGirl };
-      // change this when add more characters        ^
+      var image = characters[Math.floor(Math.random() * characters.length)];
+      var commentObject = { comment: comment, image: image };
+
       if (commentObject.comment !== undefined) {
         this.commentQueue.push(commentObject);
       }
@@ -12240,28 +12242,31 @@ var View = function () {
 
       if (this.commentRhythm % 15 === 0) {
         this.canvasComment(gameObject);
-        if (this.commentQueue.length > 3) {
-          this.commentQueue.shift();
-        }
       }
+      if (this.commentQueue.length > 3) {
+        this.commentQueue.shift();
+      }
+      this.ctx.fillStyle = 'white';
+      this.ctx.font = '16px Arial';
+      this.ctx.fillText("Suggestions Box", 80, 20);
 
       if (this.commentQueue.length > 0) {
-        this.ctx.fillStyle = 'white';
-        this.ctx.font = '10px Arial';
+
         var xCoord = 40;
         var yCoord = void 0;
 
         var queue = this.commentQueue;
 
         queue.forEach(function (comment, index) {
+          _this2.ctx.font = '10px Arial';
           if (index === 0) {
-            yCoord = 15;
+            yCoord = 30;
           } else if (index === 1) {
-            yCoord = 70;
+            yCoord = 85;
           } else if (index === 2) {
-            yCoord = 125;
+            yCoord = 140;
           }
-          _this2.ctx.drawImage(happyGirl, xCoord, yCoord);
+          _this2.ctx.drawImage(comment.image, xCoord, yCoord);
           // debugger
           _this2.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
         });

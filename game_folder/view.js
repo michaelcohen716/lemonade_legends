@@ -16,6 +16,8 @@ const madLady = new Image();
 madLady.src = "assets/madlady.png";
 const happyGirl = new Image();
 happyGirl.src = "assets/happygirl.png";
+const chillGuy = new Image();
+chillGuy.src = "assets/chillGuy.png";
 
 class View {
   constructor(game, $el, canvas){
@@ -163,7 +165,7 @@ class View {
       '"Just like grandma used to make it"'
     ];
 
-    let characters = [madLady, happyGirl];
+    let characters = [madLady, happyGirl, chillGuy];
 
     let commentSample = [];
 
@@ -182,9 +184,9 @@ class View {
     }
 
     const comment = commentSample[Math.floor(Math.random() * commentSample.length)];
-    // debugger
-    let commentObject = {comment: comment, image: happyGirl};
-    // change this when add more characters        ^
+    const image = characters[Math.floor(Math.random() * characters.length)];
+    let commentObject = {comment: comment, image: image};
+
     if(commentObject.comment !== undefined){
       this.commentQueue.push(commentObject);
     }
@@ -193,28 +195,32 @@ class View {
   canvasCommentRender(gameObject){
     if(this.commentRhythm % 15 === 0){
       this.canvasComment(gameObject);
-      if (this.commentQueue.length > 3){
-        this.commentQueue.shift();
-      }
     }
+    if (this.commentQueue.length > 3){
+      this.commentQueue.shift();
+    }
+    this.ctx.fillStyle = 'white';
+    this.ctx.font = '16px Arial';
+    this.ctx.fillText("Suggestions Box", 80, 20);
 
     if(this.commentQueue.length > 0){
-      this.ctx.fillStyle = 'white';
-      this.ctx.font = '10px Arial';
+
       let xCoord = 40;
       let yCoord;
 
       let queue = this.commentQueue;
 
+
       queue.forEach((comment, index) => {
+        this.ctx.font = '10px Arial';
         if(index === 0){
-          yCoord = 15;
+          yCoord = 30;
         } else if (index === 1){
-          yCoord = 70;
+          yCoord = 85;
         } else if (index === 2){
-          yCoord = 125;
+          yCoord = 140;
         }
-        this.ctx.drawImage(happyGirl, xCoord, yCoord);
+        this.ctx.drawImage(comment.image, xCoord, yCoord);
         // debugger
         this.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
       });

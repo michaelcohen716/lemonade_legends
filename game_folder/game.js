@@ -157,7 +157,7 @@ class Game {
             this.customersToday.push(false);
           }
 
-        }}, 200);
+        }}, 100);
     };
     runDay();
 
