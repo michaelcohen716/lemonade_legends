@@ -18,6 +18,8 @@ const happyGirl = new Image();
 happyGirl.src = "assets/happygirl.png";
 const chillGuy = new Image();
 chillGuy.src = "assets/chillGuy.png";
+const dumbGuy = new Image();
+dumbGuy.src = "assets/dumbGuy.png";
 
 class View {
   constructor(game, $el, canvas){
@@ -165,7 +167,7 @@ class View {
       '"Just like grandma used to make it"'
     ];
 
-    let characters = [madLady, happyGirl, chillGuy];
+    let characters = [madLady, happyGirl, chillGuy, dumbGuy];
 
     let commentSample = [];
 

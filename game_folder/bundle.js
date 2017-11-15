@@ -12063,6 +12063,8 @@ var happyGirl = new Image();
 happyGirl.src = "assets/happygirl.png";
 var chillGuy = new Image();
 chillGuy.src = "assets/chillGuy.png";
+var dumbGuy = new Image();
+dumbGuy.src = "assets/dumbGuy.png";
 
 var View = function () {
   function View(game, $el, canvas) {
@@ -12209,7 +12211,7 @@ var View = function () {
       var directComments = ['"Sold out? Pathetic"', '"No more lemonade?!"', '"Ice tea is better anyway"', '"Not enough ice"', '"Too expensive"'];
       var generalComments = ['"Tasty!"', '"Meh, honestly"', '"Too bitter"', '"Just what I needed!"', '"Yummy in my tummy!"', '"Do you guys sell hot dogs?"', '"I like lemonade"', '"Just like grandma used to make it"'];
 
-      var characters = [madLady, happyGirl, chillGuy];
+      var characters = [madLady, happyGirl, chillGuy, dumbGuy];
 
       var commentSample = [];
 
