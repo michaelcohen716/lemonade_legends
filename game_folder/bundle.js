@@ -10758,7 +10758,7 @@ var Game = function () {
       var lemonsPer = gameObject.lemons;
       var sugarPer = gameObject.sugar;
       // debugger
-      if (this.lemons > lemonsPer && this.sugar > sugarPer) {
+      if (this.lemons >= lemonsPer && this.sugar >= sugarPer) {
         this.lemons -= lemonsPer;
         this.sugar -= sugarPer;
         // debugger
@@ -12056,6 +12056,8 @@ var sugarImage = new Image();
 sugarImage.src = "assets/sugar.png";
 var iceImage = new Image();
 iceImage.src = "assets/ice.png";
+var madLady = new Image();
+madLady.src = "assets/madlady.png";
 
 var View = function () {
   function View(game, $el, canvas) {
@@ -12074,6 +12076,7 @@ var View = function () {
     key: 'rerenderCanvas',
     value: function rerenderCanvas() {
       this.$el.append(this.canvas);
+      (0, _jquery2.default)("#canvas").removeClass("display-none");
       this.ctx.fillStyle = 'black';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -12145,6 +12148,11 @@ var View = function () {
       (0, _jquery2.default)("#canvas").removeClass("display-none");
     }
   }, {
+    key: 'canvasSimulation',
+    value: function canvasSimulation() {
+      this.ctx.drawImage(madLady, 40, 40);
+    }
+  }, {
     key: 'renderStartButton',
     value: function renderStartButton() {
       var $div = '<div class="begin-game-holder" id="begin-game-holder">';
@@ -12160,7 +12168,7 @@ var View = function () {
     value: function showInstructions() {
       (0, _jquery2.default)("#begin-game-holder").remove();
       var $div = '<div class="instructions-holder" id="instructions-holder">';
-      var $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- each of the neighbors has a discerning palate. Some have tight pocketbooks. Now, you\'re open for business. Good luck.</span>';
+      var $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- the neighbors can be picky. And some have tight pocketbooks. Good luck.</span>';
       $div += $span;
       var $button = '<button id="go-button" class="go-button">Go</button>';
       $div += $button;
@@ -12222,6 +12230,9 @@ var View = function () {
       $section += $div;
       $section += '<div></div>';
 
+      $div = '<div class="sold-out">' + text + '</div>';
+      $section += $div;
+
       var hours = ("0" + this.game.time.hour).slice(1, 3);
       var minutes = ("0" + this.game.time.minutes.toFixed(0)).slice(-2);
       var ampm = null;
@@ -12238,8 +12249,6 @@ var View = function () {
       $div = '<div class="sales-today">Sales: $' + this.game.salesToday.toFixed(2) + '</div>';
       $section += $div;
 
-      $div = '<div class="sold-out">' + text + '</div>';
-      $section += $div;
       $section += '<div class="filler"></div>';
 
       this.$el.append($section);
@@ -12276,6 +12285,7 @@ var View = function () {
       this.$el.on("submit", "form", function (e) {
         e.preventDefault();
         _this.submitInfo();
+        _this.rerenderCanvas();
       });
 
       (0, _jquery2.default)("#begin-game-button").click(function (e) {
@@ -12426,8 +12436,12 @@ var View = function () {
           _this2.reset(resultsObject);
           clearInterval(dayInterval);
           clearInterval(renderInterval);
+          (0, _jquery2.default)("#canvas").addClass("display-none");
+        } else {
+          _this2.rerenderCanvas();
+          _this2.canvasSimulation();
         }
-      }, 200);
+      }, 20);
     }
   }, {
     key: 'reset',

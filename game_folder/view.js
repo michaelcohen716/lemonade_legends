@@ -10,6 +10,8 @@ const sugarImage = new Image();
 sugarImage.src = "assets/sugar.png";
 const iceImage = new Image();
 iceImage.src = "assets/ice.png";
+const madLady = new Image();
+madLady.src = "assets/madlady.png";
 
 class View {
   constructor(game, $el, canvas){
@@ -24,6 +26,7 @@ class View {
 
   rerenderCanvas(){
     this.$el.append(this.canvas);
+    $("#canvas").removeClass("display-none");
     this.ctx.fillStyle = 'black';
     this.ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
   }
@@ -94,6 +97,10 @@ class View {
     $("#canvas").removeClass("display-none");
   }
 
+  canvasSimulation(){
+    this.ctx.drawImage(madLady, 40, 40);
+  }
+
 
 
   renderStartButton(){
@@ -109,7 +116,7 @@ class View {
   showInstructions(){
     $("#begin-game-holder").remove();
     let $div = '<div class="instructions-holder" id="instructions-holder">';
-    let $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- each of the neighbors has a discerning palate. Some have tight pocketbooks. Now, you\'re open for business. Good luck.</span>';
+    let $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- the neighbors can be picky. And some have tight pocketbooks. Good luck.</span>';
     $div += $span;
     let $button = '<button id="go-button" class="go-button">Go</button>';
     $div += $button;
@@ -167,6 +174,9 @@ class View {
     $section += $div;
     $section += '<div></div>';
 
+    $div = `<div class="sold-out">${text}</div>`;
+    $section += $div;
+
     let hours = ("0" + (this.game.time.hour)).slice(1, 3);
     let minutes = ("0" + (this.game.time.minutes).toFixed(0)).slice(-2);
     let ampm = null;
@@ -183,8 +193,6 @@ class View {
     $div = `<div class="sales-today">Sales: $${this.game.salesToday.toFixed(2)}</div>`;
     $section += $div;
 
-    $div = `<div class="sold-out">${text}</div>`;
-    $section += $div;
     $section += '<div class="filler"></div>';
 
     this.$el.append($section);
@@ -217,6 +225,8 @@ class View {
     this.$el.on("submit","form",(e)=>{
       e.preventDefault();
       this.submitInfo();
+      this.rerenderCanvas();
+
     });
 
     $("#begin-game-button").click((e)=>{
@@ -360,8 +370,13 @@ class View {
         this.reset(resultsObject);
         clearInterval(dayInterval);
         clearInterval(renderInterval);
+        $("#canvas").addClass("display-none");
+
+      } else {
+        this.rerenderCanvas();
+        this.canvasSimulation();
       }
-    }, 200);
+    }, 20);
 
   }
   reset(resultsObject){

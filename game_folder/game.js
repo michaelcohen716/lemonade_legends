@@ -168,7 +168,7 @@ class Game {
     const lemonsPer = gameObject.lemons;
     const sugarPer = gameObject.sugar;
     // debugger
-    if(this.lemons > lemonsPer && this.sugar > sugarPer){
+    if(this.lemons >= lemonsPer && this.sugar >= sugarPer){
       this.lemons -= lemonsPer;
       this.sugar -= sugarPer;
       // debugger
