@@ -7,23 +7,7 @@
   </head>
   <body>
     <script type="application/javascript" src="./game_folder/bundle.js"></script>
-    <div class="hidden">
-      <script>
-        function preload() {
-          for (var i = 0; i < arguments.length; i++){
-            images[i] = new Image();
-            images[i].src = preload.arguments[i];
-          }
-        }
-        preload(
-          "assets/chillGuy.png",
-          "assets/dumbGuy.png",
-          "assets/happyGirl.png",
-          "assets/madlady.png"
-        )
 
-      </script>
-    </div>
     <div class="game">
       <canvas class="display-none" id="canvas">
       </canvas>

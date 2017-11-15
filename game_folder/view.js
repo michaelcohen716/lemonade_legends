@@ -13,9 +13,9 @@ const iceImage = new Image();
 iceImage.src = "assets/ice.png";
 
 const madLady = new Image();
-madLady.src = "assets/madlady.png";
+madLady.src = "assets/madLady.png";
 const happyGirl = new Image();
-happyGirl.src = "assets/happygirl.png";
+happyGirl.src = "assets/happyGirl.png";
 const chillGuy = new Image();
 chillGuy.src = "assets/chillGuy.png";
 const dumbGuy = new Image();
