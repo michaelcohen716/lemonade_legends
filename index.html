@@ -8,11 +8,21 @@
   <body>
     <script type="application/javascript" src="./game_folder/bundle.js"></script>
     <div class="hidden">
-      <img src="assets/chillGuy.png">
-      <img src="assets/dumbGuy.png">
-      <img src="assets/happyGirl.png">
-      <img src="assets/madlady.png">
-  
+      <script>
+        function preload() {
+          for (var i = 0; i < arguments.length; i++){
+            images[i] = new Image();
+            images[i].src = preload.arguments[i];
+          }
+        }
+        preload(
+          "assets/chillGuy.png",
+          "assets/dumbGuy.png",
+          "assets/happyGirl.png",
+          "assets/madlady.png"
+        )
+
+      </script>
     </div>
     <div class="game">
       <canvas class="display-none" id="canvas">
