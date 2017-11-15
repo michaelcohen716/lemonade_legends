@@ -92,7 +92,7 @@ canvas {
   height: 40px;
   position: absolute;
   top: 29.2%;
-  left: 43.7%;
+  left: 43.9%;
   font-size: 20px;
   cursor: pointer;
   font-family: "Jennifer's Hand Writing", Helvetica, Arial, Verdana, sans-serif;
@@ -128,11 +128,13 @@ canvas {
 
 .dock-holder {
   position: absolute;
-  width: 800px;
+  width: 762px;
   height: 40px;
   top: 15px;
   left: 300px;
   font-size: 23px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .my-inventory {
@@ -272,23 +274,23 @@ canvas {
 }
 
 .dock-day {
-  margin-right: 30px;
+  /*margin-right: 22px;*/
   margin-left: 5px;
   margin-bottom: 10px;
   width: 80px;
 }
 
 .dock-cash {
-  margin-left: 20px;
+  /*margin-left: 15px;*/
 }
 
 .dock-temp {
-  margin-left: 27px;
+  /*margin-left: 23px;*/
 
 }
 
 .dock-forecast {
-  margin-left: 27px;
+  /*margin-left: 23px;*/
 
 }
 

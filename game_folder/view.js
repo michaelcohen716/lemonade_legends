@@ -2,6 +2,7 @@ import $ from 'jquery';
 import 'jquery-ui';
 import Game from './game';
 import React from 'react';
+
 const cupImage = new Image();
 cupImage.src = "assets/cup.png";
 const lemonImage = new Image();
@@ -10,8 +11,11 @@ const sugarImage = new Image();
 sugarImage.src = "assets/sugar.png";
 const iceImage = new Image();
 iceImage.src = "assets/ice.png";
+
 const madLady = new Image();
 madLady.src = "assets/madlady.png";
+const happyGirl = new Image();
+happyGirl.src = "assets/happygirl.png";
 
 class View {
   constructor(game, $el, canvas){
@@ -22,13 +26,61 @@ class View {
     this.renderStartButton();
     this.bindEvents();
     this.intervals = [];
+    this.commentQueue = [];
+    this.commentRhythm = 0;
+  }
+
+  bindEvents(){
+    this.unbindEvents();
+    this.$el.on("click", "li", (e => {
+      const $button = $(e.currentTarget);
+      this.makePurchase($button);
+    }));
+
+    this.$el.on("submit","form",(e)=>{
+      e.preventDefault();
+      this.submitInfo();
+      this.rerenderCanvas();
+
+    });
+
+    $("#begin-game-button").click((e)=>{
+      e.preventDefault();
+      this.showInstructions();
+    });
+
+    $("#go-button").click((e)=>{
+      e.preventDefault();
+      this.beginGame();
+      this.renderCanvas();
+    });
+
+    $("#go-shopping-button").click((e)=>{
+      e.preventDefault();
+      this.goShopping();
+      this.rerenderCanvas();
+      this.canvasPurchase();
+    });
+
+    $("#done-shopping-button").click((e)=>{
+      e.preventDefault();
+      this.setupForm();
+    });
+
+    $("#tomorrow-button").click((e)=>{
+      e.preventDefault();
+      this.advanceDay();
+    });
+  }
+
+  unbindEvents(){
+    $(document).add('*').off();
   }
 
   rerenderCanvas(){
     this.$el.append(this.canvas);
     $("#canvas").removeClass("display-none");
-    this.ctx.fillStyle = 'black';
-    this.ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   canvasPurchase(){
@@ -97,9 +149,79 @@ class View {
     $("#canvas").removeClass("display-none");
   }
 
-  canvasSimulation(){
-    this.ctx.drawImage(madLady, 40, 40);
+  canvasComment(gameObject){
+    let directComments = ['"Sold out? Pathetic"','"No more lemonade?!"','"Ice tea is better anyway"',
+                          '"Not enough ice"', '"Too expensive"'];
+    let generalComments = [
+      '"Tasty!"',
+      '"Meh, honestly"',
+      '"Too bitter"',
+      '"Just what I needed!"',
+      '"Yummy in my tummy!"',
+      '"Do you guys sell hot dogs?"',
+      '"I like lemonade"',
+      '"Just like grandma used to make it"'
+    ];
+
+    let characters = [madLady, happyGirl];
+
+    let commentSample = [];
+
+    if(this.game.soldOut){
+      commentSample.push(directComments[0]);
+      commentSample.push(directComments[1]);
+      commentSample.push(directComments[2]);
+    } else if (gameObject.weather.temperature / gameObject.ice < 16){
+      commentSample.push(directComments[3]);
+    } else if (gameObject.price > gameObject.weather.temperature / 3){
+      commentSample.push(directComments[4]);
+    }
+
+    while(commentSample.length < 3){
+      commentSample.push(generalComments[Math.floor(Math.random() * generalComments.length)]);
+    }
+
+    const comment = commentSample[Math.floor(Math.random() * commentSample.length)];
+    // debugger
+    let commentObject = {comment: comment, image: happyGirl};
+    // change this when add more characters        ^
+    if(commentObject.comment !== undefined){
+      this.commentQueue.push(commentObject);
+    }
   }
+
+  canvasCommentRender(gameObject){
+    if(this.commentRhythm % 15 === 0){
+      this.canvasComment(gameObject);
+      if (this.commentQueue.length > 3){
+        this.commentQueue.shift();
+      }
+    }
+
+    if(this.commentQueue.length > 0){
+      this.ctx.fillStyle = 'white';
+      this.ctx.font = '10px Arial';
+      let xCoord = 40;
+      let yCoord;
+
+      let queue = this.commentQueue;
+
+      queue.forEach((comment, index) => {
+        if(index === 0){
+          yCoord = 15;
+        } else if (index === 1){
+          yCoord = 70;
+        } else if (index === 2){
+          yCoord = 125;
+        }
+        this.ctx.drawImage(happyGirl, xCoord, yCoord);
+        // debugger
+        this.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
+      });
+    }
+
+  }
+
 
 
 
@@ -140,10 +262,11 @@ class View {
   }
 
   updateStatus(){
-    this.$el.empty();
+    // this.$el.empty();
+    $("#dock-holder").remove();
     this.setupDock();
+    $("#progress-bar").remove();
     this.setupProgressBar();
-    this.renderCanvas();
   }
 
   setupProgressBar(){
@@ -215,54 +338,6 @@ class View {
     this.$el.append($div);
   }
 
-  bindEvents(){
-    this.unbindEvents();
-    this.$el.on("click", "li", (e => {
-      const $button = $(e.currentTarget);
-      this.makePurchase($button);
-    }));
-
-    this.$el.on("submit","form",(e)=>{
-      e.preventDefault();
-      this.submitInfo();
-      this.rerenderCanvas();
-
-    });
-
-    $("#begin-game-button").click((e)=>{
-      e.preventDefault();
-      this.showInstructions();
-    });
-
-    $("#go-button").click((e)=>{
-      e.preventDefault();
-      this.beginGame();
-      this.renderCanvas();
-    });
-
-    $("#go-shopping-button").click((e)=>{
-      e.preventDefault();
-      this.goShopping();
-      this.rerenderCanvas();
-      this.canvasPurchase();
-    });
-
-    $("#done-shopping-button").click((e)=>{
-      e.preventDefault();
-      this.setupForm();
-    });
-
-    $("#tomorrow-button").click((e)=>{
-      // debugger
-      e.preventDefault();
-      this.advanceDay();
-    });
-  }
-
-  unbindEvents(){
-    // debugger
-    $(document).add('*').off();
-  }
 
   goShopping(){
     $("#my-inventory").remove();
@@ -272,7 +347,6 @@ class View {
   }
 
   makePurchase($button){
-    // debugger
     const data = $button.data("data");
     const resource = data.resource;
     const units = data.units;
@@ -329,17 +403,18 @@ class View {
   }
 
   submitInfo(){
-    // debugger
     let priceInfo = document.getElementById("price-units").value;
     let lemonInfo = document.getElementById("lemon-units").value;
     let sugarInfo = document.getElementById("sugar-units").value;
     let iceInfo = document.getElementById("ice-units").value;
 
     if(priceInfo == 0 || lemonInfo == 0 || sugarInfo == 0 || iceInfo == 0){
-      // debugger
       alert("item can't be zero");
       return;
     }
+
+    this.$el.empty();
+
     let gameObject = { price: priceInfo,
                        lemons: lemonInfo,
                        sugar: sugarInfo,
@@ -350,6 +425,7 @@ class View {
 
     let renderInterval = setInterval(()=>{
       this.updateStatus();
+      // debugger
     }, 200);
 
     let dayInterval = setInterval(()=>{
@@ -368,14 +444,15 @@ class View {
         $("#canvas").addClass("display-none");
 
       } else {
+        // debugger
         this.rerenderCanvas();
-        this.canvasSimulation();
+        this.commentRhythm++;
+        this.canvasCommentRender(gameObject);
       }
-    }, 20);
+    }, 75);
 
   }
   reset(resultsObject){
-    // debugger
     $("#progress-bar").remove();
     $("#store").remove();
     $("#dock-holder").remove();
@@ -417,6 +494,8 @@ class View {
       this.game.weather = this.game.generateWeather();
       this.game.time.hour = 9;
       this.game.time.minutes = 0;
+      this.commentQueue = [];
+      this.commentRhythm = 0;
       this.showInventory();
       this.setupDock();
     } else if (this.game.day == 7){

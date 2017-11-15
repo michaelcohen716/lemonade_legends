@@ -10746,7 +10746,7 @@ var Game = function () {
               _this.customersToday.push(false);
             }
           }
-        }, 80);
+        }, 200);
       };
       runDay();
 
@@ -12056,8 +12056,11 @@ var sugarImage = new Image();
 sugarImage.src = "assets/sugar.png";
 var iceImage = new Image();
 iceImage.src = "assets/ice.png";
+
 var madLady = new Image();
 madLady.src = "assets/madlady.png";
+var happyGirl = new Image();
+happyGirl.src = "assets/happygirl.png";
 
 var View = function () {
   function View(game, $el, canvas) {
@@ -12070,15 +12073,66 @@ var View = function () {
     this.renderStartButton();
     this.bindEvents();
     this.intervals = [];
+    this.commentQueue = [];
+    this.commentRhythm = 0;
   }
 
   _createClass(View, [{
+    key: 'bindEvents',
+    value: function bindEvents() {
+      var _this = this;
+
+      this.unbindEvents();
+      this.$el.on("click", "li", function (e) {
+        var $button = (0, _jquery2.default)(e.currentTarget);
+        _this.makePurchase($button);
+      });
+
+      this.$el.on("submit", "form", function (e) {
+        e.preventDefault();
+        _this.submitInfo();
+        _this.rerenderCanvas();
+      });
+
+      (0, _jquery2.default)("#begin-game-button").click(function (e) {
+        e.preventDefault();
+        _this.showInstructions();
+      });
+
+      (0, _jquery2.default)("#go-button").click(function (e) {
+        e.preventDefault();
+        _this.beginGame();
+        _this.renderCanvas();
+      });
+
+      (0, _jquery2.default)("#go-shopping-button").click(function (e) {
+        e.preventDefault();
+        _this.goShopping();
+        _this.rerenderCanvas();
+        _this.canvasPurchase();
+      });
+
+      (0, _jquery2.default)("#done-shopping-button").click(function (e) {
+        e.preventDefault();
+        _this.setupForm();
+      });
+
+      (0, _jquery2.default)("#tomorrow-button").click(function (e) {
+        e.preventDefault();
+        _this.advanceDay();
+      });
+    }
+  }, {
+    key: 'unbindEvents',
+    value: function unbindEvents() {
+      (0, _jquery2.default)(document).add('*').off();
+    }
+  }, {
     key: 'rerenderCanvas',
     value: function rerenderCanvas() {
       this.$el.append(this.canvas);
       (0, _jquery2.default)("#canvas").removeClass("display-none");
-      this.ctx.fillStyle = 'black';
-      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
   }, {
     key: 'canvasPurchase',
@@ -12148,9 +12202,70 @@ var View = function () {
       (0, _jquery2.default)("#canvas").removeClass("display-none");
     }
   }, {
-    key: 'canvasSimulation',
-    value: function canvasSimulation() {
-      this.ctx.drawImage(madLady, 40, 40);
+    key: 'canvasComment',
+    value: function canvasComment(gameObject) {
+      var directComments = ['"Sold out? Pathetic"', '"No more lemonade?!"', '"Ice tea is better anyway"', '"Not enough ice"', '"Too expensive"'];
+      var generalComments = ['"Tasty!"', '"Meh, honestly"', '"Too bitter"', '"Just what I needed!"', '"Yummy in my tummy!"', '"Do you guys sell hot dogs?"', '"I like lemonade"', '"Just like grandma used to make it"'];
+
+      var characters = [madLady, happyGirl];
+
+      var commentSample = [];
+
+      if (this.game.soldOut) {
+        commentSample.push(directComments[0]);
+        commentSample.push(directComments[1]);
+        commentSample.push(directComments[2]);
+      } else if (gameObject.weather.temperature / gameObject.ice < 16) {
+        commentSample.push(directComments[3]);
+      } else if (gameObject.price > gameObject.weather.temperature / 3) {
+        commentSample.push(directComments[4]);
+      }
+
+      while (commentSample.length < 3) {
+        commentSample.push(generalComments[Math.floor(Math.random() * generalComments.length)]);
+      }
+
+      var comment = commentSample[Math.floor(Math.random() * commentSample.length)];
+      // debugger
+      var commentObject = { comment: comment, image: happyGirl };
+      // change this when add more characters        ^
+      if (commentObject.comment !== undefined) {
+        this.commentQueue.push(commentObject);
+      }
+    }
+  }, {
+    key: 'canvasCommentRender',
+    value: function canvasCommentRender(gameObject) {
+      var _this2 = this;
+
+      if (this.commentRhythm % 15 === 0) {
+        this.canvasComment(gameObject);
+        if (this.commentQueue.length > 3) {
+          this.commentQueue.shift();
+        }
+      }
+
+      if (this.commentQueue.length > 0) {
+        this.ctx.fillStyle = 'white';
+        this.ctx.font = '10px Arial';
+        var xCoord = 40;
+        var yCoord = void 0;
+
+        var queue = this.commentQueue;
+
+        queue.forEach(function (comment, index) {
+          if (index === 0) {
+            yCoord = 15;
+          } else if (index === 1) {
+            yCoord = 70;
+          } else if (index === 2) {
+            yCoord = 125;
+          }
+          _this2.ctx.drawImage(happyGirl, xCoord, yCoord);
+          // debugger
+          _this2.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
+        });
+      }
     }
   }, {
     key: 'renderStartButton',
@@ -12195,10 +12310,11 @@ var View = function () {
   }, {
     key: 'updateStatus',
     value: function updateStatus() {
-      this.$el.empty();
+      // this.$el.empty();
+      (0, _jquery2.default)("#dock-holder").remove();
       this.setupDock();
+      (0, _jquery2.default)("#progress-bar").remove();
       this.setupProgressBar();
-      this.renderCanvas();
     }
   }, {
     key: 'setupProgressBar',
@@ -12272,58 +12388,6 @@ var View = function () {
       this.$el.append($div);
     }
   }, {
-    key: 'bindEvents',
-    value: function bindEvents() {
-      var _this = this;
-
-      this.unbindEvents();
-      this.$el.on("click", "li", function (e) {
-        var $button = (0, _jquery2.default)(e.currentTarget);
-        _this.makePurchase($button);
-      });
-
-      this.$el.on("submit", "form", function (e) {
-        e.preventDefault();
-        _this.submitInfo();
-        _this.rerenderCanvas();
-      });
-
-      (0, _jquery2.default)("#begin-game-button").click(function (e) {
-        e.preventDefault();
-        _this.showInstructions();
-      });
-
-      (0, _jquery2.default)("#go-button").click(function (e) {
-        e.preventDefault();
-        _this.beginGame();
-        _this.renderCanvas();
-      });
-
-      (0, _jquery2.default)("#go-shopping-button").click(function (e) {
-        e.preventDefault();
-        _this.goShopping();
-        _this.rerenderCanvas();
-        _this.canvasPurchase();
-      });
-
-      (0, _jquery2.default)("#done-shopping-button").click(function (e) {
-        e.preventDefault();
-        _this.setupForm();
-      });
-
-      (0, _jquery2.default)("#tomorrow-button").click(function (e) {
-        // debugger
-        e.preventDefault();
-        _this.advanceDay();
-      });
-    }
-  }, {
-    key: 'unbindEvents',
-    value: function unbindEvents() {
-      // debugger
-      (0, _jquery2.default)(document).add('*').off();
-    }
-  }, {
     key: 'goShopping',
     value: function goShopping() {
       (0, _jquery2.default)("#my-inventory").remove();
@@ -12334,7 +12398,6 @@ var View = function () {
   }, {
     key: 'makePurchase',
     value: function makePurchase($button) {
-      // debugger
       var data = $button.data("data");
       var resource = data.resource;
       var units = data.units;
@@ -12393,19 +12456,20 @@ var View = function () {
   }, {
     key: 'submitInfo',
     value: function submitInfo() {
-      var _this2 = this;
+      var _this3 = this;
 
-      // debugger
       var priceInfo = document.getElementById("price-units").value;
       var lemonInfo = document.getElementById("lemon-units").value;
       var sugarInfo = document.getElementById("sugar-units").value;
       var iceInfo = document.getElementById("ice-units").value;
 
       if (priceInfo == 0 || lemonInfo == 0 || sugarInfo == 0 || iceInfo == 0) {
-        // debugger
         alert("item can't be zero");
         return;
       }
+
+      this.$el.empty();
+
       var gameObject = { price: priceInfo,
         lemons: lemonInfo,
         sugar: sugarInfo,
@@ -12415,33 +12479,35 @@ var View = function () {
       this.game.run(gameObject);
 
       var renderInterval = setInterval(function () {
-        _this2.updateStatus();
+        _this3.updateStatus();
+        // debugger
       }, 200);
 
       var dayInterval = setInterval(function () {
-        if (_this2.game.dayOver) {
+        if (_this3.game.dayOver) {
           var resultsObject = {
-            potentialCustomers: _this2.game.customersToday.length,
-            cupsSold: _this2.game.cupsSoldToday,
-            salesToday: _this2.game.salesToday,
-            weather: _this2.game.weather,
-            resources: _this2.game.resources(),
-            cash: _this2.game.cash
+            potentialCustomers: _this3.game.customersToday.length,
+            cupsSold: _this3.game.cupsSoldToday,
+            salesToday: _this3.game.salesToday,
+            weather: _this3.game.weather,
+            resources: _this3.game.resources(),
+            cash: _this3.game.cash
           };
-          _this2.reset(resultsObject);
+          _this3.reset(resultsObject);
           clearInterval(dayInterval);
           clearInterval(renderInterval);
           (0, _jquery2.default)("#canvas").addClass("display-none");
         } else {
-          _this2.rerenderCanvas();
-          _this2.canvasSimulation();
+          // debugger
+          _this3.rerenderCanvas();
+          _this3.commentRhythm++;
+          _this3.canvasCommentRender(gameObject);
         }
-      }, 20);
+      }, 75);
     }
   }, {
     key: 'reset',
     value: function reset(resultsObject) {
-      // debugger
       (0, _jquery2.default)("#progress-bar").remove();
       (0, _jquery2.default)("#store").remove();
       (0, _jquery2.default)("#dock-holder").remove();
@@ -12484,6 +12550,8 @@ var View = function () {
         this.game.weather = this.game.generateWeather();
         this.game.time.hour = 9;
         this.game.time.minutes = 0;
+        this.commentQueue = [];
+        this.commentRhythm = 0;
         this.showInventory();
         this.setupDock();
       } else if (this.game.day == 7) {
