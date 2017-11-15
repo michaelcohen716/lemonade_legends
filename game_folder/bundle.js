@@ -11905,6 +11905,17 @@ __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// var images = [];
+// preload(
+//   "assets/madLady"
+// )
+// function preload() {
+//   for (var i = 0; i < arguments.length; i++){
+//     images[i] = new Image();
+//     images[i].src = preload.arguments[i];
+//   }
+// }
+
 document.addEventListener("DOMContentLoaded", function () {
 
   var canvas = document.getElementById("canvas");
