@@ -45,12 +45,13 @@ canvas {
   /*left: 38%;*/
   color: white;
   text-align: center;
+  font-family: "Jennifer's Hand Writing", Helvetica, Arial, Verdana, sans-serif;
   /*border-radius: 5%;*/
 }
 
 .lemonade-legends {
   font-size: 55px;
-  font-family: Helvetica, Arial, Verdana, sans-serif;
+  font-family: "Jennifer's Hand Writing", Helvetica, Arial, Verdana, sans-serif;
   /*padding-top: 18%;*/
   width: 50%;
   position: absolute;
@@ -80,6 +81,8 @@ canvas {
   width: 24%;
   text-align: center;
   font-size: 16px;
+  /*font-family: "Jennifer's Hand Writing", Helvetica, Arial, Verdana, sans-serif;*/
+
 }
 
 .go-button {
@@ -92,6 +95,7 @@ canvas {
   left: 43.7%;
   font-size: 20px;
   cursor: pointer;
+  font-family: "Jennifer's Hand Writing", Helvetica, Arial, Verdana, sans-serif;
 
 }
 
@@ -99,17 +103,18 @@ canvas {
   background: yellow;
   color: black;
   position: absolute;
-  width: 120px;
+  width: 130px;
   height: 50px;
   top: 22%;
-  left: 44%;
+  left: 43%;
   font-size: 16px;
   cursor: pointer;
+  font-family: "Jennifer's Hand Writing", Helvetica, Arial, Verdana, sans-serif;
 
 }
 
 .tomorrow-button {
-  margin-top: 4px;
+  margin-top: 6px;
   background: yellow;
   color: black;
   font-size: 18px;
@@ -138,6 +143,7 @@ canvas {
   width: 200px;
   display: flex;
   flex-direction: column;
+
 }
 
 .my-inventory-header {
@@ -145,6 +151,7 @@ canvas {
   margin: 1%;
   width: 100%;
   text-align: center;
+  font-family: "Jennifer's Hand Writing", Helvetica, Arial, Verdana, sans-serif;
 
 }
 
@@ -242,7 +249,9 @@ canvas {
 }
 
 .form-header {
-  font-size: 25px;
+  font-size: 23px;
+  font-family: "Jennifer's Hand Writing", Helvetica, Arial, Verdana, sans-serif;
+
 }
 
 .form-submit {
@@ -349,8 +358,6 @@ canvas {
   background: yellow;
   color: black;
   height: 20%;
-  /*border-radius: 15%;*/
-
 }
 
 .progress-bar {
@@ -362,17 +369,14 @@ canvas {
   left: 50px;
   color: white;
   border-radius: 15%;
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+
 }
 
 .inventory-figure, .sold-out {
   font-size: 17px;
   margin: 3px;
-
-  /*margin: 4px;*/
-  /*background: yellow;*/
-  /*background: transparent;*/
   color: white;
-
 }
 
 .inventory-figure-cups {

@@ -12412,7 +12412,6 @@ var View = function () {
         ice: iceInfo,
         weather: this.game.weather };
 
-      // $("#store").remove();
       this.game.run(gameObject);
 
       var renderInterval = setInterval(function () {
@@ -12429,10 +12428,6 @@ var View = function () {
             resources: _this2.game.resources(),
             cash: _this2.game.cash
           };
-          // console.log("sales$");
-          // console.log(this.game.salesToday);
-          // console.log("total customers");
-          // console.log(this.game.customersToday);
           _this2.reset(resultsObject);
           clearInterval(dayInterval);
           clearInterval(renderInterval);

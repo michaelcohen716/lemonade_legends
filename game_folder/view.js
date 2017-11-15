@@ -346,7 +346,6 @@ class View {
                        ice: iceInfo,
                        weather: this.game.weather};
 
-    // $("#store").remove();
     this.game.run(gameObject);
 
     let renderInterval = setInterval(()=>{
@@ -363,10 +362,6 @@ class View {
           resources: this.game.resources(),
           cash: this.game.cash
         };
-        // console.log("sales$");
-        // console.log(this.game.salesToday);
-        // console.log("total customers");
-        // console.log(this.game.customersToday);
         this.reset(resultsObject);
         clearInterval(dayInterval);
         clearInterval(renderInterval);
