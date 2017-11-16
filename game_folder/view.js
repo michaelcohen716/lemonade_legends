@@ -13,9 +13,9 @@ const iceImage = new Image();
 iceImage.src = "assets/ice.png";
 
 const meanLady = new Image();
-meanLady.src = "assets/meanLady.png";
-const niceGirl = new Image();
-niceGirl.src = "assets/niceGirl.png";
+meanLady.src = "assets/meanlady.png";
+const happyGirl = new Image();
+happyGirl.src = "assets/happygirl.png";
 const chillGuy = new Image();
 chillGuy.src = "assets/chillGuy.png";
 const dumbGuy = new Image();
@@ -166,8 +166,8 @@ class View {
       '"I like lemonade"',
       '"Just like grandma used to make it"'
     ];
-    
-    let characters = [meanLady, niceGirl, chillGuy, dumbGuy];
+
+    let characters = [madLady, happyGirl, chillGuy, dumbGuy];
 
     let commentSample = [];
 
