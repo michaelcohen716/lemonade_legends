@@ -12,10 +12,10 @@ sugarImage.src = "assets/sugar.png";
 const iceImage = new Image();
 iceImage.src = "assets/ice.png";
 
-// const madLady = new Image();
-// madLady.src = "assets/madLady.png";
-// const happyGirl = new Image();
-// happyGirl.src = "assets/happyGirl.png";
+const meanLady = new Image();
+meanLady.src = "assets/meanLady.png";
+const niceGirl = new Image();
+niceGirl.src = "assets/niceGirl.png";
 const chillGuy = new Image();
 chillGuy.src = "assets/chillGuy.png";
 const dumbGuy = new Image();
@@ -166,8 +166,8 @@ class View {
       '"I like lemonade"',
       '"Just like grandma used to make it"'
     ];
-
-    let characters = [madLady, happyGirl, chillGuy, dumbGuy];
+    
+    let characters = [meanLady, niceGirl, chillGuy, dumbGuy];
 
     let commentSample = [];
 
