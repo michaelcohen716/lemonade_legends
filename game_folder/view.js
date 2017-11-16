@@ -223,7 +223,6 @@ class View {
           yCoord = 140;
         }
         this.ctx.drawImage(comment.image, xCoord, yCoord);
-        // debugger
         this.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
       });
     }
@@ -240,7 +239,6 @@ class View {
     let $button = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
     $div += $button;
     this.$el.append($div);
-    //onclick, this calls beginGame()
   }
 
   showInstructions(){
@@ -270,7 +268,6 @@ class View {
   }
 
   updateStatus(){
-    // this.$el.empty();
     $("#dock-holder").remove();
     this.setupDock();
     $("#progress-bar").remove();
@@ -407,7 +404,6 @@ class View {
     let submit = '<input class="form-submit" id="start-day" type="submit" value="Start Day"/>';
     $form += submit;
     this.$el.append($form);
-    // this.bindEvents();
   }
 
   submitInfo(){
@@ -433,7 +429,6 @@ class View {
 
     let renderInterval = setInterval(()=>{
       this.updateStatus();
-      // debugger
     }, 200);
 
     let dayInterval = setInterval(()=>{
@@ -452,7 +447,6 @@ class View {
         $("#canvas").addClass("display-none");
 
       } else {
-        // debugger
         this.rerenderCanvas();
         this.commentRhythm++;
         this.canvasCommentRender(gameObject);
@@ -609,7 +603,6 @@ class View {
     $li.attr("id", "buy-100-cups");
     $div.append($li);
     return $div;
-    // this.$el.append($div);
   }
 
   setupViewLemons(){
@@ -677,7 +670,6 @@ class View {
     $li.data("data", {resource: "sugar", units: 50, price: 3.05});
     $li.attr("id", "buy-50-sugar");
     $div.append($li);
-    // this.$el.append($div);
 
     return $div;
   }
@@ -712,7 +704,6 @@ class View {
     $li.data("data", {resource: "ice-cubes", units: 500, price: 4.50});
     $li.attr("id", "buy-500-ice");
     $div.append($li);
-    // this.$el.append($div);
 
     return $div;
   }

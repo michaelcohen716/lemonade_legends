@@ -52,40 +52,30 @@ class Game {
   }
 
   run(gameObject){
-    //intro, etc
-
     const resources = this.resources();
-    // this.generateWeather();
     let potentialCustomers = this.potentialCustomers();
     console.log("potentialCustomers");
     console.log(potentialCustomers);
-    // debugger
     let today = this.simulateDay(potentialCustomers, gameObject);
-    // debugger
     return today;
   }
 
   updateClock(timeIncrement){
-    // debugger
     if(this.time.minutes + timeIncrement >= 60){
       this.time.minutes = this.time.minutes - 60 + timeIncrement;
       this.time.hour += 1;
-      // this.time.minutes += timeIncrement;
     } else {
       this.time.minutes += timeIncrement;
     }
     if(this.time.hour == 13){
       this.time.hour = 1;
     }
-    // debugger
   }
 
   simulateDay(potentialCustomers, gameObject){
-    // debugger
     let pitcherCups = 0;
     let numPurchases = 0;
     let timeIncrement = ((8*60)/potentialCustomers);
-    //8 hour day
 
     var iterator = 0;
     const runDay = () => {
@@ -96,7 +86,6 @@ class Game {
           console.log("numPurchases");
           console.log(numPurchases);
           this.dayOver = true;
-          // debugger
           return;
         }
 
@@ -137,7 +126,6 @@ class Game {
 
           if(this.checkInventory(gameObject) == true && pitcherCups == 0){
             pitcherCups = this.makePitcher(gameObject);
-            // debugger
             if (pitcherCups == false){
               this.customersToday.push(false);
               return;
@@ -167,11 +155,9 @@ class Game {
   makePitcher(gameObject){
     const lemonsPer = gameObject.lemons;
     const sugarPer = gameObject.sugar;
-    // debugger
     if(this.lemons >= lemonsPer && this.sugar >= sugarPer){
       this.lemons -= lemonsPer;
       this.sugar -= sugarPer;
-      // debugger
       return 10;
     } else {
       return false;
