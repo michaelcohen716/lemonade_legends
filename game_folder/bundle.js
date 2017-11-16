@@ -10637,44 +10637,34 @@ var Game = function () {
   }, {
     key: 'run',
     value: function run(gameObject) {
-      //intro, etc
-
       var resources = this.resources();
-      // this.generateWeather();
       var potentialCustomers = this.potentialCustomers();
       console.log("potentialCustomers");
       console.log(potentialCustomers);
-      // debugger
       var today = this.simulateDay(potentialCustomers, gameObject);
-      // debugger
       return today;
     }
   }, {
     key: 'updateClock',
     value: function updateClock(timeIncrement) {
-      // debugger
       if (this.time.minutes + timeIncrement >= 60) {
         this.time.minutes = this.time.minutes - 60 + timeIncrement;
         this.time.hour += 1;
-        // this.time.minutes += timeIncrement;
       } else {
         this.time.minutes += timeIncrement;
       }
       if (this.time.hour == 13) {
         this.time.hour = 1;
       }
-      // debugger
     }
   }, {
     key: 'simulateDay',
     value: function simulateDay(potentialCustomers, gameObject) {
       var _this = this;
 
-      // debugger
       var pitcherCups = 0;
       var numPurchases = 0;
       var timeIncrement = 8 * 60 / potentialCustomers;
-      //8 hour day
 
       var iterator = 0;
       var runDay = function runDay() {
@@ -10685,7 +10675,6 @@ var Game = function () {
             console.log("numPurchases");
             console.log(numPurchases);
             _this.dayOver = true;
-            // debugger
             return;
           }
 
@@ -10726,7 +10715,6 @@ var Game = function () {
 
             if (_this.checkInventory(gameObject) == true && pitcherCups == 0) {
               pitcherCups = _this.makePitcher(gameObject);
-              // debugger
               if (pitcherCups == false) {
                 _this.customersToday.push(false);
                 return;
@@ -10757,11 +10745,9 @@ var Game = function () {
     value: function makePitcher(gameObject) {
       var lemonsPer = gameObject.lemons;
       var sugarPer = gameObject.sugar;
-      // debugger
       if (this.lemons >= lemonsPer && this.sugar >= sugarPer) {
         this.lemons -= lemonsPer;
         this.sugar -= sugarPer;
-        // debugger
         return 10;
       } else {
         return false;
@@ -11905,17 +11891,6 @@ __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// var images = [];
-// preload(
-//   "assets/madLady"
-// )
-// function preload() {
-//   for (var i = 0; i < arguments.length; i++){
-//     images[i] = new Image();
-//     images[i].src = preload.arguments[i];
-//   }
-// }
-
 document.addEventListener("DOMContentLoaded", function () {
 
   var canvas = document.getElementById("canvas");
@@ -12068,8 +12043,8 @@ sugarImage.src = "assets/sugar.png";
 var iceImage = new Image();
 iceImage.src = "assets/ice.png";
 
-var madLady = new Image();
-madLady.src = "assets/madlady.png";
+var meanLady = new Image();
+meanLady.src = "assets/meanlady.png";
 var happyGirl = new Image();
 happyGirl.src = "assets/happygirl.png";
 var chillGuy = new Image();
@@ -12280,7 +12255,6 @@ var View = function () {
             yCoord = 140;
           }
           _this2.ctx.drawImage(comment.image, xCoord, yCoord);
-          // debugger
           _this2.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
         });
       }
@@ -12294,7 +12268,6 @@ var View = function () {
       var $button = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
       $div += $button;
       this.$el.append($div);
-      //onclick, this calls beginGame()
     }
   }, {
     key: 'showInstructions',
@@ -12328,7 +12301,6 @@ var View = function () {
   }, {
     key: 'updateStatus',
     value: function updateStatus() {
-      // this.$el.empty();
       (0, _jquery2.default)("#dock-holder").remove();
       this.setupDock();
       (0, _jquery2.default)("#progress-bar").remove();
@@ -12469,7 +12441,6 @@ var View = function () {
       var submit = '<input class="form-submit" id="start-day" type="submit" value="Start Day"/>';
       $form += submit;
       this.$el.append($form);
-      // this.bindEvents();
     }
   }, {
     key: 'submitInfo',
@@ -12498,7 +12469,6 @@ var View = function () {
 
       var renderInterval = setInterval(function () {
         _this3.updateStatus();
-        // debugger
       }, 200);
 
       var dayInterval = setInterval(function () {
@@ -12516,7 +12486,6 @@ var View = function () {
           clearInterval(renderInterval);
           (0, _jquery2.default)("#canvas").addClass("display-none");
         } else {
-          // debugger
           _this3.rerenderCanvas();
           _this3.commentRhythm++;
           _this3.canvasCommentRender(gameObject);
@@ -12679,7 +12648,6 @@ var View = function () {
       $li.attr("id", "buy-100-cups");
       $div.append($li);
       return $div;
-      // this.$el.append($div);
     }
   }, {
     key: 'setupViewLemons',
@@ -12748,7 +12716,6 @@ var View = function () {
       $li.data("data", { resource: "sugar", units: 50, price: 3.05 });
       $li.attr("id", "buy-50-sugar");
       $div.append($li);
-      // this.$el.append($div);
 
       return $div;
     }
@@ -12784,7 +12751,6 @@ var View = function () {
       $li.data("data", { resource: "ice-cubes", units: 500, price: 4.50 });
       $li.attr("id", "buy-500-ice");
       $div.append($li);
-      // this.$el.append($div);
 
       return $div;
     }
