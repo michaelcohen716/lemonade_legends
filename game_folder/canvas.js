@@ -123,40 +123,6 @@ class Canvas {
     }
   }
 
-  canvasCommentRender(gameObject){
-    if(this.commentRhythm % 15 === 0){
-      this.canvasComment(gameObject);
-    }
-    if (this.commentQueue.length > 3){
-      this.commentQueue.shift();
-    }
-    this.ctx.fillStyle = 'white';
-    this.ctx.font = '16px Arial';
-    this.ctx.fillText("Suggestions Box", 80, 20);
-
-    if(this.commentQueue.length > 0){
-
-      let xCoord = 40;
-      let yCoord;
-
-      let queue = this.commentQueue;
-
-
-      queue.forEach((comment, index) => {
-        this.ctx.font = '10px Arial';
-        if(index === 0){
-          yCoord = 30;
-        } else if (index === 1){
-          yCoord = 85;
-        } else if (index === 2){
-          yCoord = 140;
-        }
-        this.ctx.drawImage(comment.image, xCoord, yCoord);
-        this.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
-      });
-    }
-  }
-
 }
 
 export default Canvas;

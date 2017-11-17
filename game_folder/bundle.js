@@ -11566,24 +11566,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var cupImage = new Image();
-cupImage.src = "assets/cup.png";
-var lemonImage = new Image();
-lemonImage.src = "assets/lemon.png";
-var sugarImage = new Image();
-sugarImage.src = "assets/sugar.png";
-var iceImage = new Image();
-iceImage.src = "assets/ice.png";
-
-var meanLady = new Image();
-meanLady.src = "assets/madlady.png";
-var happyGirl = new Image();
-happyGirl.src = "assets/happygirl.png";
-var chillGuy = new Image();
-chillGuy.src = "assets/chillGuy.png";
-var dumbGuy = new Image();
-dumbGuy.src = "assets/dumbGuy.png";
-
 var View = function () {
   function View(game, $el, canvas) {
     _classCallCheck(this, View);
@@ -11692,12 +11674,10 @@ var View = function () {
       this.ctx.fillText("Suggestions Box", 80, 20);
 
       if (this.commentQueue.length > 0) {
-
         var xCoord = 40;
         var yCoord = void 0;
 
         var queue = this.commentQueue;
-
         queue.forEach(function (comment, index) {
           _this2.ctx.font = '10px Arial';
           if (index === 0) {
@@ -11742,7 +11722,6 @@ var View = function () {
   }, {
     key: 'beginGame',
     value: function beginGame() {
-      console.log("debugger here");
       (0, _jquery2.default)("#instructions-holder").remove();
       this.showInventory();
       this.setupDock();
@@ -12471,42 +12450,6 @@ var Canvas = function () {
 
       if (commentObject.comment !== undefined) {
         gameInfo.commentQueue.push(commentObject);
-      }
-    }
-  }, {
-    key: 'canvasCommentRender',
-    value: function canvasCommentRender(gameObject) {
-      var _this = this;
-
-      if (this.commentRhythm % 15 === 0) {
-        this.canvasComment(gameObject);
-      }
-      if (this.commentQueue.length > 3) {
-        this.commentQueue.shift();
-      }
-      this.ctx.fillStyle = 'white';
-      this.ctx.font = '16px Arial';
-      this.ctx.fillText("Suggestions Box", 80, 20);
-
-      if (this.commentQueue.length > 0) {
-
-        var xCoord = 40;
-        var yCoord = void 0;
-
-        var queue = this.commentQueue;
-
-        queue.forEach(function (comment, index) {
-          _this.ctx.font = '10px Arial';
-          if (index === 0) {
-            yCoord = 30;
-          } else if (index === 1) {
-            yCoord = 85;
-          } else if (index === 2) {
-            yCoord = 140;
-          }
-          _this.ctx.drawImage(comment.image, xCoord, yCoord);
-          _this.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
-        });
       }
     }
   }]);

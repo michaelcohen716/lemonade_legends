@@ -5,24 +5,6 @@ import ProgressBar from './progress_bar';
 import InventoryStore from './inventory_store';
 import Canvas from './canvas';
 
-const cupImage = new Image();
-cupImage.src = "assets/cup.png";
-const lemonImage = new Image();
-lemonImage.src = "assets/lemon.png";
-const sugarImage = new Image();
-sugarImage.src = "assets/sugar.png";
-const iceImage = new Image();
-iceImage.src = "assets/ice.png";
-
-const meanLady = new Image();
-meanLady.src = "assets/madlady.png";
-const happyGirl = new Image();
-happyGirl.src = "assets/happygirl.png";
-const chillGuy = new Image();
-chillGuy.src = "assets/chillGuy.png";
-const dumbGuy = new Image();
-dumbGuy.src = "assets/dumbGuy.png";
-
 class View {
   constructor(game, $el, canvas){
     this.game = game;
@@ -47,7 +29,6 @@ class View {
       e.preventDefault();
       this.submitInfo();
       this.rerenderCanvas();
-
     });
 
     $("#begin-game-button").click((e)=>{
@@ -118,13 +99,10 @@ class View {
     this.ctx.fillText("Suggestions Box", 80, 20);
 
     if(this.commentQueue.length > 0){
-
       let xCoord = 40;
       let yCoord;
 
       let queue = this.commentQueue;
-
-
       queue.forEach((comment, index) => {
         this.ctx.font = '10px Arial';
         if(index === 0){
@@ -166,7 +144,6 @@ class View {
   }
 
   beginGame(){
-    console.log("debugger here");
     $("#instructions-holder").remove();
     this.showInventory();
     this.setupDock();
