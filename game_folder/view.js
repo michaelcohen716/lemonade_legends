@@ -234,20 +234,24 @@ class View {
 
   renderStartButton(){
     let $div = '<div class="begin-game-holder" id="begin-game-holder">';
+    let $section = '<section class="inner-begin-holder">';
     let $span = '<span class="lemonade-legends">Lemonade Legends</span>';
-    $div += $span;
+    $section += $span;
     let $button = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
-    $div += $button;
-    this.$el.append($div);
+    $section += $button;
+    this.$el.append($section);
   }
 
   showInstructions(){
     $("#begin-game-holder").remove();
     let $div = '<div class="instructions-holder" id="instructions-holder">';
+    let $section = '<section class="inner-instructions">';
     let $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- the neighbors can be picky. And some have tight pocketbooks. Good luck.</span>';
-    $div += $span;
+    $section += $span;
     let $button = '<button id="go-button" class="go-button">Go</button>';
-    $div += $button;
+    $section += $button;
+    $div += $section;
+
     this.$el.append($div);
     this.bindEvents();
   }
