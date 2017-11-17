@@ -8,10 +8,6 @@ class ProgressBar {
 
   setupProgressBar(gameObject){
     let $section = '<section id="progress-bar" class="progress-bar">';
-    // let myCups = this.game.cups;
-    // let myLemons = this.game.lemons;
-    // let mySugar = this.game.sugar;
-    // let myIce = this.game.iceCubes;
     let text = "";
 
     if(gameObject.soldOut == true){
@@ -54,7 +50,6 @@ class ProgressBar {
     $section += $div;
 
     $section += '<div class="filler"></div>';
-    debugger
     return $section;
   }
 

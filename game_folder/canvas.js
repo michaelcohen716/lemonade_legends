@@ -1,17 +1,10 @@
-
+import $ from 'jquery';
+import 'jquery-ui';
 
 class Canvas {
-  constructor(){
-    this.backgroundCanvas = document.getElementById("canvas-background");
-    this.actionCanvas = document.getElementById("canvas");
-    this.backgroundContext = this.backgroundCanvas.getContext("2d");
-    this.actionContext = this.actionCanvas.getContext("2d");
-
-
-  }
 
   render(ctx){
-    
+
   }
 
 

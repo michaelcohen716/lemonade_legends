@@ -11554,6 +11554,10 @@ var _progress_bar = __webpack_require__(19);
 
 var _progress_bar2 = _interopRequireDefault(_progress_bar);
 
+var _inventory_store = __webpack_require__(20);
+
+var _inventory_store2 = _interopRequireDefault(_inventory_store);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -11848,24 +11852,6 @@ var View = function () {
       this.$el.append((0, _jquery2.default)($section.setupProgressBar(gameObject)));
     }
   }, {
-    key: 'setupStore',
-    value: function setupStore() {
-      var $cups = this.setupViewCups();
-      var $lemons = this.setupViewLemons();
-      var $sugar = this.setupViewSugar();
-      var $ice = this.setupViewIceCubes();
-
-      var $div = (0, _jquery2.default)('<div class="store" id="store">');
-      var $button = (0, _jquery2.default)('<button class="done-shopping-button" id="done-shopping-button">Done Shopping</button>');
-      $div.append($button);
-      $div.append($cups);
-      $div.append($lemons);
-      $div.append($sugar);
-      $div.append($ice);
-
-      this.$el.append($div);
-    }
-  }, {
     key: 'goShopping',
     value: function goShopping() {
       (0, _jquery2.default)("#my-inventory").remove();
@@ -12104,143 +12090,12 @@ var View = function () {
       this.$el.append($div);
     }
   }, {
-    key: 'setupViewCups',
-    value: function setupViewCups() {
-      var $div = (0, _jquery2.default)("<div>");
-      $div.addClass("inventory-holder");
-
-      var cupsInventory = this.game.cups;
-      var $span = (0, _jquery2.default)('<span>You have ' + cupsInventory + ' cups</span>');
-      $span.addClass("inventory-number-cups");
-      $span.attr("id", "cups-counter");
-      $div.append($span);
-
-      //buy 25 cups
-      var $li = (0, _jquery2.default)("<li>25 paper cups for $0.80</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "cups", units: 25, price: 0.80 });
-      $li.attr("id", "buy-25-cups");
-      $div.append($li);
-
-      //buy 50 cups
-      $li = (0, _jquery2.default)("<li>50 paper cups for $1.55</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "cups", units: 50, price: 1.55 });
-      $li.attr("id", "buy-50-cups");
-      $div.append($li);
-
-      //buy 100 cups
-      $li = (0, _jquery2.default)("<li>100 paper cups for $3.00</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "cups", units: 100, price: 3.00 });
-      $li.attr("id", "buy-100-cups");
-      $div.append($li);
-      return $div;
-    }
-  }, {
-    key: 'setupViewLemons',
-    value: function setupViewLemons() {
-      var $div = (0, _jquery2.default)("<div>");
-      $div.addClass("inventory-holder");
-
-      var lemonsInventory = this.game.lemons;
-      var $span = (0, _jquery2.default)('<span>You have ' + lemonsInventory + ' lemons</span>');
-      $span.addClass("inventory-number-lemons");
-      $span.attr("id", "lemons-counter");
-      $div.append($span);
-
-      //buy 10 lemons
-      var $li = (0, _jquery2.default)("<li>10 lemons for $0.50</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "lemons", units: 10, price: 0.50 });
-      $li.attr("id", "buy-10-lemons");
-      $div.append($li);
-
-      //buy 30 lemons
-      $li = (0, _jquery2.default)("<li>30 lemons for $1.40</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "lemons", units: 30, price: 1.40 });
-      $li.attr("id", "buy-30-lemons");
-      $div.append($li);
-
-      //buy 75 lemons
-      $li = (0, _jquery2.default)("<li>75 lemons for $3.00</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "lemons", units: 75, price: 3.00 });
-      $li.attr("id", "buy-75-lemons");
-      $div.append($li);
-      return $div;
-      // this.$el.append($div);
-    }
-  }, {
-    key: 'setupViewSugar',
-    value: function setupViewSugar() {
-      var $div = (0, _jquery2.default)("<div>");
-      $div.addClass("inventory-holder");
-
-      var sugarInventory = this.game.sugar;
-      var $span = (0, _jquery2.default)('<span>You have ' + sugarInventory + ' cups of sugar</span>');
-      $span.addClass("inventory-number-sugar");
-      $span.attr("id", "sugar-counter");
-      $div.append($span);
-
-      //buy 12 cups of sugar
-      var $li = (0, _jquery2.default)("<li>12 cups of sugar for $0.80</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "sugar", units: 12, price: 0.80 });
-      $li.attr("id", "buy-12-sugar");
-      $div.append($li);
-
-      //buy 30 cups of sugar
-      $li = (0, _jquery2.default)("<li>30 cups of sugar for $1.90</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "sugar", units: 30, price: 1.90 });
-      $li.attr("id", "buy-30-sugar");
-      $div.append($li);
-
-      //buy 50 cups of sugar
-      $li = (0, _jquery2.default)("<li>50 cups of sugar for $3.05</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "sugar", units: 50, price: 3.05 });
-      $li.attr("id", "buy-50-sugar");
-      $div.append($li);
-
-      return $div;
-    }
-  }, {
-    key: 'setupViewIceCubes',
-    value: function setupViewIceCubes() {
-      var $div = (0, _jquery2.default)("<div>");
-      $div.addClass("inventory-holder");
-
-      var iceInventory = this.game.iceCubes;
-      var $span = (0, _jquery2.default)('<span>You have ' + iceInventory + ' ice cubes</span>');
-      $span.addClass("inventory-number-ice");
-      $span.attr("id", "ice-counter");
-      $div.append($span);
-
-      //buy 100 ice cubes
-      var $li = (0, _jquery2.default)("<li>100 ice cubes for $1.00</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "ice-cubes", units: 100, price: 1.00 });
-      $li.attr("id", "buy-100-ice");
-      $div.append($li);
-
-      //buy 250 ice cubes
-      $li = (0, _jquery2.default)("<li>250 ice cubes for $2.35</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "ice-cubes", units: 250, price: 2.35 });
-      $li.attr("id", "buy-250-ice");
-      $div.append($li);
-
-      //buy 500 ice cubes
-      $li = (0, _jquery2.default)("<li>500 ice cubes for $4.50</li>");
-      $li.addClass("inventory-buy-button");
-      $li.data("data", { resource: "ice-cubes", units: 500, price: 4.50 });
-      $li.attr("id", "buy-500-ice");
-      $div.append($li);
-
-      return $div;
+    key: 'setupStore',
+    value: function setupStore() {
+      var gameObject = { cups: this.game.cups, lemons: this.game.lemons,
+        sugar: this.game.sugar, ice: this.game.iceCubes };
+      var $section = new _inventory_store2.default(gameObject);
+      this.$el.append((0, _jquery2.default)($section.setupStore(gameObject)));
     }
   }]);
 
@@ -12312,10 +12167,6 @@ var ProgressBar = function () {
     key: 'setupProgressBar',
     value: function setupProgressBar(gameObject) {
       var $section = '<section id="progress-bar" class="progress-bar">';
-      // let myCups = this.game.cups;
-      // let myLemons = this.game.lemons;
-      // let mySugar = this.game.sugar;
-      // let myIce = this.game.iceCubes;
       var text = "";
 
       if (gameObject.soldOut == true) {
@@ -12358,7 +12209,6 @@ var ProgressBar = function () {
       $section += $div;
 
       $section += '<div class="filler"></div>';
-      debugger;
       return $section;
     }
   }]);
@@ -12367,6 +12217,196 @@ var ProgressBar = function () {
 }();
 
 exports.default = ProgressBar;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _jquery = __webpack_require__(1);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+__webpack_require__(4);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var InventoryStore = function () {
+  function InventoryStore(gameObject) {
+    _classCallCheck(this, InventoryStore);
+  }
+
+  _createClass(InventoryStore, [{
+    key: 'setupStore',
+    value: function setupStore(gameObject) {
+      var $cups = this.setupViewCups(gameObject);
+      var $lemons = this.setupViewLemons(gameObject);
+      var $sugar = this.setupViewSugar(gameObject);
+      var $ice = this.setupViewIceCubes(gameObject);
+
+      var $div = (0, _jquery2.default)('<div class="store" id="store">');
+      var $button = (0, _jquery2.default)('<button class="done-shopping-button" id="done-shopping-button">Done Shopping</button>');
+      $div.append($button);
+      $div.append($cups);
+      $div.append($lemons);
+      $div.append($sugar);
+      $div.append($ice);
+      return $div;
+    }
+  }, {
+    key: 'setupViewCups',
+    value: function setupViewCups(gameObject) {
+      var $div = (0, _jquery2.default)("<div>");
+      $div.addClass("inventory-holder");
+
+      var cupsInventory = gameObject.cups;
+      var $span = (0, _jquery2.default)('<span>You have ' + cupsInventory + ' cups</span>');
+      $span.addClass("inventory-number-cups");
+      $span.attr("id", "cups-counter");
+      $div.append($span);
+
+      //buy 25 cups
+      var $li = (0, _jquery2.default)("<li>25 paper cups for $0.80</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "cups", units: 25, price: 0.80 });
+      $li.attr("id", "buy-25-cups");
+      $div.append($li);
+
+      //buy 50 cups
+      $li = (0, _jquery2.default)("<li>50 paper cups for $1.55</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "cups", units: 50, price: 1.55 });
+      $li.attr("id", "buy-50-cups");
+      $div.append($li);
+
+      //buy 100 cups
+      $li = (0, _jquery2.default)("<li>100 paper cups for $3.00</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "cups", units: 100, price: 3.00 });
+      $li.attr("id", "buy-100-cups");
+      $div.append($li);
+      return $div;
+    }
+  }, {
+    key: 'setupViewLemons',
+    value: function setupViewLemons(gameObject) {
+      var $div = (0, _jquery2.default)("<div>");
+      $div.addClass("inventory-holder");
+
+      var lemonsInventory = gameObject.lemons;
+      var $span = (0, _jquery2.default)('<span>You have ' + lemonsInventory + ' lemons</span>');
+      $span.addClass("inventory-number-lemons");
+      $span.attr("id", "lemons-counter");
+      $div.append($span);
+
+      //buy 10 lemons
+      var $li = (0, _jquery2.default)("<li>10 lemons for $0.50</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "lemons", units: 10, price: 0.50 });
+      $li.attr("id", "buy-10-lemons");
+      $div.append($li);
+
+      //buy 30 lemons
+      $li = (0, _jquery2.default)("<li>30 lemons for $1.40</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "lemons", units: 30, price: 1.40 });
+      $li.attr("id", "buy-30-lemons");
+      $div.append($li);
+
+      //buy 75 lemons
+      $li = (0, _jquery2.default)("<li>75 lemons for $3.00</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "lemons", units: 75, price: 3.00 });
+      $li.attr("id", "buy-75-lemons");
+      $div.append($li);
+      return $div;
+    }
+  }, {
+    key: 'setupViewSugar',
+    value: function setupViewSugar(gameObject) {
+      var $div = (0, _jquery2.default)("<div>");
+      $div.addClass("inventory-holder");
+
+      var sugarInventory = gameObject.sugar;
+      var $span = (0, _jquery2.default)('<span>You have ' + sugarInventory + ' cups of sugar</span>');
+      $span.addClass("inventory-number-sugar");
+      $span.attr("id", "sugar-counter");
+      $div.append($span);
+
+      //buy 12 cups of sugar
+      var $li = (0, _jquery2.default)("<li>12 cups of sugar for $0.80</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "sugar", units: 12, price: 0.80 });
+      $li.attr("id", "buy-12-sugar");
+      $div.append($li);
+
+      //buy 30 cups of sugar
+      $li = (0, _jquery2.default)("<li>30 cups of sugar for $1.90</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "sugar", units: 30, price: 1.90 });
+      $li.attr("id", "buy-30-sugar");
+      $div.append($li);
+
+      //buy 50 cups of sugar
+      $li = (0, _jquery2.default)("<li>50 cups of sugar for $3.05</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "sugar", units: 50, price: 3.05 });
+      $li.attr("id", "buy-50-sugar");
+      $div.append($li);
+
+      return $div;
+    }
+  }, {
+    key: 'setupViewIceCubes',
+    value: function setupViewIceCubes(gameObject) {
+      var $div = (0, _jquery2.default)("<div>");
+      $div.addClass("inventory-holder");
+
+      var iceInventory = gameObject.ice;
+      var $span = (0, _jquery2.default)('<span>You have ' + iceInventory + ' ice cubes</span>');
+      $span.addClass("inventory-number-ice");
+      $span.attr("id", "ice-counter");
+      $div.append($span);
+
+      //buy 100 ice cubes
+      var $li = (0, _jquery2.default)("<li>100 ice cubes for $1.00</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "ice-cubes", units: 100, price: 1.00 });
+      $li.attr("id", "buy-100-ice");
+      $div.append($li);
+
+      //buy 250 ice cubes
+      $li = (0, _jquery2.default)("<li>250 ice cubes for $2.35</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "ice-cubes", units: 250, price: 2.35 });
+      $li.attr("id", "buy-250-ice");
+      $div.append($li);
+
+      //buy 500 ice cubes
+      $li = (0, _jquery2.default)("<li>500 ice cubes for $4.50</li>");
+      $li.addClass("inventory-buy-button");
+      $li.data("data", { resource: "ice-cubes", units: 500, price: 4.50 });
+      $li.attr("id", "buy-500-ice");
+      $div.append($li);
+
+      return $div;
+    }
+  }]);
+
+  return InventoryStore;
+}();
+
+exports.default = InventoryStore;
 
 /***/ })
 /******/ ]);
