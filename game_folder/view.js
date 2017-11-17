@@ -3,6 +3,7 @@ import 'jquery-ui';
 import Game from './game';
 import ProgressBar from './progress_bar';
 import InventoryStore from './inventory_store';
+import Canvas from './canvas';
 
 const cupImage = new Image();
 cupImage.src = "assets/cup.png";
@@ -89,65 +90,10 @@ class View {
   }
 
   canvasPurchase(){
-    this.ctx.fillStyle = 'white';
-    this.ctx.font = '16px Arial';
-    this.ctx.fillText('Cups', 20, 190);
-    this.ctx.fillText('Lemons', 85, 190);
-    this.ctx.fillText('Sugar', 165, 190);
-    this.ctx.fillText('Ice', 245, 190);
-
-    let numCupPics = Math.floor(this.game.cups / 20);
-    let xCoord;
-    let yCoord = 185;
-    for (var i = 0; i < numCupPics; i++) {
-      if (i % 2 == 0){
-        xCoord = 17;
-        yCoord -= 36;
-      } else {
-        xCoord = 42;
-      }
-      this.ctx.drawImage(cupImage, xCoord, yCoord);
-    }
-
-    let numLemonPics = Math.floor(this.game.lemons / 8);
-    yCoord = 182;
-    xCoord = 85;
-    for (var j = 0; j < numLemonPics; j++) {
-      if (j % 2 == 0){
-        xCoord = 82;
-        yCoord -= 32;
-      } else {
-        xCoord = 112;
-      }
-      this.ctx.drawImage(lemonImage, xCoord, yCoord);
-    }
-
-    let numSugarPics = Math.floor(this.game.sugar / 8);
-    yCoord = 182;
-    xCoord = 147;
-    for (var k = 0; k < numSugarPics; k++) {
-      if (k % 2 == 0){
-        xCoord = 161;
-        yCoord -= 32;
-      } else {
-        xCoord = 191;
-      }
-      this.ctx.drawImage(sugarImage, xCoord, yCoord);
-    }
-
-    let numIcePics = Math.floor(this.game.iceCubes / 50);
-    yCoord = 182;
-    xCoord = 228;
-    for (var l = 0; l < numIcePics; l++) {
-      if (l % 2 == 0){
-        xCoord = 228;
-        yCoord -= 32;
-      } else {
-        xCoord = 258;
-      }
-      this.ctx.drawImage(iceImage, xCoord, yCoord);
-    }
-
+    let canvas = new Canvas();
+    let canvasInfo = {ctx: this.ctx, cups: this.game.cups, lemons: this.game.lemons,
+                      sugar: this.game.sugar, ice: this.game.iceCubes};
+    canvas.canvasPurchase(canvasInfo);
   }
 
   renderCanvas(){
@@ -155,45 +101,9 @@ class View {
   }
 
   canvasComment(gameObject){
-    let directComments = ['"Sold out? Pathetic"','"No more lemonade?!"','"Ice tea is better anyway"',
-                          '"Not enough ice"', '"Too expensive"'];
-    let generalComments = [
-      '"Tasty!"',
-      '"Meh, honestly"',
-      '"Too bitter"',
-      '"Just what I needed!"',
-      '"Yummy in my tummy!"',
-      '"Do you guys sell hot dogs?"',
-      '"I like lemonade"',
-      '"Just like grandma used to make it"'
-    ];
-
-    let characters = [meanLady, happyGirl, chillGuy, dumbGuy];
-
-    let commentSample = [];
-
-    if(this.game.soldOut){
-      commentSample.push(directComments[0]);
-      commentSample.push(directComments[1]);
-      commentSample.push(directComments[2]);
-    } else if (gameObject.weather.temperature / gameObject.ice < 16){
-      commentSample.push(directComments[3]);
-    } else if (gameObject.price > gameObject.weather.temperature / 3){
-      commentSample.push(directComments[4]);
-    }
-
-    while(commentSample.length < 3){
-      commentSample.push(generalComments[Math.floor(Math.random() * generalComments.length)]);
-      commentSample.push(generalComments[Math.floor(Math.random() * generalComments.length)]);
-    }
-
-    const comment = commentSample[Math.floor(Math.random() * commentSample.length)];
-    const image = characters[Math.floor(Math.random() * characters.length)];
-    let commentObject = {comment: comment, image: image};
-
-    if(commentObject.comment !== undefined){
-      this.commentQueue.push(commentObject);
-    }
+    let gameInfo = {soldOut: this.game.soldOut, commentQueue: this.commentQueue};
+    let canvas = new Canvas();
+    canvas.canvasComment(gameObject, gameInfo);
   }
 
   canvasCommentRender(gameObject){

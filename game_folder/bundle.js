@@ -11558,6 +11558,10 @@ var _inventory_store = __webpack_require__(20);
 
 var _inventory_store2 = _interopRequireDefault(_inventory_store);
 
+var _canvas = __webpack_require__(21);
+
+var _canvas2 = _interopRequireDefault(_canvas);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -11655,64 +11659,10 @@ var View = function () {
   }, {
     key: 'canvasPurchase',
     value: function canvasPurchase() {
-      this.ctx.fillStyle = 'white';
-      this.ctx.font = '16px Arial';
-      this.ctx.fillText('Cups', 20, 190);
-      this.ctx.fillText('Lemons', 85, 190);
-      this.ctx.fillText('Sugar', 165, 190);
-      this.ctx.fillText('Ice', 245, 190);
-
-      var numCupPics = Math.floor(this.game.cups / 20);
-      var xCoord = void 0;
-      var yCoord = 185;
-      for (var i = 0; i < numCupPics; i++) {
-        if (i % 2 == 0) {
-          xCoord = 17;
-          yCoord -= 36;
-        } else {
-          xCoord = 42;
-        }
-        this.ctx.drawImage(cupImage, xCoord, yCoord);
-      }
-
-      var numLemonPics = Math.floor(this.game.lemons / 8);
-      yCoord = 182;
-      xCoord = 85;
-      for (var j = 0; j < numLemonPics; j++) {
-        if (j % 2 == 0) {
-          xCoord = 82;
-          yCoord -= 32;
-        } else {
-          xCoord = 112;
-        }
-        this.ctx.drawImage(lemonImage, xCoord, yCoord);
-      }
-
-      var numSugarPics = Math.floor(this.game.sugar / 8);
-      yCoord = 182;
-      xCoord = 147;
-      for (var k = 0; k < numSugarPics; k++) {
-        if (k % 2 == 0) {
-          xCoord = 161;
-          yCoord -= 32;
-        } else {
-          xCoord = 191;
-        }
-        this.ctx.drawImage(sugarImage, xCoord, yCoord);
-      }
-
-      var numIcePics = Math.floor(this.game.iceCubes / 50);
-      yCoord = 182;
-      xCoord = 228;
-      for (var l = 0; l < numIcePics; l++) {
-        if (l % 2 == 0) {
-          xCoord = 228;
-          yCoord -= 32;
-        } else {
-          xCoord = 258;
-        }
-        this.ctx.drawImage(iceImage, xCoord, yCoord);
-      }
+      var canvas = new _canvas2.default();
+      var canvasInfo = { ctx: this.ctx, cups: this.game.cups, lemons: this.game.lemons,
+        sugar: this.game.sugar, ice: this.game.iceCubes };
+      canvas.canvasPurchase(canvasInfo);
     }
   }, {
     key: 'renderCanvas',
@@ -11722,35 +11672,9 @@ var View = function () {
   }, {
     key: 'canvasComment',
     value: function canvasComment(gameObject) {
-      var directComments = ['"Sold out? Pathetic"', '"No more lemonade?!"', '"Ice tea is better anyway"', '"Not enough ice"', '"Too expensive"'];
-      var generalComments = ['"Tasty!"', '"Meh, honestly"', '"Too bitter"', '"Just what I needed!"', '"Yummy in my tummy!"', '"Do you guys sell hot dogs?"', '"I like lemonade"', '"Just like grandma used to make it"'];
-
-      var characters = [meanLady, happyGirl, chillGuy, dumbGuy];
-
-      var commentSample = [];
-
-      if (this.game.soldOut) {
-        commentSample.push(directComments[0]);
-        commentSample.push(directComments[1]);
-        commentSample.push(directComments[2]);
-      } else if (gameObject.weather.temperature / gameObject.ice < 16) {
-        commentSample.push(directComments[3]);
-      } else if (gameObject.price > gameObject.weather.temperature / 3) {
-        commentSample.push(directComments[4]);
-      }
-
-      while (commentSample.length < 3) {
-        commentSample.push(generalComments[Math.floor(Math.random() * generalComments.length)]);
-        commentSample.push(generalComments[Math.floor(Math.random() * generalComments.length)]);
-      }
-
-      var comment = commentSample[Math.floor(Math.random() * commentSample.length)];
-      var image = characters[Math.floor(Math.random() * characters.length)];
-      var commentObject = { comment: comment, image: image };
-
-      if (commentObject.comment !== undefined) {
-        this.commentQueue.push(commentObject);
-      }
+      var gameInfo = { soldOut: this.game.soldOut, commentQueue: this.commentQueue };
+      var canvas = new _canvas2.default();
+      canvas.canvasComment(gameObject, gameInfo);
     }
   }, {
     key: 'canvasCommentRender',
@@ -12407,6 +12331,190 @@ var InventoryStore = function () {
 }();
 
 exports.default = InventoryStore;
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _jquery = __webpack_require__(1);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+__webpack_require__(4);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var cupImage = new Image();
+cupImage.src = "assets/cup.png";
+var lemonImage = new Image();
+lemonImage.src = "assets/lemon.png";
+var sugarImage = new Image();
+sugarImage.src = "assets/sugar.png";
+var iceImage = new Image();
+iceImage.src = "assets/ice.png";
+
+var meanLady = new Image();
+meanLady.src = "assets/madlady.png";
+var happyGirl = new Image();
+happyGirl.src = "assets/happygirl.png";
+var chillGuy = new Image();
+chillGuy.src = "assets/chillGuy.png";
+var dumbGuy = new Image();
+dumbGuy.src = "assets/dumbGuy.png";
+
+var Canvas = function () {
+  function Canvas() {
+    _classCallCheck(this, Canvas);
+  }
+
+  _createClass(Canvas, [{
+    key: 'canvasPurchase',
+    value: function canvasPurchase(canvasInfo) {
+      canvasInfo.ctx.fillStyle = 'white';
+      canvasInfo.ctx.font = '16px Arial';
+      canvasInfo.ctx.fillText('Cups', 20, 190);
+      canvasInfo.ctx.fillText('Lemons', 85, 190);
+      canvasInfo.ctx.fillText('Sugar', 165, 190);
+      canvasInfo.ctx.fillText('Ice', 245, 190);
+
+      var numCupPics = Math.floor(canvasInfo.cups / 20);
+      var xCoord = void 0;
+      var yCoord = 185;
+      for (var i = 0; i < numCupPics; i++) {
+        if (i % 2 == 0) {
+          xCoord = 17;
+          yCoord -= 36;
+        } else {
+          xCoord = 42;
+        }
+        canvasInfo.ctx.drawImage(cupImage, xCoord, yCoord);
+      }
+
+      var numLemonPics = Math.floor(canvasInfo.lemons / 8);
+      yCoord = 182;
+      xCoord = 85;
+      for (var j = 0; j < numLemonPics; j++) {
+        if (j % 2 == 0) {
+          xCoord = 82;
+          yCoord -= 32;
+        } else {
+          xCoord = 112;
+        }
+        canvasInfo.ctx.drawImage(lemonImage, xCoord, yCoord);
+      }
+
+      var numSugarPics = Math.floor(canvasInfo.sugar / 8);
+      yCoord = 182;
+      xCoord = 147;
+      for (var k = 0; k < numSugarPics; k++) {
+        if (k % 2 == 0) {
+          xCoord = 161;
+          yCoord -= 32;
+        } else {
+          xCoord = 191;
+        }
+        canvasInfo.ctx.drawImage(sugarImage, xCoord, yCoord);
+      }
+
+      var numIcePics = Math.floor(canvasInfo.ice / 50);
+      yCoord = 182;
+      xCoord = 228;
+      for (var l = 0; l < numIcePics; l++) {
+        if (l % 2 == 0) {
+          xCoord = 228;
+          yCoord -= 32;
+        } else {
+          xCoord = 258;
+        }
+        canvasInfo.ctx.drawImage(iceImage, xCoord, yCoord);
+      }
+    }
+  }, {
+    key: 'canvasComment',
+    value: function canvasComment(gameObject, gameInfo) {
+      var directComments = ['"Sold out? Pathetic"', '"No more lemonade?!"', '"Ice tea is better anyway"', '"Not enough ice"', '"Too expensive"'];
+      var generalComments = ['"Tasty!"', '"Meh, honestly"', '"Too bitter"', '"Just what I needed!"', '"Yummy in my tummy!"', '"Do you guys sell hot dogs?"', '"I like lemonade"', '"Just like grandma used to make it"'];
+
+      var characters = [meanLady, happyGirl, chillGuy, dumbGuy];
+
+      var commentSample = [];
+
+      if (gameInfo.soldOut) {
+        commentSample.push(directComments[0]);
+        commentSample.push(directComments[1]);
+        commentSample.push(directComments[2]);
+      } else if (gameObject.weather.temperature / gameObject.ice < 16) {
+        commentSample.push(directComments[3]);
+      } else if (gameObject.price > gameObject.weather.temperature / 3) {
+        commentSample.push(directComments[4]);
+      }
+
+      while (commentSample.length < 3) {
+        commentSample.push(generalComments[Math.floor(Math.random() * generalComments.length)]);
+        commentSample.push(generalComments[Math.floor(Math.random() * generalComments.length)]);
+      }
+
+      var comment = commentSample[Math.floor(Math.random() * commentSample.length)];
+      var image = characters[Math.floor(Math.random() * characters.length)];
+      var commentObject = { comment: comment, image: image };
+
+      if (commentObject.comment !== undefined) {
+        gameInfo.commentQueue.push(commentObject);
+      }
+    }
+  }, {
+    key: 'canvasCommentRender',
+    value: function canvasCommentRender(gameObject) {
+      var _this = this;
+
+      if (this.commentRhythm % 15 === 0) {
+        this.canvasComment(gameObject);
+      }
+      if (this.commentQueue.length > 3) {
+        this.commentQueue.shift();
+      }
+      this.ctx.fillStyle = 'white';
+      this.ctx.font = '16px Arial';
+      this.ctx.fillText("Suggestions Box", 80, 20);
+
+      if (this.commentQueue.length > 0) {
+
+        var xCoord = 40;
+        var yCoord = void 0;
+
+        var queue = this.commentQueue;
+
+        queue.forEach(function (comment, index) {
+          _this.ctx.font = '10px Arial';
+          if (index === 0) {
+            yCoord = 30;
+          } else if (index === 1) {
+            yCoord = 85;
+          } else if (index === 2) {
+            yCoord = 140;
+          }
+          _this.ctx.drawImage(comment.image, xCoord, yCoord);
+          _this.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
+        });
+      }
+    }
+  }]);
+
+  return Canvas;
+}();
+
+exports.default = Canvas;
 
 /***/ })
 /******/ ]);
