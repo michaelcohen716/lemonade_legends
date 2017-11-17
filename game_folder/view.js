@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'jquery-ui';
 import Game from './game';
-import React from 'react';
+import ProgressBar from './progress_bar';
 
 const cupImage = new Image();
 cupImage.src = "assets/cup.png";
@@ -183,6 +183,7 @@ class View {
 
     while(commentSample.length < 3){
       commentSample.push(generalComments[Math.floor(Math.random() * generalComments.length)]);
+      commentSample.push(generalComments[Math.floor(Math.random() * generalComments.length)]);
     }
 
     const comment = commentSample[Math.floor(Math.random() * commentSample.length)];
@@ -280,55 +281,13 @@ class View {
   }
 
   setupProgressBar(){
-    let $section = '<section id="progress-bar" class="progress-bar">';
-    let myCups = this.game.cups;
-    let myLemons = this.game.lemons;
-    let mySugar = this.game.sugar;
-    let myIce = this.game.iceCubes;
-    let text = "";
+    let gameObject = {myCups: this.game.cups, myLemons: this.game.lemons,
+                      mySugar: this.game.sugar, myIce: this.game.iceCubes,
+                      soldOut: this.game.soldOut, hour: this.game.time.hour,
+                      minutes: this.game.time.minutes, salesToday: this.game.salesToday };
 
-    if(this.game.soldOut == true){
-      text = "SOLD OUT";
-    }
-
-    let $div = `<div class="inventory-figure-cups">${myCups} cups</div>`;
-    $section += $div;
-    $section += '<div></div>';
-
-    $div = `<div class="inventory-figure">${myLemons} lemons</div>`;
-    $section += $div;
-    $section += '<div></div>';
-
-    $div = `<div class="inventory-figure">${mySugar} cups of sugar</div>`;
-    $section += $div;
-    $section += '<div></div>';
-
-    $div = `<div class="inventory-figure">${myIce} ice cubes</div>`;
-    $section += $div;
-    $section += '<div></div>';
-
-    $div = `<div class="sold-out">${text}</div>`;
-    $section += $div;
-
-    let hours = ("0" + (this.game.time.hour)).slice(1, 3);
-    let minutes = ("0" + (this.game.time.minutes).toFixed(0)).slice(-2);
-    let ampm = null;
-    if(hours < 12 && hours > 8){
-      ampm = "am";
-    } else {
-      ampm = "pm";
-    }
-
-    $div = `<div class="time">${hours}:${minutes} ${ampm}</div>`;
-    $section += $div;
-    $section += '<div class="filler"></div>';
-
-    $div = `<div class="sales-today">Sales: $${this.game.salesToday.toFixed(2)}</div>`;
-    $section += $div;
-
-    $section += '<div class="filler"></div>';
-
-    this.$el.append($section);
+    let $section = new ProgressBar(gameObject);
+    this.$el.append($($section.setupProgressBar(gameObject)));
   }
 
   setupStore(){
