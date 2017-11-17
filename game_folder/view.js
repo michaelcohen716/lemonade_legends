@@ -13,7 +13,7 @@ const iceImage = new Image();
 iceImage.src = "assets/ice.png";
 
 const meanLady = new Image();
-meanLady.src = "assets/meanlady.png";
+meanLady.src = "assets/madlady.png";
 const happyGirl = new Image();
 happyGirl.src = "assets/happygirl.png";
 const chillGuy = new Image();
@@ -167,7 +167,7 @@ class View {
       '"Just like grandma used to make it"'
     ];
 
-    let characters = [madLady, happyGirl, chillGuy, dumbGuy];
+    let characters = [meanLady, happyGirl, chillGuy, dumbGuy];
 
     let commentSample = [];
 
@@ -234,7 +234,7 @@ class View {
 
   renderStartButton(){
     let $div = '<div class="begin-game-holder" id="begin-game-holder">';
-    let $section = '<section class="inner-begin-holder">';
+    let $section = '<section class="inner-begin-holder" id="inner-begin-holder">';
     let $span = '<span class="lemonade-legends">Lemonade Legends</span>';
     $section += $span;
     let $button = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
@@ -243,7 +243,8 @@ class View {
   }
 
   showInstructions(){
-    $("#begin-game-holder").remove();
+    $("#inner-begin-holder").remove();
+
     let $div = '<div class="instructions-holder" id="instructions-holder">';
     let $section = '<section class="inner-instructions">';
     let $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- the neighbors can be picky. And some have tight pocketbooks. Good luck.</span>';

@@ -266,10 +266,10 @@ canvas {
 .form-input {
   padding-left: 0.6%;
   margin-left: 2%;
-  margin-top: 4px;
+  margin-top: 8px;
   background: white;
   color: black;
-  height: 25px;
+  height: 20px;
 }
 
 .form-header {

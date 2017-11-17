@@ -12044,7 +12044,7 @@ var iceImage = new Image();
 iceImage.src = "assets/ice.png";
 
 var meanLady = new Image();
-meanLady.src = "assets/meanlady.png";
+meanLady.src = "assets/madlady.png";
 var happyGirl = new Image();
 happyGirl.src = "assets/happygirl.png";
 var chillGuy = new Image();
@@ -12197,7 +12197,7 @@ var View = function () {
       var directComments = ['"Sold out? Pathetic"', '"No more lemonade?!"', '"Ice tea is better anyway"', '"Not enough ice"', '"Too expensive"'];
       var generalComments = ['"Tasty!"', '"Meh, honestly"', '"Too bitter"', '"Just what I needed!"', '"Yummy in my tummy!"', '"Do you guys sell hot dogs?"', '"I like lemonade"', '"Just like grandma used to make it"'];
 
-      var characters = [madLady, happyGirl, chillGuy, dumbGuy];
+      var characters = [meanLady, happyGirl, chillGuy, dumbGuy];
 
       var commentSample = [];
 
@@ -12263,7 +12263,7 @@ var View = function () {
     key: 'renderStartButton',
     value: function renderStartButton() {
       var $div = '<div class="begin-game-holder" id="begin-game-holder">';
-      var $section = '<section class="inner-begin-holder">';
+      var $section = '<section class="inner-begin-holder" id="inner-begin-holder">';
       var $span = '<span class="lemonade-legends">Lemonade Legends</span>';
       $section += $span;
       var $button = '<button id="begin-game-button" class="begin-game-button">Begin Game</button>';
@@ -12273,7 +12273,8 @@ var View = function () {
   }, {
     key: 'showInstructions',
     value: function showInstructions() {
-      (0, _jquery2.default)("#begin-game-holder").remove();
+      (0, _jquery2.default)("#inner-begin-holder").remove();
+
       var $div = '<div class="instructions-holder" id="instructions-holder">';
       var $section = '<section class="inner-instructions">';
       var $span = '<span class="instructions">You have 7 days to master the lemonade business. Each morning, you buy what you need at the store (cups, lemons, sugar, ice cubes). Make sure to check the weather. That\'s how you\'ll know how many customers to expect. Set your recipe and your price carefully -- the neighbors can be picky. And some have tight pocketbooks. Good luck.</span>';
