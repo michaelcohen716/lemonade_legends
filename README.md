@@ -2,7 +2,7 @@
 
 Think your business skills are up to snuff? Try running this lemonade stand for a week and see if you can turn a profit.
 
-[Lemonade Legends](https://michaeljcohen.live/lemonade_legends/)
+[Lemonade Legends](http://michaeljcohen.live/lemonade_legends/)
 
 # **Background**
 
