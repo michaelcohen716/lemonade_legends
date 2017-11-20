@@ -2,6 +2,8 @@
 
 Think your business skills are up to snuff? Try running this lemonade stand for a week and see if you can turn a profit.
 
+[Lemonade Legends](michaeljcohen.live/lemonade_legends/)
+
 # **Background**
 
 Lemonade Legends is a simple game with real world parallels. You start with $20.00, a ramshackle wooden stand, and unbridled optimism. But, the reality of the dog-eat-dog lemonade business soon sets in as you struggle to serve a quality product at an affordable price to a demanding clientele.
