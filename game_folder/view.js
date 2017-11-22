@@ -16,6 +16,15 @@ class View {
     this.intervals = [];
     this.commentQueue = [];
     this.commentRhythm = 0;
+    this.setupFooter();
+  }
+
+  setupFooter(){
+    debugger
+    let $div = '<div class="footer" id="footer">';
+    let $section = '<div class="fa fa-github"><a href="www.github.com/michaelcohen716">';
+    $div += $section;
+    this.$el.append($($div));
   }
 
   bindEvents(){
