@@ -11664,22 +11664,22 @@ var View = function () {
         this.commentQueue.shift();
       }
       this.ctx.fillStyle = 'white';
-      this.ctx.font = '16px Arial';
-      this.ctx.fillText("Suggestions Box", 80, 20);
+      this.ctx.font = '36px Arial';
+      this.ctx.fillText("Suggestions Box", 230, 40);
 
       if (this.commentQueue.length > 0) {
-        var xCoord = 40;
+        var xCoord = 210;
         var yCoord = void 0;
 
         var queue = this.commentQueue;
         queue.forEach(function (comment, index) {
-          _this2.ctx.font = '10px Arial';
+          _this2.ctx.font = '23px Arial';
           if (index === 0) {
-            yCoord = 30;
+            yCoord = 65;
           } else if (index === 1) {
-            yCoord = 85;
+            yCoord = 185;
           } else if (index === 2) {
-            yCoord = 140;
+            yCoord = 305;
           }
           _this2.ctx.drawImage(comment.image, xCoord, yCoord);
           _this2.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
@@ -12338,8 +12338,8 @@ var happyGirl = new Image();
 happyGirl.src = "assets/happygirl.png";
 var chillGuy = new Image();
 chillGuy.src = "assets/chillGuy.png";
-var dumbGuy = new Image();
-dumbGuy.src = "assets/dumbGuy.png";
+var person1 = new Image();
+person1.src = "assets/person1.png";
 
 var Canvas = function () {
   function Canvas() {
@@ -12414,7 +12414,7 @@ var Canvas = function () {
       var directComments = ['"Sold out? Pathetic"', '"No more lemonade?!"', '"Ice tea is better anyway"', '"Not enough ice"', '"Too expensive"'];
       var generalComments = ['"Tasty!"', '"Meh, honestly"', '"Too bitter"', '"Just what I needed!"', '"Yummy in my tummy!"', '"Do you guys sell hot dogs?"', '"I like lemonade"', '"Just like grandma used to make it"'];
 
-      var characters = [meanLady, happyGirl, chillGuy, dumbGuy];
+      var characters = [person1];
 
       var commentSample = [];
 

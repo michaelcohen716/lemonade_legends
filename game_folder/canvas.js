@@ -15,8 +15,8 @@ const happyGirl = new Image();
 happyGirl.src = "assets/happygirl.png";
 const chillGuy = new Image();
 chillGuy.src = "assets/chillGuy.png";
-const dumbGuy = new Image();
-dumbGuy.src = "assets/dumbGuy.png";
+const person1 = new Image();
+person1.src = "assets/person1.png";
 
 class Canvas {
   canvasPurchase(canvasInfo){
@@ -95,7 +95,7 @@ class Canvas {
       '"Just like grandma used to make it"'
     ];
 
-    let characters = [meanLady, happyGirl, chillGuy, dumbGuy];
+    let characters = [person1];
 
     let commentSample = [];
 

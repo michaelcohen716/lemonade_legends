@@ -95,22 +95,22 @@ class View {
       this.commentQueue.shift();
     }
     this.ctx.fillStyle = 'white';
-    this.ctx.font = '16px Arial';
-    this.ctx.fillText("Suggestions Box", 80, 20);
+    this.ctx.font = '36px Arial';
+    this.ctx.fillText("Suggestions Box", 230, 40);
 
     if(this.commentQueue.length > 0){
-      let xCoord = 40;
+      let xCoord = 210;
       let yCoord;
 
       let queue = this.commentQueue;
       queue.forEach((comment, index) => {
-        this.ctx.font = '10px Arial';
+        this.ctx.font = '23px Arial';
         if(index === 0){
-          yCoord = 30;
+          yCoord = 65;
         } else if (index === 1){
-          yCoord = 85;
+          yCoord = 185;
         } else if (index === 2){
-          yCoord = 140;
+          yCoord = 305;
         }
         this.ctx.drawImage(comment.image, xCoord, yCoord);
         this.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
