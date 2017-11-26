@@ -1,13 +1,13 @@
 import $ from 'jquery';
 import 'jquery-ui';
 const cupImage = new Image();
-cupImage.src = "assets/cup.png";
+cupImage.src = "assets/cup2.png";
 const lemonImage = new Image();
-lemonImage.src = "assets/lemon.png";
+lemonImage.src = "assets/lemon2.png";
 const sugarImage = new Image();
-sugarImage.src = "assets/sugar.png";
+sugarImage.src = "assets/sugar2.png";
 const iceImage = new Image();
-iceImage.src = "assets/ice.png";
+iceImage.src = "assets/ice2.png";
 
 const meanLady = new Image();
 meanLady.src = "assets/madlady.png";
@@ -21,60 +21,60 @@ dumbGuy.src = "assets/dumbGuy.png";
 class Canvas {
   canvasPurchase(canvasInfo){
     canvasInfo.ctx.fillStyle = 'white';
-    canvasInfo.ctx.font = '16px Arial';
-    canvasInfo.ctx.fillText('Cups', 20, 190);
-    canvasInfo.ctx.fillText('Lemons', 85, 190);
-    canvasInfo.ctx.fillText('Sugar', 165, 190);
-    canvasInfo.ctx.fillText('Ice', 245, 190);
+    canvasInfo.ctx.font = '40px Arial';
+    canvasInfo.ctx.fillText('Cups', 44, 400);
+    canvasInfo.ctx.fillText('Lemons', 204, 400);
+    canvasInfo.ctx.fillText('Sugar', 424, 400);
+    canvasInfo.ctx.fillText('Ice', 622, 400);
 
     let numCupPics = Math.floor(canvasInfo.cups / 20);
     let xCoord;
-    let yCoord = 185;
+    let yCoord = 367;
     for (var i = 0; i < numCupPics; i++) {
       if (i % 2 == 0){
-        xCoord = 17;
-        yCoord -= 36;
+        xCoord = 11;
+        yCoord -= 90;
       } else {
-        xCoord = 42;
+        xCoord = 84;
       }
       canvasInfo.ctx.drawImage(cupImage, xCoord, yCoord);
     }
 
     let numLemonPics = Math.floor(canvasInfo.lemons / 8);
-    yCoord = 182;
-    xCoord = 85;
+    yCoord = 337;
+    xCoord = 153;
     for (var j = 0; j < numLemonPics; j++) {
       if (j % 2 == 0){
-        xCoord = 82;
-        yCoord -= 32;
+        xCoord = 153;
+        yCoord -= 72;
       } else {
-        xCoord = 112;
+        xCoord = 251;
       }
       canvasInfo.ctx.drawImage(lemonImage, xCoord, yCoord);
     }
 
     let numSugarPics = Math.floor(canvasInfo.sugar / 8);
-    yCoord = 182;
-    xCoord = 147;
+    yCoord = 363;
+    xCoord = 379;
     for (var k = 0; k < numSugarPics; k++) {
       if (k % 2 == 0){
-        xCoord = 161;
-        yCoord -= 32;
+        xCoord = 379;
+        yCoord -= 74;
       } else {
-        xCoord = 191;
+        xCoord = 469;
       }
       canvasInfo.ctx.drawImage(sugarImage, xCoord, yCoord);
     }
 
     let numIcePics = Math.floor(canvasInfo.ice / 50);
-    yCoord = 182;
-    xCoord = 228;
+    yCoord = 374;
+    xCoord = 566;
     for (var l = 0; l < numIcePics; l++) {
       if (l % 2 == 0){
-        xCoord = 228;
-        yCoord -= 32;
+        xCoord = 566;
+        yCoord -= 74;
       } else {
-        xCoord = 258;
+        xCoord = 653;
       }
       canvasInfo.ctx.drawImage(iceImage, xCoord, yCoord);
     }

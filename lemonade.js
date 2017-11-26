@@ -7,8 +7,8 @@ import 'jquery-ui';
 document.addEventListener("DOMContentLoaded", () => {
 
   const canvas = document.getElementById("canvas");
-  // canvas.height = 200;
-  // canvas.width = 300;
+  canvas.height = 435;
+  canvas.width = 750;
 
   const game = new Game();
   const rootEl = $('.game');

@@ -60,12 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */,
-/* 1 */
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10325,329 +10324,7 @@ return jQuery;
 
 
 /***/ }),
-/* 2 */,
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _business_day = __webpack_require__(10);
-
-var _business_day2 = _interopRequireDefault(_business_day);
-
-var _weather = __webpack_require__(11);
-
-var _weather2 = _interopRequireDefault(_weather);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Game = function () {
-  function Game() {
-    _classCallCheck(this, Game);
-
-    this.cups = 0;
-    this.lemons = 0;
-    this.sugar = 0;
-    this.iceCubes = 0;
-    this.cash = 20.00;
-    this.day = 1;
-    this.today = null;
-    this.cupsSoldToday = 0;
-    this.salesToday = 0;
-    this.totalSales = 0;
-    this.totalExpenses = 0;
-    this.customersToday = [];
-    this.weather = this.generateWeather();
-    this.dayOver = false;
-    this.soldOut = false;
-    this.time = { hour: 9, minutes: 0 };
-  }
-
-  _createClass(Game, [{
-    key: 'resources',
-    value: function resources() {
-      return {
-        cups: this.cups,
-        lemons: this.lemons,
-        sugar: this.sugar,
-        iceCubes: this.iceCubes,
-        cash: this.cash.toFixed(2),
-        day: this.day
-      };
-    }
-  }, {
-    key: 'generateWeather',
-    value: function generateWeather() {
-      var weather = new _weather2.default();
-      return weather.weather();
-    }
-  }, {
-    key: 'updateInventory',
-    value: function updateInventory(resource, units, price) {
-      if (resource === "cups") {
-        this.cups += units;
-      } else if (resource === "lemons") {
-        this.lemons += units;
-      } else if (resource === "sugar") {
-        this.sugar += units;
-      } else if (resource === "ice-cubes") {
-        this.iceCubes += units;
-      }
-      this.cash -= price;
-    }
-  }, {
-    key: 'run',
-    value: function run(gameObject) {
-      var resources = this.resources();
-      var potentialCustomers = this.potentialCustomers();
-      console.log("potentialCustomers");
-      console.log(potentialCustomers);
-      var today = this.simulateDay(potentialCustomers, gameObject);
-      return today;
-    }
-  }, {
-    key: 'updateClock',
-    value: function updateClock(timeIncrement) {
-      if (this.time.minutes + timeIncrement >= 60) {
-        this.time.minutes = this.time.minutes - 60 + timeIncrement;
-        this.time.hour += 1;
-      } else {
-        this.time.minutes += timeIncrement;
-      }
-      if (this.time.hour == 13) {
-        this.time.hour = 1;
-      }
-    }
-  }, {
-    key: 'simulateDay',
-    value: function simulateDay(potentialCustomers, gameObject) {
-      var _this = this;
-
-      var pitcherCups = 0;
-      var numPurchases = 0;
-      var timeIncrement = 8 * 60 / potentialCustomers;
-
-      var iterator = 0;
-      var runDay = function runDay() {
-        setTimeout(function () {
-          _this.updateClock(timeIncrement);
-
-          if (_this.customersToday.length == potentialCustomers - 1) {
-            console.log("numPurchases");
-            console.log(numPurchases);
-            _this.dayOver = true;
-            return;
-          }
-
-          iterator++;
-          if (iterator < potentialCustomers) {
-            runDay();
-            if (_this.checkInventory(gameObject) == false && pitcherCups == 0) {
-              _this.customersToday.push(false);
-              console.log("sold out");
-              _this.soldOut = true;
-              return;
-            }
-
-            if (_this.iceCubes - gameObject.ice < 0 || _this.cups == 0) {
-              _this.customersToday.push(false);
-
-              console.log("sold out");
-              _this.soldOut = true;
-
-              return;
-            }
-
-            if (_this.lemons - gameObject.lemons < 0 && pitcherCups == 0) {
-              _this.customersToday.push(false);
-              console.log("sold out");
-              _this.soldOut = true;
-
-              return;
-            }
-
-            if (_this.sugar - gameObject.sugar < 0 && pitcherCups == 0) {
-              _this.customersToday.push(false);
-              console.log("sold out");
-              _this.soldOut = true;
-
-              return;
-            }
-
-            if (_this.checkInventory(gameObject) == true && pitcherCups == 0) {
-              pitcherCups = _this.makePitcher(gameObject);
-              if (pitcherCups == false) {
-                _this.customersToday.push(false);
-                return;
-              }
-            }
-
-            if (_this.purchaseOrNot(gameObject) && _this.iceCubes > 0 && _this.cups > 0) {
-              _this.customersToday.push(true);
-              _this.cupsSoldToday += 1;
-              _this.salesToday += parseInt(gameObject.price) / 100;
-              _this.cash += parseInt(gameObject.price) / 100;
-              _this.cups -= 1;
-              numPurchases += 1;
-              pitcherCups -= 1;
-              _this.iceCubes -= parseInt(gameObject.ice);
-            } else {
-              _this.customersToday.push(false);
-            }
-          }
-        }, 100);
-      };
-      runDay();
-
-      return;
-    }
-  }, {
-    key: 'makePitcher',
-    value: function makePitcher(gameObject) {
-      var lemonsPer = gameObject.lemons;
-      var sugarPer = gameObject.sugar;
-      if (this.lemons >= lemonsPer && this.sugar >= sugarPer) {
-        this.lemons -= lemonsPer;
-        this.sugar -= sugarPer;
-        return 10;
-      } else {
-        return false;
-      }
-    }
-  }, {
-    key: 'checkInventory',
-    value: function checkInventory(gameObject) {
-      if (this.cups == 0) {
-        return false;
-      }
-      if (this.iceCubes - gameObject.ice < 0) {
-        return false;
-      }
-      if (this.lemons - gameObject.lemons < 0) {
-        return false;
-      }
-      if (this.sugar - gameObject.sugar < 0) {
-        return false;
-      }
-
-      return true;
-    }
-  }, {
-    key: 'potentialCustomers',
-    value: function potentialCustomers() {
-      var weatherObject = this.weather;
-
-      var outlookQuotients = {
-        "Sunny": 100,
-        "Overcast": 60,
-        "Rainy": 15
-      };
-      var outlookScore = void 0;
-      var tempScore = weatherObject.temperature;
-
-      if (weatherObject.outlook == "Sunny") {
-        outlookScore = Math.floor(Math.random() * outlookQuotients.Sunny);
-      } else if (weatherObject.outlook == "Overcast") {
-        outlookScore = Math.floor(Math.random() * outlookQuotients.Overcast);
-      } else {
-        outlookScore = Math.floor(Math.random() * outlookQuotients.Overcast);
-      }
-
-      var potentialVisitors = tempScore + outlookScore;
-      return potentialVisitors;
-    }
-  }, {
-    key: 'purchaseOrNot',
-    value: function purchaseOrNot(gameObject) {
-      var price = gameObject.price;
-      var lemons = gameObject.lemons;
-      var sugar = gameObject.sugar;
-      var ice = gameObject.ice;
-      var weather = gameObject.weather;
-      var likelihood = 100;
-
-      var weatherDecrement = this.weatherPurchaseCalculus(weather);
-      likelihood -= weatherDecrement;
-      //either a neutral or a decrement
-
-      var ingredientsFactor = this.ingredientsPurchaseCalculus(lemons, sugar, ice, weather);
-
-      likelihood += ingredientsFactor;
-      //could be positive or negative
-
-      var priceFactor = this.pricePurchaseCalculus(price);
-      likelihood += priceFactor;
-      //could be positive or negative
-      if (likelihood >= 50) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }, {
-    key: 'ingredientsPurchaseCalculus',
-    value: function ingredientsPurchaseCalculus(lemons, sugar, ice, weather) {
-      var weatherObject = weather;
-
-      // const iceCubes = this.iceCubes;
-      var iceCubeEquilibrium = weatherObject.temperature / 16;
-      var iceQuotient = (ice - iceCubeEquilibrium) * 10;
-
-      // const lemons = this.lemonsPerPitcher;
-      var lemonEquilibrium = 4;
-      var lemonQuotient = (lemons - lemonEquilibrium) * 7;
-
-      // const sugar = this.sugarPerPitcher;
-      var sugarEquilibrium = 4;
-      var sugarQuotient = (sugar - sugarEquilibrium) * 7;
-
-      return iceQuotient + lemonQuotient + sugarQuotient;
-    }
-  }, {
-    key: 'pricePurchaseCalculus',
-    value: function pricePurchaseCalculus(price, weather) {
-      var equilibriumPrice = 0.25;
-      equilibriumPrice = Math.random() * 2 * equilibriumPrice;
-      var priceQuotient = (equilibriumPrice - price / 100) * 500;
-      return priceQuotient;
-    }
-  }, {
-    key: 'weatherPurchaseCalculus',
-    value: function weatherPurchaseCalculus(weather) {
-      var weatherObject = weather;
-      var outlookQuotients = {
-        "Sunny": 10,
-        "Overcast": 45,
-        "Rainy": 80
-      };
-
-      var outlookDecrement = outlookQuotients[weatherObject.outlook];
-      outlookDecrement = Math.floor(Math.random() * outlookDecrement);
-
-      var tempConstant = 0.65;
-      var maxTemp = 100;
-      var actualTemp = weatherObject.temperature;
-      var temperatureDecrement = (maxTemp - actualTemp) * tempConstant;
-      return outlookDecrement + temperatureDecrement;
-    }
-  }]);
-
-  return Game;
-}();
-
-exports.default = Game;
-
-/***/ }),
-/* 4 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10669,7 +10346,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 	if ( true ) {
 
 		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1), __webpack_require__(13) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(7) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -11389,37 +11066,354 @@ return $.widget;
 
 
 /***/ }),
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _game = __webpack_require__(3);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _business_day = __webpack_require__(4);
+
+var _business_day2 = _interopRequireDefault(_business_day);
+
+var _weather = __webpack_require__(5);
+
+var _weather2 = _interopRequireDefault(_weather);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Game = function () {
+  function Game() {
+    _classCallCheck(this, Game);
+
+    this.cups = 0;
+    this.lemons = 0;
+    this.sugar = 0;
+    this.iceCubes = 0;
+    this.cash = 20.00;
+    this.day = 1;
+    this.today = null;
+    this.cupsSoldToday = 0;
+    this.salesToday = 0;
+    this.totalSales = 0;
+    this.totalExpenses = 0;
+    this.customersToday = [];
+    this.weather = this.generateWeather();
+    this.dayOver = false;
+    this.soldOut = false;
+    this.time = { hour: 9, minutes: 0 };
+  }
+
+  _createClass(Game, [{
+    key: 'resources',
+    value: function resources() {
+      return {
+        cups: this.cups,
+        lemons: this.lemons,
+        sugar: this.sugar,
+        iceCubes: this.iceCubes,
+        cash: this.cash.toFixed(2),
+        day: this.day
+      };
+    }
+  }, {
+    key: 'generateWeather',
+    value: function generateWeather() {
+      var weather = new _weather2.default();
+      return weather.weather();
+    }
+  }, {
+    key: 'updateInventory',
+    value: function updateInventory(resource, units, price) {
+      if (resource === "cups") {
+        this.cups += units;
+      } else if (resource === "lemons") {
+        this.lemons += units;
+      } else if (resource === "sugar") {
+        this.sugar += units;
+      } else if (resource === "ice-cubes") {
+        this.iceCubes += units;
+      }
+      this.cash -= price;
+    }
+  }, {
+    key: 'run',
+    value: function run(gameObject) {
+      var resources = this.resources();
+      var potentialCustomers = this.potentialCustomers();
+      console.log("potentialCustomers");
+      console.log(potentialCustomers);
+      var today = this.simulateDay(potentialCustomers, gameObject);
+      return today;
+    }
+  }, {
+    key: 'updateClock',
+    value: function updateClock(timeIncrement) {
+      if (this.time.minutes + timeIncrement >= 60) {
+        this.time.minutes = this.time.minutes - 60 + timeIncrement;
+        this.time.hour += 1;
+      } else {
+        this.time.minutes += timeIncrement;
+      }
+      if (this.time.hour == 13) {
+        this.time.hour = 1;
+      }
+    }
+  }, {
+    key: 'simulateDay',
+    value: function simulateDay(potentialCustomers, gameObject) {
+      var _this = this;
+
+      var pitcherCups = 0;
+      var numPurchases = 0;
+      var timeIncrement = 8 * 60 / potentialCustomers;
+
+      var iterator = 0;
+      var runDay = function runDay() {
+        setTimeout(function () {
+          _this.updateClock(timeIncrement);
+
+          if (_this.customersToday.length == potentialCustomers - 1) {
+            console.log("numPurchases");
+            console.log(numPurchases);
+            _this.dayOver = true;
+            return;
+          }
+
+          iterator++;
+          if (iterator < potentialCustomers) {
+            runDay();
+            if (_this.checkInventory(gameObject) == false && pitcherCups == 0) {
+              _this.customersToday.push(false);
+              console.log("sold out");
+              _this.soldOut = true;
+              return;
+            }
+
+            if (_this.iceCubes - gameObject.ice < 0 || _this.cups == 0) {
+              _this.customersToday.push(false);
+
+              console.log("sold out");
+              _this.soldOut = true;
+
+              return;
+            }
+
+            if (_this.lemons - gameObject.lemons < 0 && pitcherCups == 0) {
+              _this.customersToday.push(false);
+              console.log("sold out");
+              _this.soldOut = true;
+
+              return;
+            }
+
+            if (_this.sugar - gameObject.sugar < 0 && pitcherCups == 0) {
+              _this.customersToday.push(false);
+              console.log("sold out");
+              _this.soldOut = true;
+
+              return;
+            }
+
+            if (_this.checkInventory(gameObject) == true && pitcherCups == 0) {
+              pitcherCups = _this.makePitcher(gameObject);
+              if (pitcherCups == false) {
+                _this.customersToday.push(false);
+                return;
+              }
+            }
+
+            if (_this.purchaseOrNot(gameObject) && _this.iceCubes > 0 && _this.cups > 0) {
+              _this.customersToday.push(true);
+              _this.cupsSoldToday += 1;
+              _this.salesToday += parseInt(gameObject.price) / 100;
+              _this.cash += parseInt(gameObject.price) / 100;
+              _this.cups -= 1;
+              numPurchases += 1;
+              pitcherCups -= 1;
+              _this.iceCubes -= parseInt(gameObject.ice);
+            } else {
+              _this.customersToday.push(false);
+            }
+          }
+        }, 100);
+      };
+      runDay();
+
+      return;
+    }
+  }, {
+    key: 'makePitcher',
+    value: function makePitcher(gameObject) {
+      var lemonsPer = gameObject.lemons;
+      var sugarPer = gameObject.sugar;
+      if (this.lemons >= lemonsPer && this.sugar >= sugarPer) {
+        this.lemons -= lemonsPer;
+        this.sugar -= sugarPer;
+        return 10;
+      } else {
+        return false;
+      }
+    }
+  }, {
+    key: 'checkInventory',
+    value: function checkInventory(gameObject) {
+      if (this.cups == 0) {
+        return false;
+      }
+      if (this.iceCubes - gameObject.ice < 0) {
+        return false;
+      }
+      if (this.lemons - gameObject.lemons < 0) {
+        return false;
+      }
+      if (this.sugar - gameObject.sugar < 0) {
+        return false;
+      }
+
+      return true;
+    }
+  }, {
+    key: 'potentialCustomers',
+    value: function potentialCustomers() {
+      var weatherObject = this.weather;
+
+      var outlookQuotients = {
+        "Sunny": 100,
+        "Overcast": 60,
+        "Rainy": 15
+      };
+      var outlookScore = void 0;
+      var tempScore = weatherObject.temperature;
+
+      if (weatherObject.outlook == "Sunny") {
+        outlookScore = Math.floor(Math.random() * outlookQuotients.Sunny);
+      } else if (weatherObject.outlook == "Overcast") {
+        outlookScore = Math.floor(Math.random() * outlookQuotients.Overcast);
+      } else {
+        outlookScore = Math.floor(Math.random() * outlookQuotients.Overcast);
+      }
+
+      var potentialVisitors = tempScore + outlookScore;
+      return potentialVisitors;
+    }
+  }, {
+    key: 'purchaseOrNot',
+    value: function purchaseOrNot(gameObject) {
+      var price = gameObject.price;
+      var lemons = gameObject.lemons;
+      var sugar = gameObject.sugar;
+      var ice = gameObject.ice;
+      var weather = gameObject.weather;
+      var likelihood = 100;
+
+      var weatherDecrement = this.weatherPurchaseCalculus(weather);
+      likelihood -= weatherDecrement;
+      //either a neutral or a decrement
+
+      var ingredientsFactor = this.ingredientsPurchaseCalculus(lemons, sugar, ice, weather);
+
+      likelihood += ingredientsFactor;
+      //could be positive or negative
+
+      var priceFactor = this.pricePurchaseCalculus(price);
+      likelihood += priceFactor;
+      //could be positive or negative
+      if (likelihood >= 50) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }, {
+    key: 'ingredientsPurchaseCalculus',
+    value: function ingredientsPurchaseCalculus(lemons, sugar, ice, weather) {
+      var weatherObject = weather;
+
+      // const iceCubes = this.iceCubes;
+      var iceCubeEquilibrium = weatherObject.temperature / 16;
+      var iceQuotient = (ice - iceCubeEquilibrium) * 10;
+
+      // const lemons = this.lemonsPerPitcher;
+      var lemonEquilibrium = 4;
+      var lemonQuotient = (lemons - lemonEquilibrium) * 7;
+
+      // const sugar = this.sugarPerPitcher;
+      var sugarEquilibrium = 4;
+      var sugarQuotient = (sugar - sugarEquilibrium) * 7;
+
+      return iceQuotient + lemonQuotient + sugarQuotient;
+    }
+  }, {
+    key: 'pricePurchaseCalculus',
+    value: function pricePurchaseCalculus(price, weather) {
+      var equilibriumPrice = 0.25;
+      equilibriumPrice = Math.random() * 2 * equilibriumPrice;
+      var priceQuotient = (equilibriumPrice - price / 100) * 500;
+      return priceQuotient;
+    }
+  }, {
+    key: 'weatherPurchaseCalculus',
+    value: function weatherPurchaseCalculus(weather) {
+      var weatherObject = weather;
+      var outlookQuotients = {
+        "Sunny": 10,
+        "Overcast": 45,
+        "Rainy": 80
+      };
+
+      var outlookDecrement = outlookQuotients[weatherObject.outlook];
+      outlookDecrement = Math.floor(Math.random() * outlookDecrement);
+
+      var tempConstant = 0.65;
+      var maxTemp = 100;
+      var actualTemp = weatherObject.temperature;
+      var temperatureDecrement = (maxTemp - actualTemp) * tempConstant;
+      return outlookDecrement + temperatureDecrement;
+    }
+  }]);
+
+  return Game;
+}();
+
+exports.default = Game;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _game = __webpack_require__(2);
 
 var _game2 = _interopRequireDefault(_game);
 
-var _view = __webpack_require__(12);
+var _view = __webpack_require__(6);
 
 var _view2 = _interopRequireDefault(_view);
 
-var _jquery = __webpack_require__(1);
+var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-__webpack_require__(4);
+__webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 document.addEventListener("DOMContentLoaded", function () {
 
   var canvas = document.getElementById("canvas");
-  canvas.height = 200;
-  canvas.width = 300;
+  canvas.height = 435;
+  canvas.width = 750;
 
   var game = new _game2.default();
   var rootEl = (0, _jquery2.default)('.game');
@@ -11427,7 +11421,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /***/ }),
-/* 10 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11480,7 +11474,7 @@ var BusinessDay = function () {
 exports.default = BusinessDay;
 
 /***/ }),
-/* 11 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11528,7 +11522,7 @@ var Weather = function () {
 exports.default = Weather;
 
 /***/ }),
-/* 12 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11540,25 +11534,25 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _jquery = __webpack_require__(1);
+var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-__webpack_require__(4);
+__webpack_require__(1);
 
-var _game = __webpack_require__(3);
+var _game = __webpack_require__(2);
 
 var _game2 = _interopRequireDefault(_game);
 
-var _progress_bar = __webpack_require__(19);
+var _progress_bar = __webpack_require__(8);
 
 var _progress_bar2 = _interopRequireDefault(_progress_bar);
 
-var _inventory_store = __webpack_require__(20);
+var _inventory_store = __webpack_require__(9);
 
 var _inventory_store2 = _interopRequireDefault(_inventory_store);
 
-var _canvas = __webpack_require__(21);
+var _canvas = __webpack_require__(10);
 
 var _canvas2 = _interopRequireDefault(_canvas);
 
@@ -12008,14 +12002,14 @@ var View = function () {
 exports.default = View;
 
 /***/ }),
-/* 13 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
 	if ( true ) {
 
 		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -12034,12 +12028,7 @@ return $.ui.version = "1.12.1";
 
 
 /***/ }),
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12051,11 +12040,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _jquery = __webpack_require__(1);
+var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-__webpack_require__(4);
+__webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12122,7 +12111,7 @@ var ProgressBar = function () {
 exports.default = ProgressBar;
 
 /***/ }),
-/* 20 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12134,11 +12123,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _jquery = __webpack_require__(1);
+var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-__webpack_require__(4);
+__webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12312,7 +12301,7 @@ var InventoryStore = function () {
 exports.default = InventoryStore;
 
 /***/ }),
-/* 21 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12324,24 +12313,24 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _jquery = __webpack_require__(1);
+var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-__webpack_require__(4);
+__webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var cupImage = new Image();
-cupImage.src = "assets/cup.png";
+cupImage.src = "assets/cup2.png";
 var lemonImage = new Image();
-lemonImage.src = "assets/lemon.png";
+lemonImage.src = "assets/lemon2.png";
 var sugarImage = new Image();
-sugarImage.src = "assets/sugar.png";
+sugarImage.src = "assets/sugar2.png";
 var iceImage = new Image();
-iceImage.src = "assets/ice.png";
+iceImage.src = "assets/ice2.png";
 
 var meanLady = new Image();
 meanLady.src = "assets/madlady.png";
@@ -12361,60 +12350,60 @@ var Canvas = function () {
     key: 'canvasPurchase',
     value: function canvasPurchase(canvasInfo) {
       canvasInfo.ctx.fillStyle = 'white';
-      canvasInfo.ctx.font = '16px Arial';
-      canvasInfo.ctx.fillText('Cups', 20, 190);
-      canvasInfo.ctx.fillText('Lemons', 85, 190);
-      canvasInfo.ctx.fillText('Sugar', 165, 190);
-      canvasInfo.ctx.fillText('Ice', 245, 190);
+      canvasInfo.ctx.font = '40px Arial';
+      canvasInfo.ctx.fillText('Cups', 44, 400);
+      canvasInfo.ctx.fillText('Lemons', 204, 400);
+      canvasInfo.ctx.fillText('Sugar', 424, 400);
+      canvasInfo.ctx.fillText('Ice', 622, 400);
 
       var numCupPics = Math.floor(canvasInfo.cups / 20);
       var xCoord = void 0;
-      var yCoord = 185;
+      var yCoord = 367;
       for (var i = 0; i < numCupPics; i++) {
         if (i % 2 == 0) {
-          xCoord = 17;
-          yCoord -= 36;
+          xCoord = 11;
+          yCoord -= 90;
         } else {
-          xCoord = 42;
+          xCoord = 84;
         }
         canvasInfo.ctx.drawImage(cupImage, xCoord, yCoord);
       }
 
       var numLemonPics = Math.floor(canvasInfo.lemons / 8);
-      yCoord = 182;
-      xCoord = 85;
+      yCoord = 337;
+      xCoord = 153;
       for (var j = 0; j < numLemonPics; j++) {
         if (j % 2 == 0) {
-          xCoord = 82;
-          yCoord -= 32;
+          xCoord = 153;
+          yCoord -= 72;
         } else {
-          xCoord = 112;
+          xCoord = 251;
         }
         canvasInfo.ctx.drawImage(lemonImage, xCoord, yCoord);
       }
 
       var numSugarPics = Math.floor(canvasInfo.sugar / 8);
-      yCoord = 182;
-      xCoord = 147;
+      yCoord = 363;
+      xCoord = 379;
       for (var k = 0; k < numSugarPics; k++) {
         if (k % 2 == 0) {
-          xCoord = 161;
-          yCoord -= 32;
+          xCoord = 379;
+          yCoord -= 74;
         } else {
-          xCoord = 191;
+          xCoord = 469;
         }
         canvasInfo.ctx.drawImage(sugarImage, xCoord, yCoord);
       }
 
       var numIcePics = Math.floor(canvasInfo.ice / 50);
-      yCoord = 182;
-      xCoord = 228;
+      yCoord = 374;
+      xCoord = 566;
       for (var l = 0; l < numIcePics; l++) {
         if (l % 2 == 0) {
-          xCoord = 228;
-          yCoord -= 32;
+          xCoord = 566;
+          yCoord -= 74;
         } else {
-          xCoord = 258;
+          xCoord = 653;
         }
         canvasInfo.ctx.drawImage(iceImage, xCoord, yCoord);
       }

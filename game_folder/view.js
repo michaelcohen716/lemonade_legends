@@ -16,7 +16,6 @@ class View {
     this.intervals = [];
     this.commentQueue = [];
     this.commentRhythm = 0;
-    this.setupFooter();
   }
 
   bindEvents(){
