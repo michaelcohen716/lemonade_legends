@@ -12338,6 +12338,8 @@ var person2 = new Image();
 person2.src = "assets/person2b.png";
 var person3 = new Image();
 person3.src = "assets/person3.png";
+var person4 = new Image();
+person4.src = "assets/person4.png";
 
 var Canvas = function () {
   function Canvas() {
@@ -12412,7 +12414,7 @@ var Canvas = function () {
       var directComments = ['"Sold out? Pathetic"', '"No more lemonade?!"', '"Ice tea is better anyway"', '"Not enough ice"', '"Too expensive"'];
       var generalComments = ['"Tasty!"', '"Meh, honestly"', '"Too bitter"', '"Just what I needed!"', '"Yummy in my tummy!"', '"Do you guys sell hot dogs?"', '"I like lemonade"', '"Just like grandma used to make it"'];
 
-      var characters = [person1, person2, person3];
+      var characters = [person1, person2, person3, person4];
 
       var commentSample = [];
 
