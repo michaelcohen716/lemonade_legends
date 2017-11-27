@@ -99,7 +99,7 @@ class View {
     this.ctx.fillText("Suggestions Box", 230, 40);
 
     if(this.commentQueue.length > 0){
-      let xCoord = 210;
+      let xCoord = 200;
       let yCoord;
 
       let queue = this.commentQueue;
@@ -113,7 +113,7 @@ class View {
           yCoord = 305;
         }
         this.ctx.drawImage(comment.image, xCoord, yCoord);
-        this.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
+        this.ctx.fillText(comment.comment, xCoord + 60, yCoord + 40);
       });
     }
   }

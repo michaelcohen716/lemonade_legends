@@ -11668,7 +11668,7 @@ var View = function () {
       this.ctx.fillText("Suggestions Box", 230, 40);
 
       if (this.commentQueue.length > 0) {
-        var xCoord = 210;
+        var xCoord = 200;
         var yCoord = void 0;
 
         var queue = this.commentQueue;
@@ -11682,7 +11682,7 @@ var View = function () {
             yCoord = 305;
           }
           _this2.ctx.drawImage(comment.image, xCoord, yCoord);
-          _this2.ctx.fillText(comment.comment, xCoord + 40, yCoord + 20);
+          _this2.ctx.fillText(comment.comment, xCoord + 60, yCoord + 40);
         });
       }
     }
@@ -12332,14 +12332,12 @@ sugarImage.src = "assets/sugar2.png";
 var iceImage = new Image();
 iceImage.src = "assets/ice2.png";
 
-var meanLady = new Image();
-meanLady.src = "assets/madlady.png";
-var happyGirl = new Image();
-happyGirl.src = "assets/happygirl.png";
-var chillGuy = new Image();
-chillGuy.src = "assets/chillGuy.png";
 var person1 = new Image();
 person1.src = "assets/person1.png";
+var person2 = new Image();
+person2.src = "assets/person2b.png";
+var person3 = new Image();
+person3.src = "assets/person3.png";
 
 var Canvas = function () {
   function Canvas() {
@@ -12414,7 +12412,7 @@ var Canvas = function () {
       var directComments = ['"Sold out? Pathetic"', '"No more lemonade?!"', '"Ice tea is better anyway"', '"Not enough ice"', '"Too expensive"'];
       var generalComments = ['"Tasty!"', '"Meh, honestly"', '"Too bitter"', '"Just what I needed!"', '"Yummy in my tummy!"', '"Do you guys sell hot dogs?"', '"I like lemonade"', '"Just like grandma used to make it"'];
 
-      var characters = [person1];
+      var characters = [person1, person2, person3];
 
       var commentSample = [];
 

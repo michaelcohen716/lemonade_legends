@@ -9,14 +9,13 @@ sugarImage.src = "assets/sugar2.png";
 const iceImage = new Image();
 iceImage.src = "assets/ice2.png";
 
-const meanLady = new Image();
-meanLady.src = "assets/madlady.png";
-const happyGirl = new Image();
-happyGirl.src = "assets/happygirl.png";
-const chillGuy = new Image();
-chillGuy.src = "assets/chillGuy.png";
+
 const person1 = new Image();
 person1.src = "assets/person1.png";
+const person2 = new Image();
+person2.src = "assets/person2b.png";
+const person3 = new Image();
+person3.src = "assets/person3.png";
 
 class Canvas {
   canvasPurchase(canvasInfo){
@@ -95,7 +94,7 @@ class Canvas {
       '"Just like grandma used to make it"'
     ];
 
-    let characters = [person1];
+    let characters = [person1, person2, person3];
 
     let commentSample = [];
 
