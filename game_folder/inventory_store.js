@@ -13,12 +13,15 @@ class InventoryStore {
     let $ice = this.setupViewIceCubes(gameObject);
 
     let $div = $('<div class="store" id="store">');
-    let $button = $('<button class="done-shopping-button" id="done-shopping-button">Done Shopping</button>');
-    $div.append($button);
+    let $section = $('<section class="store-header"> The Store </section>');
+    $div.append($section);
     $div.append($cups);
     $div.append($lemons);
     $div.append($sugar);
     $div.append($ice);
+
+    let $button = $('<button class="done-shopping-button" id="done-shopping-button">Done Shopping</button>');
+    $div.append($button);
     return $div;
   }
 

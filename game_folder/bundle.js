@@ -10280,9 +10280,9 @@ jQuery.nodeName = nodeName;
 // https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon
 
 if ( true ) {
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {
 		return jQuery;
-	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+	}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 }
 
@@ -12147,12 +12147,15 @@ var InventoryStore = function () {
       var $ice = this.setupViewIceCubes(gameObject);
 
       var $div = (0, _jquery2.default)('<div class="store" id="store">');
-      var $button = (0, _jquery2.default)('<button class="done-shopping-button" id="done-shopping-button">Done Shopping</button>');
-      $div.append($button);
+      var $section = (0, _jquery2.default)('<section class="store-header"> The Store </section>');
+      $div.append($section);
       $div.append($cups);
       $div.append($lemons);
       $div.append($sugar);
       $div.append($ice);
+
+      var $button = (0, _jquery2.default)('<button class="done-shopping-button" id="done-shopping-button">Done Shopping</button>');
+      $div.append($button);
       return $div;
     }
   }, {

@@ -14,6 +14,15 @@
   /*-webkit-text-stroke-color: black;*/
 }
 
+.store-header {
+  width: 200px;
+  font-family: "Jennifer's Hand Writing", Helvetica, Arial, Verdana, sans-serif;
+  margin-top: 10px;
+  margin-bottom: -19px;
+  margin-left: 40px;
+  font-size: 25px;
+}
+
 canvas {
   width: 750px;
   height: 435px;
@@ -184,7 +193,7 @@ canvas {
   background: yellow;
   color: black;
   height: 30px;
-  margin-top: 5px;
+  margin-top: 12px;
   font-size: 17px;
   cursor: pointer;
 
@@ -298,14 +307,14 @@ canvas {
   color: black;
   margin-left: 61px;
   margin-top: 10px;
-  height: 25px;
+  height: 32px;
+  width: 110px;
   font-size: 17px;
   cursor: pointer;
 }
 
 .store {
   position: absolute;
-  top: 6px;
   left: 20px;
   list-style: none;
 }
