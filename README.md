@@ -26,12 +26,12 @@ Finally, the clock strikes 9 am and you're open for business. Based on your pric
 
 At close, your remaining ice cubes melt. And, if luck is working against you, your lemons or sugar may spoil as well. Tomorrow is another day.
 
-At the end of Day 7, we'll see if you've made any money along the way.
+At the end of Day 7, we'll see if you have what it takes to navigate the lemonade business.
 
 # **Technologies**
 
 This project was implemented with the following technologies:
-* JavaScript for game logic
+* JavaScript for game logic, jQuery for DOM manipulation
 * Canvas/HTML5 for basic game graphics
 
 
