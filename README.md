@@ -31,7 +31,7 @@ At the end of Day 7, we'll see if you have what it takes to navigate the lemonad
 # **Technologies**
 
 This project was implemented with the following technologies:
-* JavaScript for game logic, jQuery for DOM manipulation
+* JavaScript for game logic; jQuery for DOM manipulation
 * Canvas/HTML5 for basic game graphics
 
 
